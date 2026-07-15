@@ -1186,7 +1186,7 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
 
 <div class="scanbar">
   <span class="rec"><span class="rec-dot"></span> LIVE PRICE LIST</span>
-  <span id="clock" class="mono">2026-07-15 04:25:00</span>
+  <span id="clock" class="mono">2026-07-15 17:35:35</span>
 </div>
 
 <header>
@@ -1254,28 +1254,17 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
      for the newest one, and clicking it opens that offer's detail page directly. Built to be
      extensible: adding new offer kinds/status rules only needs a JS-side hook, never a markup change. -->
 <div class="offers-hero-wrap">
-  <div class="offers-hero has-offer" id="offersHero" role="button" tabindex="0" aria-label="تصفح عروضنا" data-offer-id="off_mri04j8q_bxzpay">
+  <div class="offers-hero" id="offersHero" role="button" tabindex="0" aria-label="تصفح عروضنا">
     <div class="offers-hero-inner" id="offersHeroInner">
-    <div class="offers-hero-media">
-  <svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" style="background:linear-gradient(160deg, #9c1f52 0%, #5c0e2e 55%, #f4a300 100%);width:100%;height:auto;">
-    <defs></defs>
-    <g opacity="0.18"><circle cx="80" cy="30" r="10" fill="#f4a300"></circle><circle cx="170" cy="30" r="10" fill="#f4a300"></circle><circle cx="260" cy="30" r="10" fill="#f4a300"></circle><circle cx="350" cy="30" r="10" fill="#f4a300"></circle><circle cx="440" cy="30" r="10" fill="#f4a300"></circle><circle cx="530" cy="30" r="10" fill="#f4a300"></circle></g>
-    <g transform="translate(30,30)">
-      <rect x="-20" y="-24" width="60" height="24" rx="4" fill="#f4a300" opacity="0.85"></rect>
-    </g>
-    <g transform="translate(420,42)"><rect x="0" y="0" width="90" height="34" rx="17" fill="#f4a300"></rect></g>
-    <text x="41.28" y="155.20000000000002" text-anchor="end" font-family="'Almarai', sans-serif" font-size="30" font-weight="800" fill="#ffffff">خصم كأس العالم</text>
-    <text x="41.28" y="187.20000000000002" text-anchor="end" font-family="'Tajawal', sans-serif" font-size="14" fill="#ffffff" opacity="0.92">صب بلاتينيوم AH -650</text>
-    <text x="41.28" y="213.20000000000002" text-anchor="end" font-family="'Tajawal', sans-serif" font-size="12" fill="#ffffff" opacity="0.8">أوميجا طنطا • طنطا - شارع مسجد الجندي متفرع من عمر بن عبدالعزيز</text>
-    <g transform="translate(465,69)"><g><rect x="-58" y="-28" width="116" height="56" rx="10" fill="#fff" opacity="0.94"></rect><text x="0" y="8" text-anchor="middle" font-size="26" font-weight="800" fill="#5c0e2e">10%</text></g></g>
-  </svg></div>
-    <div class="offers-hero-body">
-      <span class="offers-hero-badge new">✨ عرض جديد</span>
-      <div class="offers-hero-title">خصم كأس العالم</div>
-      <div class="offers-hero-sub">صب بلاتينيوم AH -650</div>
+      <div class="offers-hero-icon">🏷️</div>
+      <div class="offers-hero-messages" id="offersHeroMessages">
+        <span class="offers-hero-msg">🎁 اكتشف أحدث عروضنا</span>
+        <span class="offers-hero-msg">🔥 عروض وخصومات حصرية</span>
+        <span class="offers-hero-msg">💥 اضغط هنا لمشاهدة أحدث العروض</span>
+        <span class="offers-hero-msg">📢 لا تفوت عروضنا الحالية</span>
+      </div>
+      <button class="offers-hero-cta" id="offersHeroCTA" type="button">تصفح العروض ←</button>
     </div>
-    
-  </div>
   </div>
 </div>
 
@@ -1291,27 +1280,7 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
   <button class="close-promo" id="offerNotifyBannerClose" type="button" title="إغلاق">✕</button>
 </div>
 
-<div class="offers-showcase" id="offersShowcase" style="display: flex;">
-    <div class="offers-showcase-card" data-id="off_mri04j8q_bxzpay">
-      <div class="osc-media">
-  <svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" style="background:linear-gradient(160deg, #9c1f52 0%, #5c0e2e 55%, #f4a300 100%);width:100%;height:auto;">
-    <defs></defs>
-    <g opacity="0.18"><circle cx="80" cy="30" r="10" fill="#f4a300"></circle><circle cx="170" cy="30" r="10" fill="#f4a300"></circle><circle cx="260" cy="30" r="10" fill="#f4a300"></circle><circle cx="350" cy="30" r="10" fill="#f4a300"></circle><circle cx="440" cy="30" r="10" fill="#f4a300"></circle><circle cx="530" cy="30" r="10" fill="#f4a300"></circle></g>
-    <g transform="translate(30,30)">
-      <rect x="-20" y="-24" width="60" height="24" rx="4" fill="#f4a300" opacity="0.85"></rect>
-    </g>
-    <g transform="translate(420,42)"><rect x="0" y="0" width="90" height="34" rx="17" fill="#f4a300"></rect></g>
-    <text x="41.28" y="155.20000000000002" text-anchor="end" font-family="'Almarai', sans-serif" font-size="30" font-weight="800" fill="#ffffff">خصم كأس العالم</text>
-    <text x="41.28" y="187.20000000000002" text-anchor="end" font-family="'Tajawal', sans-serif" font-size="14" fill="#ffffff" opacity="0.92">صب بلاتينيوم AH -650</text>
-    <text x="41.28" y="213.20000000000002" text-anchor="end" font-family="'Tajawal', sans-serif" font-size="12" fill="#ffffff" opacity="0.8">أوميجا طنطا • طنطا - شارع مسجد الجندي متفرع من عمر بن عبدالعزيز</text>
-    <g transform="translate(465,69)"><g><rect x="-58" y="-28" width="116" height="56" rx="10" fill="#fff" opacity="0.94"></rect><text x="0" y="8" text-anchor="middle" font-size="26" font-weight="800" fill="#5c0e2e">10%</text></g></g>
-  </svg></div>
-      <div class="osc-body">
-        <div class="osc-title">خصم كأس العالم</div>
-        <div class="osc-desc">صب بلاتينيوم AH -650</div>
-      </div>
-    </div>
-  </div>
+<div class="offers-showcase" id="offersShowcase" style="display:none;"></div>
 
 <!-- ================= OFFER NOTIFY IN-PAGE TOAST (shows when an offer's "inpage" display method is enabled) ================= -->
 <div class="offer-inpage-toast" id="offerNotifyInpage">
@@ -1336,9 +1305,9 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
       </div>
       <div class="grid">
         
-          <div class="card   " data-key="0-1">
+          <div class="card  in-cart " data-key="0-1">
             
-            
+            <span class="in-cart-tag">✓ في السلة</span>
             <span class="cbracket tl"></span><span class="cbracket br"></span>
             
       <div class="card-img-wrap">
@@ -1355,15 +1324,19 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
             
               <div class="qty-row">
                 
-                  <button class="order-now-btn" data-key="0-1" data-out="0" type="button">🛒 اطلب الآن</button>
+                  <div class="qty-stepper">
+                    <button class="qty-btn minus" data-key="0-1" type="button">−</button>
+                    <input class="qty-val" data-key="0-1" type="number" inputmode="numeric" min="1" value="1">
+                    <button class="qty-btn plus" data-key="0-1" type="button">+</button>
+                  </div>
                 
               </div>
             
           </div>
         
-          <div class="card   " data-key="0-2">
+          <div class="card  in-cart " data-key="0-2">
             
-            
+            <span class="in-cart-tag">✓ في السلة</span>
             <span class="cbracket tl"></span><span class="cbracket br"></span>
             
       <div class="card-img-wrap">
@@ -1380,15 +1353,19 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
             
               <div class="qty-row">
                 
-                  <button class="order-now-btn" data-key="0-2" data-out="0" type="button">🛒 اطلب الآن</button>
+                  <div class="qty-stepper">
+                    <button class="qty-btn minus" data-key="0-2" type="button">−</button>
+                    <input class="qty-val" data-key="0-2" type="number" inputmode="numeric" min="1" value="3">
+                    <button class="qty-btn plus" data-key="0-2" type="button">+</button>
+                  </div>
                 
               </div>
             
           </div>
         
-          <div class="card   " data-key="0-3">
+          <div class="card  in-cart " data-key="0-3">
             
-            
+            <span class="in-cart-tag">✓ في السلة</span>
             <span class="cbracket tl"></span><span class="cbracket br"></span>
             
       <div class="card-img-wrap">
@@ -1405,15 +1382,19 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
             
               <div class="qty-row">
                 
-                  <button class="order-now-btn" data-key="0-3" data-out="0" type="button">🛒 اطلب الآن</button>
+                  <div class="qty-stepper">
+                    <button class="qty-btn minus" data-key="0-3" type="button">−</button>
+                    <input class="qty-val" data-key="0-3" type="number" inputmode="numeric" min="1" value="1">
+                    <button class="qty-btn plus" data-key="0-3" type="button">+</button>
+                  </div>
                 
               </div>
             
           </div>
         
-          <div class="card   " data-key="0-9">
+          <div class="card  in-cart " data-key="0-9">
             
-            
+            <span class="in-cart-tag">✓ في السلة</span>
             <span class="cbracket tl"></span><span class="cbracket br"></span>
             
       <div class="card-img-wrap">
@@ -1430,7 +1411,11 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
             
               <div class="qty-row">
                 
-                  <button class="order-now-btn" data-key="0-9" data-out="0" type="button">🛒 اطلب الآن</button>
+                  <div class="qty-stepper">
+                    <button class="qty-btn minus" data-key="0-9" type="button">−</button>
+                    <input class="qty-val" data-key="0-9" type="number" inputmode="numeric" min="1" value="1">
+                    <button class="qty-btn plus" data-key="0-9" type="button">+</button>
+                  </div>
                 
               </div>
             
@@ -1530,9 +1515,9 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
             
           </div>
         
-          <div class="card  in-cart " data-key="0-14">
+          <div class="card   " data-key="0-14">
             
-            <span class="in-cart-tag">✓ في السلة</span>
+            
             <span class="cbracket tl"></span><span class="cbracket br"></span>
             
       <div class="card-img-wrap">
@@ -1549,19 +1534,15 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
             
               <div class="qty-row">
                 
-                  <div class="qty-stepper">
-                    <button class="qty-btn minus" data-key="0-14" type="button">−</button>
-                    <input class="qty-val" data-key="0-14" type="number" inputmode="numeric" min="1" value="1">
-                    <button class="qty-btn plus" data-key="0-14" type="button">+</button>
-                  </div>
+                  <button class="order-now-btn" data-key="0-14" data-out="0" type="button">🛒 اطلب الآن</button>
                 
               </div>
             
           </div>
         
-          <div class="card  in-cart " data-key="0-29">
+          <div class="card   " data-key="0-29">
             
-            <span class="in-cart-tag">✓ في السلة</span>
+            
             <span class="cbracket tl"></span><span class="cbracket br"></span>
             <div class="card-img-wrap"><div class="card-img card-img-default"><img src="data:image/svg+xml;utf8,%0A%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20200%22%3E%0A%20%20%3Crect%20width%3D%22200%22%20height%3D%22200%22%20fill%3D%22%23eef1f4%22%2F%3E%0A%20%20%3Cg%20fill%3D%22none%22%20stroke%3D%22%239aa5b1%22%20stroke-width%3D%226%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M40%2070%20L100%2040%20L160%2070%20L160%20140%20L100%20170%20L40%20140%20Z%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M40%2070%20L100%20100%20L160%2070%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M100%20100%20L100%20170%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E" alt="كاميرا خارجى مايك الوان يو ان فى 2ميجاUNVB112F40W2M" loading="lazy" style="object-fit:contain; opacity:0.55;"></div></div>
             <span class="badge-status available">✓ متوفر</span>
@@ -1572,11 +1553,7 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
             
               <div class="qty-row">
                 
-                  <div class="qty-stepper">
-                    <button class="qty-btn minus" data-key="0-29" type="button">−</button>
-                    <input class="qty-val" data-key="0-29" type="number" inputmode="numeric" min="1" value="1">
-                    <button class="qty-btn plus" data-key="0-29" type="button">+</button>
-                  </div>
+                  <button class="order-now-btn" data-key="0-29" data-out="0" type="button">🛒 اطلب الآن</button>
                 
               </div>
             
@@ -1873,9 +1850,9 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
             
           </div>
         
-          <div class="card  in-cart " data-key="0-4">
+          <div class="card   " data-key="0-4">
             
-            <span class="in-cart-tag">✓ في السلة</span>
+            
             <span class="cbracket tl"></span><span class="cbracket br"></span>
             
       <div class="card-img-wrap">
@@ -1892,11 +1869,7 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
             
               <div class="qty-row">
                 
-                  <div class="qty-stepper">
-                    <button class="qty-btn minus" data-key="0-4" type="button">−</button>
-                    <input class="qty-val" data-key="0-4" type="number" inputmode="numeric" min="1" value="1">
-                    <button class="qty-btn plus" data-key="0-4" type="button">+</button>
-                  </div>
+                  <button class="order-now-btn" data-key="0-4" data-out="0" type="button">🛒 اطلب الآن</button>
                 
               </div>
             
@@ -1996,9 +1969,9 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
             
           </div>
         
-          <div class="card  in-cart " data-key="0-16">
+          <div class="card   " data-key="0-16">
             
-            <span class="in-cart-tag">✓ في السلة</span>
+            
             <span class="cbracket tl"></span><span class="cbracket br"></span>
             
       <div class="card-img-wrap">
@@ -2015,11 +1988,7 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
             
               <div class="qty-row">
                 
-                  <div class="qty-stepper">
-                    <button class="qty-btn minus" data-key="0-16" type="button">−</button>
-                    <input class="qty-val" data-key="0-16" type="number" inputmode="numeric" min="1" value="1">
-                    <button class="qty-btn plus" data-key="0-16" type="button">+</button>
-                  </div>
+                  <button class="order-now-btn" data-key="0-16" data-out="0" type="button">🛒 اطلب الآن</button>
                 
               </div>
             
@@ -2132,9 +2101,9 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
             
           </div>
         
-          <div class="card  in-cart " data-key="0-22">
+          <div class="card   " data-key="0-22">
             
-            <span class="in-cart-tag">✓ في السلة</span>
+            
             <span class="cbracket tl"></span><span class="cbracket br"></span>
             <div class="card-img-wrap"><div class="card-img card-img-default"><img src="data:image/svg+xml;utf8,%0A%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20200%22%3E%0A%20%20%3Crect%20width%3D%22200%22%20height%3D%22200%22%20fill%3D%22%23eef1f4%22%2F%3E%0A%20%20%3Cg%20fill%3D%22none%22%20stroke%3D%22%239aa5b1%22%20stroke-width%3D%226%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M40%2070%20L100%2040%20L160%2070%20L160%20140%20L100%20170%20L40%20140%20Z%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M40%2070%20L100%20100%20L160%2070%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M100%20100%20L100%20170%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E" alt="كاميرا يس داخلى D530" loading="lazy" style="object-fit:contain; opacity:0.55;"></div></div>
             <span class="badge-status limited">⚠ كمية محدودة</span>
@@ -2145,11 +2114,7 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
             
               <div class="qty-row">
                 
-                  <div class="qty-stepper">
-                    <button class="qty-btn minus" data-key="0-22" type="button">−</button>
-                    <input class="qty-val" data-key="0-22" type="number" inputmode="numeric" min="1" value="1">
-                    <button class="qty-btn plus" data-key="0-22" type="button">+</button>
-                  </div>
+                  <button class="order-now-btn" data-key="0-22" data-out="0" type="button">🛒 اطلب الآن</button>
                 
               </div>
             
@@ -2174,9 +2139,9 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
             
           </div>
         
-          <div class="card  in-cart " data-key="0-24">
+          <div class="card   " data-key="0-24">
             
-            <span class="in-cart-tag">✓ في السلة</span>
+            
             <span class="cbracket tl"></span><span class="cbracket br"></span>
             <div class="card-img-wrap"><div class="card-img card-img-default"><img src="data:image/svg+xml;utf8,%0A%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20200%22%3E%0A%20%20%3Crect%20width%3D%22200%22%20height%3D%22200%22%20fill%3D%22%23eef1f4%22%2F%3E%0A%20%20%3Cg%20fill%3D%22none%22%20stroke%3D%22%239aa5b1%22%20stroke-width%3D%226%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M40%2070%20L100%2040%20L160%2070%20L160%20140%20L100%20170%20L40%20140%20Z%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M40%2070%20L100%20100%20L160%2070%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M100%20100%20L100%20170%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E" alt="باور صبلاى ووتر بروف 20امبير" loading="lazy" style="object-fit:contain; opacity:0.55;"></div></div>
             <span class="badge-status limited">⚠ كمية محدودة</span>
@@ -2187,19 +2152,15 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
             
               <div class="qty-row">
                 
-                  <div class="qty-stepper">
-                    <button class="qty-btn minus" data-key="0-24" type="button">−</button>
-                    <input class="qty-val" data-key="0-24" type="number" inputmode="numeric" min="1" value="1">
-                    <button class="qty-btn plus" data-key="0-24" type="button">+</button>
-                  </div>
+                  <button class="order-now-btn" data-key="0-24" data-out="0" type="button">🛒 اطلب الآن</button>
                 
               </div>
             
           </div>
         
-          <div class="card  in-cart " data-key="0-25">
+          <div class="card   " data-key="0-25">
             
-            <span class="in-cart-tag">✓ في السلة</span>
+            
             <span class="cbracket tl"></span><span class="cbracket br"></span>
             <div class="card-img-wrap"><div class="card-img card-img-default"><img src="data:image/svg+xml;utf8,%0A%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20200%22%3E%0A%20%20%3Crect%20width%3D%22200%22%20height%3D%22200%22%20fill%3D%22%23eef1f4%22%2F%3E%0A%20%20%3Cg%20fill%3D%22none%22%20stroke%3D%22%239aa5b1%22%20stroke-width%3D%226%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M40%2070%20L100%2040%20L160%2070%20L160%20140%20L100%20170%20L40%20140%20Z%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M40%2070%20L100%20100%20L160%2070%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M100%20100%20L100%20170%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E" alt="ان فى ار يس اوريجنال 16 بورت 8 ميجا NVR 4516F-D9(16CH 8MP)" loading="lazy" style="object-fit:contain; opacity:0.55;"></div></div>
             <span class="badge-status limited">⚠ كمية محدودة</span>
@@ -2210,11 +2171,7 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
             
               <div class="qty-row">
                 
-                  <div class="qty-stepper">
-                    <button class="qty-btn minus" data-key="0-25" type="button">−</button>
-                    <input class="qty-val" data-key="0-25" type="number" inputmode="numeric" min="1" value="1">
-                    <button class="qty-btn plus" data-key="0-25" type="button">+</button>
-                  </div>
+                  <button class="order-now-btn" data-key="0-25" data-out="0" type="button">🛒 اطلب الآن</button>
                 
               </div>
             
@@ -2334,9 +2291,9 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
             
           </div>
         
-          <div class="card  in-cart " data-key="0-36">
+          <div class="card   " data-key="0-36">
             
-            <span class="in-cart-tag">✓ في السلة</span>
+            
             <span class="cbracket tl"></span><span class="cbracket br"></span>
             <div class="card-img-wrap"><div class="card-img card-img-default"><img src="data:image/svg+xml;utf8,%0A%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20200%22%3E%0A%20%20%3Crect%20width%3D%22200%22%20height%3D%22200%22%20fill%3D%22%23eef1f4%22%2F%3E%0A%20%20%3Cg%20fill%3D%22none%22%20stroke%3D%22%239aa5b1%22%20stroke-width%3D%226%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M40%2070%20L100%2040%20L160%2070%20L160%20140%20L100%20170%20L40%20140%20Z%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M40%2070%20L100%20100%20L160%2070%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M100%20100%20L100%20170%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E" alt="ديى فى ار هاى لوك 4بورت 2ميجا 104G" loading="lazy" style="object-fit:contain; opacity:0.55;"></div></div>
             <span class="badge-status limited">⚠ كمية محدودة</span>
@@ -2347,11 +2304,7 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
             
               <div class="qty-row">
                 
-                  <div class="qty-stepper">
-                    <button class="qty-btn minus" data-key="0-36" type="button">−</button>
-                    <input class="qty-val" data-key="0-36" type="number" inputmode="numeric" min="1" value="1">
-                    <button class="qty-btn plus" data-key="0-36" type="button">+</button>
-                  </div>
+                  <button class="order-now-btn" data-key="0-36" data-out="0" type="button">🛒 اطلب الآن</button>
                 
               </div>
             
@@ -22576,7 +22529,7 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
 
 <button class="float-cart" id="cartFloatBtn" type="button" aria-label="سلة الطلبات">
   🧾 <span class="cart-label">سلة الطلبات</span>
-  <span class="cart-badge" id="cartBadge" style="display: flex;">8</span>
+  <span class="cart-badge" id="cartBadge" style="display: flex;">10</span>
 </button>
 
 <!-- ================= DATA SCRIPTS ================= -->
@@ -23076,7 +23029,7 @@ const PROMO = JSON.parse(document.getElementById('promo-data').textContent);
    README-GOOGLE-SHEETS-ORDERS.md for full setup steps). Leaving it empty simply skips the
    Sheets save and the WhatsApp button keeps working exactly as before — nothing breaks. */
 // [ربط جديد - المرحلة الأولى] متغير رابط Google Apps Script Web App
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyohHoRMWgxKdpkkNTtm-AnbkbSWSBhclNedQWfi6n_6L3QZNoa8yJjVuxsTO49zimh/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxVd_8s-HLIioRue4-nPr2ymO89lupaUM_-mF80AqLbqLVfcjY0Z1YOLYGO6Q-xqsS8eg/exec";
 const GAS_ORDERS_WEBHOOK_URL = WEB_APP_URL; // <-- تم الربط: يشير الآن لنفس رابط WEB_APP_URL أعلاه
 async function sendOrderToGoogleSheet(payload){
   if(!GAS_ORDERS_WEBHOOK_URL){
@@ -23092,13 +23045,9 @@ async function sendOrderToGoogleSheet(payload){
   console.log('[GAS ORDER] البيانات بصيغة JSON:', bodyString);
 
   try{
-    // [إصلاح CORS] استخدام 'text/plain' بدل 'application/json' كـ Content-Type.
-    // هذا يجعل الطلب "simple request" حسب مواصفات CORS، فلا يُطلق المتصفح
-    // preflight (OPTIONS) قبل الطلب الحقيقي. Google Apps Script لا يمكنه أبدًا
-    // إضافة Access-Control-Allow-Origin على استجابة الـ OPTIONS، لذلك أي طلب
-    // يفرض preflight سيُحظر قبل الوصول للسيرفر (ولن يظهر أي Execution).
-    // محتوى الـ body يبقى JSON صالح تمامًا كما هو — فقط الـ header يتغيّر.
-    // Apps Script يقرأه عبر e.postData.contents ويعمل JSON.parse عليه كالمعتاد.
+    // [إصلاح CORS] 'text/plain' بدل 'application/json' كـ Content-Type يجعل الطلب
+    // "simple request" فلا يُطلق المتصفح preflight (OPTIONS) قبل الطلب الحقيقي —
+    // Google Apps Script لا يمكنه إضافة Access-Control-Allow-Origin على OPTIONS إطلاقًا.
     const res = await fetch(GAS_ORDERS_WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -28704,16 +28653,20 @@ async function sendOrderPdfElectronically(){
       pdf.addImage(imgData, 'PNG', 20, 20, imgW, imgH);
     });
     const pdfBase64 = pdf.output('datauristring'); // إخراج كـ Base64 بدل التنزيل (لا pdf.save هنا)
+    // [Debug] طباعة حجم ملف PDF الناتج (بالميجابايت) لتشخيص أي فشل بسبب حجم البيانات
+    console.log('[GAS ORDER][PDF] حجم ملف PDF بصيغة base64 (MB):', (pdfBase64.length / 1024 / 1024).toFixed(2));
     const custName = (document.getElementById('custName').value.trim() || 'عميل').replace(/\s+/g,'-');
     const result = await sendOrderToGoogleSheet(Object.assign({
       type:'order_pdf', fileName: `الطلب-وفق-العميل-${custName}.pdf`, fileData: pdfBase64
     }, payload));
+    console.log('[GAS ORDER][PDF] نتيجة الإرسال الكاملة:', result);
     if(result.ok || result.skipped){
       showElectronicSendSuccess();
     } else {
       showOrderSendStatus('error', '⚠️ حصل خطأ أثناء إرسال ملف PDF. حاول تاني.');
     }
   }catch(e){
+    console.error('[GAS ORDER][PDF] استثناء أثناء إنشاء أو إرسال PDF:', e);
     showOrderSendStatus('error', '⚠️ حصل خطأ أثناء إنشاء أو إرسال ملف PDF، تأكد من الاتصال بالإنترنت وحاول تاني.');
   }
   btn.disabled = false; btn.textContent = oldText;
@@ -30290,7 +30243,14 @@ document.getElementById('backupFileInput').addEventListener('change', async (e) 
    kept for migration"), plus any other omega_* key on this device that predates the
    current *_v1/_v2 key naming and isn't one of the keys this version already reads.
    If such data is found, the user is asked to confirm before anything is migrated. ---- */
-const SESSION_AUTOSAVE_KEY = 'omega_session_autosave_v1';
+// [إصلاح] المفتاح القديم كان ثابتًا (omega_session_autosave_v1) في كل نسخ المشروع.
+// المشكلة: لو المتصفح فتح أكثر من نسخة (مطور/شركة/عميل) بنفس طريقة file://، فكل
+// النسخ تشترك في نفس localStorage بغض النظر عن محتوى الملف، فمسودة "عرض سعر" اتحفظت
+// وأنت بتجرب نسخة المطور كانت بتظهر تلقائيًا وتتفعّل حتى في نسخة العميل التي لا تحتوي
+// أصلاً على أداة "عرض سعر". الحل: ربط المفتاح باسم ملف الـ HTML نفسه (location.pathname)
+// بدل مفتاح ثابت، بحيث كل نسخة (ملف) منفصلة تمامًا عن غيرها في التخزين، دون التأثير على
+// أي مفتاح آخر (السلة، الفواتير، عروض الأسعار المؤرشفة تبقى كما هي بدون أي تغيير).
+const SESSION_AUTOSAVE_KEY = 'omega_session_autosave_v1__' + (typeof location !== 'undefined' ? location.pathname : '');
 const CURRENT_STORAGE_KEYS = [
   CART_STORAGE_KEY, CUSTOM_ITEMS_KEY, OFFERS_STORAGE_KEY, OFFER_ORDER_SEQ_KEY,
   OFFER_NOTIFY_DISMISSED_KEY, CUSTOMERS_KEY, PRICE_HISTORY_KEY, OWNER_PASSWORD_KEY,

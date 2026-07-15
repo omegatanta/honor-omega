@@ -23092,9 +23092,16 @@ async function sendOrderToGoogleSheet(payload){
   console.log('[GAS ORDER] البيانات بصيغة JSON:', bodyString);
 
   try{
+    // [إصلاح CORS] استخدام 'text/plain' بدل 'application/json' كـ Content-Type.
+    // هذا يجعل الطلب "simple request" حسب مواصفات CORS، فلا يُطلق المتصفح
+    // preflight (OPTIONS) قبل الطلب الحقيقي. Google Apps Script لا يمكنه أبدًا
+    // إضافة Access-Control-Allow-Origin على استجابة الـ OPTIONS، لذلك أي طلب
+    // يفرض preflight سيُحظر قبل الوصول للسيرفر (ولن يظهر أي Execution).
+    // محتوى الـ body يبقى JSON صالح تمامًا كما هو — فقط الـ header يتغيّر.
+    // Apps Script يقرأه عبر e.postData.contents ويعمل JSON.parse عليه كالمعتاد.
     const res = await fetch(GAS_ORDERS_WEBHOOK_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: bodyString
     });
 

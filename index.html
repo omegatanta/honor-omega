@@ -1186,7 +1186,7 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
 
 <div class="scanbar">
   <span class="rec"><span class="rec-dot"></span> LIVE PRICE LIST</span>
-  <span id="clock" class="mono">2026-07-15 17:35:35</span>
+  <span id="clock" class="mono">2026-07-15 18:01:53</span>
 </div>
 
 <header>
@@ -23031,12 +23031,7 @@ const PROMO = JSON.parse(document.getElementById('promo-data').textContent);
 // [ربط جديد - المرحلة الأولى] متغير رابط Google Apps Script Web App
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxVd_8s-HLIioRue4-nPr2ymO89lupaUM_-mF80AqLbqLVfcjY0Z1YOLYGO6Q-xqsS8eg/exec";
 const GAS_ORDERS_WEBHOOK_URL = WEB_APP_URL; // <-- تم الربط: يشير الآن لنفس رابط WEB_APP_URL أعلاه
-async function sendOrderToGoogleSheet(payload){
-  if(!GAS_ORDERS_WEBHOOK_URL){
-    console.log('[GAS ORDER] لا يوجد رابط Web App مضبوط — تم تخطي الإرسال إلى Google Sheet.');
-    return {ok:false, skipped:true};
-  }
-
+async function sendOrderToGoogleSheetOnce(payload){
   const bodyString = JSON.stringify(payload);
 
   // [Debug] طباعة الرابط والبيانات قبل الإرسال
@@ -23044,49 +23039,66 @@ async function sendOrderToGoogleSheet(payload){
   console.log('[GAS ORDER] البيانات المرسلة (payload):', payload);
   console.log('[GAS ORDER] البيانات بصيغة JSON:', bodyString);
 
+  // [إصلاح CORS] 'text/plain' بدل 'application/json' كـ Content-Type يجعل الطلب
+  // "simple request" فلا يُطلق المتصفح preflight (OPTIONS) قبل الطلب الحقيقي —
+  // Google Apps Script لا يمكنه إضافة Access-Control-Allow-Origin على OPTIONS إطلاقًا.
+  const res = await fetch(GAS_ORDERS_WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: bodyString
+  });
+
+  // [Debug] طباعة حالة الاستجابة
+  console.log('[GAS ORDER] Response Status:', res.status, res.statusText);
+
+  const resText = await res.text();
+  console.log('[GAS ORDER] Response Text:', resText);
+
+  let data;
   try{
-    // [إصلاح CORS] 'text/plain' بدل 'application/json' كـ Content-Type يجعل الطلب
-    // "simple request" فلا يُطلق المتصفح preflight (OPTIONS) قبل الطلب الحقيقي —
-    // Google Apps Script لا يمكنه إضافة Access-Control-Allow-Origin على OPTIONS إطلاقًا.
-    const res = await fetch(GAS_ORDERS_WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: bodyString
-    });
+    data = JSON.parse(resText);
+  }catch(parseErr){
+    console.log('[GAS ORDER] الاستجابة ليست JSON صالح، سيتم اعتبارها نجاح إذا كانت حالة HTTP سليمة.', parseErr);
+    data = null;
+  }
 
-    // [Debug] طباعة حالة الاستجابة
-    console.log('[GAS ORDER] Response Status:', res.status, res.statusText);
+  const httpOk = res.ok; // true لو status بين 200-299
+  const logicalOk = data ? (data.ok !== false) : true;
 
-    const resText = await res.text();
-    console.log('[GAS ORDER] Response Text:', resText);
+  if(!httpOk){
+    console.error('[GAS ORDER] فشل الإرسال: حالة HTTP غير ناجحة.', res.status, resText);
+    return {ok:false};
+  }
+  if(!logicalOk){
+    console.error('[GAS ORDER] فشل الإرسال: السيرفر رجّع ok:false.', data);
+    return {ok:false};
+  }
 
-    let data;
-    try{
-      data = JSON.parse(resText);
-    }catch(parseErr){
-      console.log('[GAS ORDER] الاستجابة ليست JSON صالح، سيتم اعتبارها نجاح إذا كانت حالة HTTP سليمة.', parseErr);
-      data = null;
-    }
+  console.log('[GAS ORDER] تم إرسال الطلب بنجاح وتخزينه في Google Sheet.');
+  return {ok:true};
+}
 
-    const httpOk = res.ok; // true لو status بين 200-299
-    const logicalOk = data ? (data.ok !== false) : true;
+async function sendOrderToGoogleSheet(payload){
+  if(!GAS_ORDERS_WEBHOOK_URL){
+    console.log('[GAS ORDER] لا يوجد رابط Web App مضبوط — تم تخطي الإرسال إلى Google Sheet.');
+    return {ok:false, skipped:true};
+  }
 
-    if(!httpOk){
-      console.error('[GAS ORDER] فشل الإرسال: حالة HTTP غير ناجحة.', res.status, resText);
-      return {ok:false};
-    }
-    if(!logicalOk){
-      console.error('[GAS ORDER] فشل الإرسال: السيرفر رجّع ok:false.', data);
-      return {ok:false};
-    }
-
-    console.log('[GAS ORDER] تم إرسال الطلب بنجاح وتخزينه في Google Sheet.');
-    return {ok:true};
-
+  // ملاحظة إصلاح: بعض طلبات Google Apps Script (خصوصًا مع صورة/PDF كبيرين) قد تأخذ وقتًا طويلًا
+  // في التنفيذ على الخادم، فيحدث أحيانًا أن يفشل الـ fetch نفسه على المتصفح (خطأ شبكة/اتصال)
+  // بعد أن يكون GAS قد أنهى العملية وحفظ الملف بالفعل في Drive. لتفادي إظهار رسالة خطأ
+  // خاطئة في هذه الحالة، نعيد المحاولة مرة واحدة تلقائيًا قبل اعتبار الإرسال فاشلًا فعليًا.
+  try{
+    return await sendOrderToGoogleSheetOnce(payload);
   }catch(err){
-    // [Debug] طباعة أي خطأ يحدث أثناء الإرسال (شبكة، CORS، رابط خاطئ، إلخ)
-    console.error('[GAS ORDER] حدث خطأ أثناء إرسال الطلب إلى Google Apps Script:', err);
-    return {ok:false, error: err && err.message};
+    console.error('[GAS ORDER] حدث خطأ في المحاولة الأولى، سيتم إعادة المحاولة مرة واحدة قبل اعتبارها فشلًا:', err);
+    try{
+      return await sendOrderToGoogleSheetOnce(payload);
+    }catch(err2){
+      // [Debug] طباعة أي خطأ يحدث أثناء الإرسال (شبكة، CORS، رابط خاطئ، إلخ)
+      console.error('[GAS ORDER] حدث خطأ أثناء إرسال الطلب إلى Google Apps Script (بعد إعادة المحاولة):', err2);
+      return {ok:false, error: err2 && err2.message};
+    }
   }
 }
 
@@ -23101,6 +23113,46 @@ let CUSTOM_ITEMS = []; // {id, desc, type, qty, price}
 CUSTOM_ITEMS = Storage.getJSON(CUSTOM_ITEMS_KEY, []) || [];
 function saveCustomItems(){
   Storage.setJSON(CUSTOM_ITEMS_KEY, CUSTOM_ITEMS);
+}
+
+/* ================= حفظ بيانات العميل تلقائيًا في نموذج الطلب (Local Storage فقط) =================
+   يحفظ حقول الاسم/الهاتف/العنوان/طريقة الشحن/شركة الشحن/طريقة الدفع في localStorage بمجرد
+   تغييرها، ويعيد تعبئتها تلقائيًا عند فتح الصفحة من جديد. لا علاقة له بميزة SAVED_CUSTOMERS
+   (دليل العملاء)، وهو منطق مستقل وبسيط لا يغيّر أي تصميم أو عناصر واجهة موجودة. */
+const ORDER_CUSTOMER_FORM_KEY = 'omega_tanta_order_customer_form_v1';
+const ORDER_CUSTOMER_FORM_FIELDS = ['custName','custPhone','custAddress','custShipping','custShippingCompany','custPayment'];
+
+function saveOrderCustomerFormField(fieldId){
+  const el = document.getElementById(fieldId);
+  if(!el) return;
+  const data = Storage.getJSON(ORDER_CUSTOMER_FORM_KEY, {}) || {};
+  data[fieldId] = el.value;
+  Storage.setJSON(ORDER_CUSTOMER_FORM_KEY, data);
+}
+
+function restoreOrderCustomerForm(){
+  const data = Storage.getJSON(ORDER_CUSTOMER_FORM_KEY, null);
+  if(!data) return;
+  ORDER_CUSTOMER_FORM_FIELDS.forEach(fieldId => {
+    const el = document.getElementById(fieldId);
+    if(el && data[fieldId]) el.value = data[fieldId];
+  });
+}
+
+function initOrderCustomerFormPersistence(){
+  restoreOrderCustomerForm();
+  ORDER_CUSTOMER_FORM_FIELDS.forEach(fieldId => {
+    const el = document.getElementById(fieldId);
+    if(!el) return;
+    const handler = () => saveOrderCustomerFormField(fieldId);
+    el.addEventListener('input', handler);
+    el.addEventListener('change', handler);
+  });
+}
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', initOrderCustomerFormPersistence);
+}else{
+  initOrderCustomerFormPersistence();
 }
 
 /* ================= OFFERS SYSTEM (Core — Stage 1) =================

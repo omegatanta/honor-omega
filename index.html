@@ -1186,7 +1186,7 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
 
 <div class="scanbar">
   <span class="rec"><span class="rec-dot"></span> LIVE PRICE LIST</span>
-  <span id="clock" class="mono">2026-07-15 18:01:53</span>
+  <span id="clock" class="mono">2026-07-15 20:44:25</span>
 </div>
 
 <header>
@@ -22529,7 +22529,7 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
 
 <button class="float-cart" id="cartFloatBtn" type="button" aria-label="سلة الطلبات">
   🧾 <span class="cart-label">سلة الطلبات</span>
-  <span class="cart-badge" id="cartBadge" style="display: flex;">10</span>
+  <span class="cart-badge" id="cartBadge" style="display: flex;">6</span>
 </button>
 
 <!-- ================= DATA SCRIPTS ================= -->
@@ -22608,6 +22608,7 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
     <!-- 1) title -->
     <div class="cart-head">
       <h3>سلة الطلبات 🧾</h3>
+      <button id="myOrdersArchiveBtn" type="button" class="cart-clear-btn" title="طلباتي السابقة" style="margin-inline-end:6px;">🗂️</button>
       <button id="clearCartBtn" type="button" class="cart-clear-btn" title="حذف جميع الأصناف من السلة"><svg class="btn-ic" style="margin-inline-end:0;width:15px;height:15px;" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg></button>
     </div>
     <div class="cart-subtitle">طلبك بيتحفظ تلقائيًا على جهازك، تقدر تسيب الصفحة وترجع تكمله في أي وقت.</div>
@@ -22696,6 +22697,21 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
     <div id="orderSendStatus" style="display:none; margin-top:10px; padding:10px 12px; border-radius:8px; font-size:12.5px; line-height:1.7;"></div>
     <div class="cart-footnote">
       تقدر ترسل طلبك مباشرة عبر واتساب، أو تحفظه كصورة/PDF باسم "الطلب وفق العميل" وترسله بنفسك بأي طريقة تناسبك.
+    </div>
+  </div>
+</div>
+
+<!-- ================= MY ORDERS ARCHIVE (طلباتي السابقة - خاص بالعميل على جهازه) ================= -->
+<div class="modal-overlay" id="myOrdersArchiveModal">
+  <div class="modal-box">
+    <h3>🗂️ طلباتي السابقة</h3>
+    <div style="font-size:12px;color:var(--text-dim);margin-bottom:14px;line-height:1.7;">
+      كل طلب ترسله بيتحفظ هنا تلقائيًا على جهازك، تقدر تفتحه أو تعيد تحميله لسلة الطلبات، أو تحذفه.
+    </div>
+    <div id="myOrdersArchiveList"><div class="cart-empty">لسه مفيش طلبات محفوظة. لما تبعت طلب هيتحفظ هنا تلقائيًا.</div></div>
+    <div class="cart-actions" style="margin-top:12px;">
+      <button id="myOrdersArchiveDeleteAllBtn" class="btn-cancel" type="button" style="flex:1 1 100%; color:var(--red-rec); border-color:var(--red-rec);">🗑 حذف كل الطلبات المحفوظة</button>
+      <button id="myOrdersArchiveClose" class="btn-cancel cart-action-btn" type="button" style="flex:1 1 100%;">إغلاق</button>
     </div>
   </div>
 </div>
@@ -22980,6 +22996,19 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
   </div>
 </div>
 
+<!-- ================= SAVED CART RESTORE PROMPT (Local Storage فقط) ================= -->
+<div class="modal-overlay" id="cartRestoreModal">
+  <div class="modal-box" style="max-width:420px;">
+    <h3>🛒 سلة محفوظة</h3>
+    <div style="margin-top:8px; line-height:1.7;">تم العثور على سلة طلبات محفوظة.</div>
+    <div class="modal-actions" style="flex-wrap:wrap; margin-top:16px;">
+      <button id="cartRestoreYes" class="btn-save" type="button" style="flex:1 1 100%;">استعادة السلة</button>
+      <button id="cartRestoreNewBtn" class="btn-cancel" type="button" style="flex:1 1 48%;">بدء سلة جديدة</button>
+      <button id="cartRestoreDeleteBtn" class="btn-cancel" type="button" style="flex:1 1 48%;">حذف السلة المحفوظة</button>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ================= STORAGE LAYER (single local-storage access point) =================
    Stage 8: every read/write in this project goes through this layer only — no other
@@ -23104,7 +23133,12 @@ async function sendOrderToGoogleSheet(payload){
 
 const CART_STORAGE_KEY = 'omega_tanta_cart_v1';
 let CART = {}; // key "secIdx-itemIdx" -> qty
-CART = Storage.getJSON(CART_STORAGE_KEY, {}) || {};
+/* ================= استعادة السلة المحفوظة (Local Storage فقط) =================
+   لا تُحمَّل السلة المحفوظة تلقائيًا داخل CART عند فتح الصفحة. بدلاً من ذلك تُحفظ
+   نسخة منها في SAVED_CART_SNAPSHOT فقط، وبعد اكتمال تحميل الصفحة تُعرض رسالة
+   للمستخدم ليختار: استعادة السلة / بدء سلة جديدة / حذف السلة المحفوظة.
+   راجع الدالة showCartRestorePrompt() في آخر الملف. */
+const SAVED_CART_SNAPSHOT = Storage.getJSON(CART_STORAGE_KEY, {}) || {};
 function saveCart(){
   Storage.setJSON(CART_STORAGE_KEY, CART);
 }
@@ -28252,9 +28286,11 @@ function attemptSendOrderToSheet(payload, waUrl){
     if(btn) btn.disabled = false;
     if(result.ok){
       showOrderSendStatus('success', '✅ تم حفظ طلبك بنجاح. تقدر كمان تأكد إرساله عبر واتساب.');
+      archiveCurrentCustomerOrder(payload);
     } else if(result.skipped){
       // No webhook configured yet — behave exactly like the original version (WhatsApp only).
       showOrderSendStatus('success', '✅ الطلب جاهز.');
+      archiveCurrentCustomerOrder(payload);
     } else {
       showOrderSendStatus('error', '⚠️ حصل خطأ أثناء حفظ الطلب. تقدر تعيد المحاولة أو ترسله مباشرة عبر واتساب. <button id="retryOrderSendBtn" type="button" class="btn-cancel" style="margin-top:6px;padding:6px 14px;">إعادة المحاولة</button>');
       const retryBtn = document.getElementById('retryOrderSendBtn');
@@ -28263,6 +28299,121 @@ function attemptSendOrderToSheet(payload, waUrl){
     window.open(waUrl, '_blank');
   });
 }
+
+/* ================= MY ORDERS ARCHIVE (أرشيف طلبات العميل الشخصي) =================
+   مستقل تمامًا عن أرشيف الفواتير/عروض الأسعار الخاص بالشركة، ومستقل عن سلة الطلبات
+   الحالية. كل طلب يرسله العميل (واتساب/إلكتروني) يتحفظ هنا في Local Storage على
+   جهازه فقط، ويقدر يفتحه ليعيد تحميله لسلة الطلبات الحالية، أو يحذفه. */
+const MY_ORDERS_ARCHIVE_KEY = 'omega_customer_orders_v1';
+function loadMyOrdersArchive(){
+  return Storage.getJSON(MY_ORDERS_ARCHIVE_KEY, []) || [];
+}
+function saveMyOrdersArchiveList(list){
+  Storage.setJSON(MY_ORDERS_ARCHIVE_KEY, list);
+}
+function archiveCurrentCustomerOrder(payload){
+  if(!payload) return;
+  const list = loadMyOrdersArchive();
+  const snap = Object.assign({}, payload, {
+    id: 'o_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
+    savedAt: new Date().toISOString()
+  });
+  list.push(snap);
+  saveMyOrdersArchiveList(list);
+  renderMyOrdersArchiveList();
+}
+function renderMyOrdersArchiveList(){
+  const holder = document.getElementById('myOrdersArchiveList');
+  if(!holder) return;
+  const list = loadMyOrdersArchive().slice().sort((a, b) => (b.savedAt || '').localeCompare(a.savedAt || ''));
+  if(list.length === 0){
+    holder.innerHTML = '<div class="cart-empty">لسه مفيش طلبات محفوظة. لما تبعت طلب هيتحفظ هنا تلقائيًا.</div>';
+    return;
+  }
+  holder.innerHTML = list.map(rec => {
+    const dateDisplay = rec.date ? new Date(rec.date).toLocaleDateString('ar-EG') : '—';
+    const totalDisplay = Math.round(+rec.grandTotal || 0).toLocaleString('en-US');
+    return `
+    <div class="q-arch-row" data-id="${rec.id}" style="border:1px solid var(--hair); border-radius:10px; padding:12px; margin-bottom:10px; background:#fff;">
+      <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; font-size:13px;">
+        <span><b>التاريخ:</b> ${dateDisplay}</span>
+        <span><b>الإجمالي:</b> ${totalDisplay} ج.م</span>
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;">
+        <button class="btn-cancel my-order-open" data-id="${rec.id}" type="button" style="flex:1 1 45%; font-size:12px; padding:6px;">📂 فتح</button>
+        <button class="btn-cancel my-order-restore" data-id="${rec.id}" type="button" style="flex:1 1 45%; font-size:12px; padding:6px;">↩️ إعادة تحميل للسلة</button>
+        <button class="btn-cancel my-order-delete" data-id="${rec.id}" type="button" style="flex:1 1 100%; font-size:12px; padding:6px; color:var(--red-rec); border-color:var(--red-rec);">🗑 حذف</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function findMyOrder(id){
+  return loadMyOrdersArchive().find(x => x.id === id) || null;
+}
+function openMyOrderDetails(id){
+  const rec = findMyOrder(id);
+  if(!rec) return;
+  alert(rec.message || rec.itemsText || 'لا توجد تفاصيل محفوظة لهذا الطلب.');
+}
+function restoreMyOrderToCart(id){
+  const rec = findMyOrder(id);
+  if(!rec) return;
+  if(!confirm('هيتم استبدال سلة الطلبات الحالية بمحتوى الطلب ده. تأكيد؟')) return;
+  CART = {};
+  CUSTOM_ITEMS = [];
+  (rec.items || []).forEach(it => {
+    if(it.custom){
+      CUSTOM_ITEMS.push({
+        id: 'ci_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
+        desc: it.custom.desc, type: it.custom.type, qty: it.custom.qty, price: it.custom.price
+      });
+    } else if(it.key){
+      const [s,i] = it.key.split('-').map(Number);
+      if(DATA[s] && DATA[s].items[i]) CART[it.key] = it.qty;
+    }
+  });
+  saveCart();
+  saveCustomItems();
+  if(rec.name) document.getElementById('custName').value = rec.name;
+  if(rec.phone) document.getElementById('custPhone').value = rec.phone;
+  if(rec.address) document.getElementById('custAddress').value = rec.address;
+  if(rec.shipping) document.getElementById('custShipping').value = rec.shipping;
+  if(rec.shippingCompany) document.getElementById('custShippingCompany').value = rec.shippingCompany;
+  if(rec.payment) document.getElementById('custPayment').value = rec.payment;
+  ORDER_CUSTOMER_FORM_FIELDS.forEach(id => saveOrderCustomerFormField(id));
+  updateCartBadge();
+  document.getElementById('myOrdersArchiveModal').classList.remove('show');
+  renderCartModal();
+  render();
+  document.getElementById('cartModal').classList.add('show');
+}
+function deleteMyOrder(id){
+  if(!confirm('متأكد إنك عايز تحذف الطلب ده من طلباتك السابقة؟')) return;
+  const list = loadMyOrdersArchive().filter(x => x.id !== id);
+  saveMyOrdersArchiveList(list);
+  renderMyOrdersArchiveList();
+}
+document.getElementById('myOrdersArchiveBtn').addEventListener('click', () => {
+  renderMyOrdersArchiveList();
+  document.getElementById('myOrdersArchiveModal').classList.add('show');
+});
+document.getElementById('myOrdersArchiveClose').addEventListener('click', () => {
+  document.getElementById('myOrdersArchiveModal').classList.remove('show');
+});
+document.getElementById('myOrdersArchiveDeleteAllBtn').addEventListener('click', () => {
+  if(loadMyOrdersArchive().length === 0) return;
+  if(!confirm('متأكد إنك عايز تحذف كل طلباتك السابقة المحفوظة؟ الخطوة دي مينفعش يترجع فيها.')) return;
+  saveMyOrdersArchiveList([]);
+  renderMyOrdersArchiveList();
+});
+document.getElementById('myOrdersArchiveList').addEventListener('click', (e) => {
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  const id = btn.dataset.id;
+  if(btn.classList.contains('my-order-open')) openMyOrderDetails(id);
+  else if(btn.classList.contains('my-order-restore')) restoreMyOrderToCart(id);
+  else if(btn.classList.contains('my-order-delete')) deleteMyOrder(id);
+});
 
 document.getElementById('sendOrderBtn').addEventListener('click', () => {
   const keys = Object.keys(CART).filter(k => CART[k] > 0);
@@ -28296,7 +28447,7 @@ document.getElementById('sendOrderBtn').addEventListener('click', () => {
     const lineTotal = unitPrice * qty;
     grand += lineTotal;
     itemsText += `${idx+1}) ${it.name} × ${qty} = ${lineTotal.toLocaleString('en-US')} ج.م${unitPrice !== (+it.price||0) ? ' (سعر بعد الخصم 🏷️)' : ''}\n`;
-    itemsList.push({name: it.name, qty, unitPrice, lineTotal});
+    itemsList.push({name: it.name, qty, unitPrice, lineTotal, key});
   });
   let hasReviewItems = false;
   CUSTOM_ITEMS.forEach((ci, idx) => {
@@ -28305,11 +28456,11 @@ document.getElementById('sendOrderBtn').addEventListener('click', () => {
       const lineTotal = ci.price * (ci.qty||1);
       grand += lineTotal;
       itemsText += `${n}) [صنف غير مدرج] ${ci.desc}${ci.type ? ' - ' + ci.type : ''} × ${ci.qty||1} = ${lineTotal.toLocaleString('en-US')} ج.م\n`;
-      itemsList.push({name: `[غير مدرج] ${ci.desc}${ci.type ? ' - ' + ci.type : ''}`, qty: ci.qty||1, unitPrice: ci.price, lineTotal});
+      itemsList.push({name: `[غير مدرج] ${ci.desc}${ci.type ? ' - ' + ci.type : ''}`, qty: ci.qty||1, unitPrice: ci.price, lineTotal, custom: {desc: ci.desc, type: ci.type, qty: ci.qty||1, price: ci.price}});
     } else {
       hasReviewItems = true;
       itemsText += `${n}) [صنف غير مدرج - يحتاج تأكيد سعر] ${ci.desc}${ci.type ? ' - ' + ci.type : ''} × ${ci.qty||1}\n`;
-      itemsList.push({name: `[غير مدرج - يحتاج تأكيد سعر] ${ci.desc}${ci.type ? ' - ' + ci.type : ''}`, qty: ci.qty||1, unitPrice: 0, lineTotal: 0});
+      itemsList.push({name: `[غير مدرج - يحتاج تأكيد سعر] ${ci.desc}${ci.type ? ' - ' + ci.type : ''}`, qty: ci.qty||1, unitPrice: 0, lineTotal: 0, custom: {desc: ci.desc, type: ci.type, qty: ci.qty||1, price: ci.price||null}});
     }
   });
   const message =
@@ -30768,6 +30919,33 @@ function showSessionRestorePrompt(){
   };
 }
 showSessionRestorePrompt();
+
+/* ================= عرض رسالة استعادة السلة المحفوظة (Local Storage فقط) ================= */
+function showCartRestorePrompt(){
+  if(!SAVED_CART_SNAPSHOT || Object.keys(SAVED_CART_SNAPSHOT).length === 0) return;
+  const modal = document.getElementById('cartRestoreModal');
+  if(!modal) return;
+  modal.classList.add('show');
+  const restoreBtn = document.getElementById('cartRestoreYes');
+  const newBtn = document.getElementById('cartRestoreNewBtn');
+  const deleteBtn = document.getElementById('cartRestoreDeleteBtn');
+  if(restoreBtn) restoreBtn.onclick = () => {
+    modal.classList.remove('show');
+    CART = JSON.parse(JSON.stringify(SAVED_CART_SNAPSHOT));
+    saveCart();
+    updateCartBadge();
+    render();
+  };
+  if(newBtn) newBtn.onclick = () => {
+    modal.classList.remove('show');
+    // بدء سلة جديدة: تجاهل السلة المحفوظة مع الاحتفاظ ببيانات العميل (لا تغيير هنا).
+  };
+  if(deleteBtn) deleteBtn.onclick = () => {
+    modal.classList.remove('show');
+    try{ window.localStorage.removeItem(CART_STORAGE_KEY); }catch(e){}
+  };
+}
+showCartRestorePrompt();
 
 /* ================= PREVIEW WORKSPACE (Stage 2: fully-live modes) =================
    Still purely additive and in-page-only — it does NOT touch the existing save/export

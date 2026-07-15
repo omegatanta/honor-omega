@@ -23076,7 +23076,7 @@ const PROMO = JSON.parse(document.getElementById('promo-data').textContent);
    README-GOOGLE-SHEETS-ORDERS.md for full setup steps). Leaving it empty simply skips the
    Sheets save and the WhatsApp button keeps working exactly as before — nothing breaks. */
 // [ربط جديد - المرحلة الأولى] متغير رابط Google Apps Script Web App
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw8qzz6XvzqXg5J66X1k4dvGEiJTvWxUpsRpMdTwiVI8sIGQEuLu8TQA-3gY7gCgoyPUg/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyohHoRMWgxKdpkkNTtm-AnbkbSWSBhclNedQWfi6n_6L3QZNoa8yJjVuxsTO49zimh/exec";
 const GAS_ORDERS_WEBHOOK_URL = WEB_APP_URL; // <-- تم الربط: يشير الآن لنفس رابط WEB_APP_URL أعلاه
 async function sendOrderToGoogleSheet(payload){
   if(!GAS_ORDERS_WEBHOOK_URL){
@@ -23091,19 +23091,13 @@ async function sendOrderToGoogleSheet(payload){
   console.log('[GAS ORDER] البيانات المرسلة (payload):', payload);
   console.log('[GAS ORDER] البيانات بصيغة JSON:', bodyString);
 
-  try{
-    // [إصلاح CORS] استخدام 'text/plain' بدل 'application/json' كـ Content-Type.
-    // هذا يجعل الطلب "simple request" حسب مواصفات CORS، فلا يُطلق المتصفح
-    // preflight (OPTIONS) قبل الطلب الحقيقي. Google Apps Script لا يمكنه أبدًا
-    // إضافة Access-Control-Allow-Origin على استجابة الـ OPTIONS، لذلك أي طلب
-    // يفرض preflight سيُحظر قبل الوصول للسيرفر (ولن يظهر أي Execution).
-    // محتوى الـ body يبقى JSON صالح تمامًا كما هو — فقط الـ header يتغيّر.
-    // Apps Script يقرأه عبر e.postData.contents ويعمل JSON.parse عليه كالمعتاد.
-    const res = await fetch(GAS_ORDERS_WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: bodyString
-    });
+  const formData = new URLSearchParams();
+formData.append("data", bodyString);
+
+const res = await fetch(GAS_ORDERS_WEBHOOK_URL, {
+  method: "POST",
+  body: formData
+});
 
     // [Debug] طباعة حالة الاستجابة
     console.log('[GAS ORDER] Response Status:', res.status, res.statusText);

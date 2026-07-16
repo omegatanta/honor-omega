@@ -1176,9 +1176,125 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
   background:var(--surface); border:1px solid var(--hair); padding:11px 14px; border-radius:var(--radius);
   cursor:pointer; white-space:nowrap;
 }
+
+/* ---------- تحسين تجربة الاستخدام: إشعارات + مؤشر تحميل (لا تغيير في التصميم العام) ---------- */
+#uxToastStack{
+  position:fixed; left:50%; transform:translateX(-50%); bottom:22px; z-index:99999;
+  display:flex; flex-direction:column; gap:10px; align-items:center;
+  pointer-events:none; width:min(92vw,420px);
+}
+.ux-toast{
+  pointer-events:auto;
+  display:flex; align-items:flex-start; gap:10px;
+  width:100%; box-sizing:border-box;
+  padding:13px 16px; border-radius:14px;
+  font-family:var(--font-body,'Tajawal',sans-serif); font-size:14.5px; font-weight:700; line-height:1.55;
+  color:#0f2417; background:#eafff2; border:1.5px solid #34c76f;
+  box-shadow:0 14px 32px rgba(15,18,34,0.18);
+  opacity:0; transform:translateY(10px) scale(0.98);
+  animation:uxToastIn .28s ease forwards;
+}
+.ux-toast.ux-toast-out{ animation:uxToastOut .22s ease forwards; }
+@keyframes uxToastIn{ to{ opacity:1; transform:translateY(0) scale(1); } }
+@keyframes uxToastOut{ to{ opacity:0; transform:translateY(8px) scale(0.98); } }
+.ux-toast .ux-toast-icon{ flex:0 0 auto; font-size:18px; line-height:1; margin-top:1px; }
+.ux-toast .ux-toast-msg{ flex:1 1 auto; word-break:break-word; }
+.ux-toast .ux-toast-close{
+  flex:0 0 auto; background:none; border:none; cursor:pointer; font-size:15px; font-weight:900;
+  color:inherit; opacity:0.55; padding:0 0 0 4px; line-height:1;
+}
+.ux-toast .ux-toast-close:hover{ opacity:1; }
+.ux-toast.ux-toast-success{ color:#0f2417; background:#eafff2; border-color:#34c76f; }
+.ux-toast.ux-toast-error{ color:#3a0d0d; background:#fff0ee; border-color:#e5484d; }
+.ux-toast.ux-toast-warning{ color:#3a2a06; background:#fff8e6; border-color:#e8ab1f; }
+.ux-toast.ux-toast-info{ color:#0d2440; background:#eaf3ff; border-color:#3a86e0; }
+
+#uxLoadingOverlay{
+  position:fixed; inset:0; z-index:100000;
+  display:none; align-items:center; justify-content:center;
+  background:rgba(15,18,34,0.32); backdrop-filter:blur(1.5px);
+}
+#uxLoadingOverlay.active{ display:flex; }
+.ux-loading-box{
+  display:flex; flex-direction:column; align-items:center; gap:12px;
+  background:var(--surface,#fff); color:var(--text,#0f2417);
+  padding:22px 28px; border-radius:16px; box-shadow:0 20px 50px rgba(15,18,34,0.28);
+  font-family:var(--font-body,'Tajawal',sans-serif); font-weight:700; font-size:14.5px; text-align:center;
+  min-width:180px;
+}
+.ux-spinner{
+  width:34px; height:34px; border-radius:50%;
+  border:3.5px solid rgba(52,199,111,0.22); border-top-color:#34c76f;
+  animation:uxSpin .7s linear infinite;
+}
+@keyframes uxSpin{ to{ transform:rotate(360deg); } }
+
+/* مؤشر تحميل صغير داخل الأزرار أثناء تنفيذ عملية طويلة */
+.ux-btn-busy{ position:relative; color:transparent !important; pointer-events:none; }
+.ux-btn-busy::after{
+  content:""; position:absolute; top:50%; left:50%; width:16px; height:16px;
+  margin:-8px 0 0 -8px; border-radius:50%;
+  border:2.5px solid rgba(255,255,255,0.4); border-top-color:#fff;
+  animation:uxSpin .6s linear infinite;
+}
+.ux-btn-busy.ux-btn-busy-dark::after{ border:2.5px solid rgba(15,18,34,0.25); border-top-color:#0f2417; }
+
+/* ================= [جديد - المرحلة 3B] مركز الطلبات (Orders Center) ================= */
+.orders-toolbar{
+  display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:4px;
+}
+.orders-search-box{
+  position:relative; flex:1 1 220px; min-width:180px;
+}
+.orders-search-box input{
+  width:100%; padding:8px 32px 8px 10px; border:1px solid var(--hair); border-radius:var(--radius,4px);
+  background:var(--surface-2,#f7f7f7); color:var(--text); font-family:var(--font-body); font-size:13.5px;
+}
+.orders-search-box input:focus{ border-color:var(--green-phos); box-shadow:0 0 0 3px var(--green-phos-dim); outline:none; }
+.orders-search-box .icon{ position:absolute; inset-inline-end:10px; top:50%; transform:translateY(-50%); opacity:0.55; pointer-events:none; }
+.orders-table-wrap{ overflow-x:auto; border:1px solid var(--hair); border-radius:var(--radius,4px); }
+table.orders-table{ width:100%; border-collapse:collapse; font-size:13px; min-width:820px; }
+table.orders-table thead th{
+  background:var(--green-deep); color:#fff; text-align:right; padding:9px 10px; font-weight:700;
+  white-space:nowrap; position:sticky; top:0; z-index:1;
+}
+table.orders-table tbody td{
+  padding:8px 10px; border-bottom:1px solid var(--hair); vertical-align:middle; white-space:nowrap;
+}
+table.orders-table tbody tr:hover{ background:var(--green-phos-dim); }
+table.orders-table td.orders-td-wrap{ white-space:normal; max-width:220px; }
+.orders-status-badge{
+  display:inline-block; padding:3px 9px; border-radius:20px; font-size:11.5px; font-weight:700;
+  background:var(--surface-2,#f0f0f0); color:var(--text); border:1px solid var(--hair);
+}
+.orders-status-new{ background:rgba(15,92,52,0.12); color:var(--green-deep); border-color:rgba(15,92,52,0.3); }
+.orders-status-paid{ background:rgba(23,106,60,0.14); color:var(--green-brand); border-color:rgba(23,106,60,0.3); }
+.orders-status-unpaid{ background:rgba(181,52,47,0.12); color:var(--red-rec); border-color:rgba(181,52,47,0.3); }
+.orders-status-partial{ background:rgba(180,140,20,0.14); color:#8a6a10; border-color:rgba(180,140,20,0.35); }
+.orders-details-btn{
+  border:1px solid var(--hair); background:var(--surface); color:var(--green-deep); border-radius:var(--radius,4px);
+  padding:5px 10px; font-size:12px; cursor:pointer; font-weight:700;
+}
+.orders-details-btn:hover{ background:var(--green-phos-dim); }
+#ordersCenterResultCount{ font-size:12.5px; color:var(--text-dim); font-weight:700; }
+
+/* ================= [جديد - المرحلة 4] سجل إشعارات الطلبات ================= */
+.orders-notif-toolbar{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:space-between; margin-bottom:6px; }
+.orders-notif-log{ max-height:180px; overflow-y:auto; border:1px solid var(--hair); border-radius:var(--radius,4px); }
+.orders-notif-item{
+  display:flex; align-items:center; gap:8px; padding:7px 10px; border-bottom:1px solid var(--hair);
+  font-size:12.5px;
+}
+.orders-notif-item:last-child{ border-bottom:none; }
+.orders-notif-item.orders-notif-unread{ background:var(--green-phos-dim); font-weight:700; }
+.orders-notif-icon{ flex:0 0 auto; }
+.orders-notif-msg{ flex:1 1 auto; }
+.orders-notif-time{ flex:0 0 auto; color:var(--text-faint); font-family:'JetBrains Mono',monospace; font-size:11px; white-space:nowrap; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script></head>
 <body>
+<div id="uxToastStack" aria-live="polite"></div>
+<div id="uxLoadingOverlay"><div class="ux-loading-box"><div class="ux-spinner"></div><div id="uxLoadingText">جاري التنفيذ...</div></div></div>
 
 
 
@@ -1186,7 +1302,7 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
 
 <div class="scanbar">
   <span class="rec"><span class="rec-dot"></span> LIVE PRICE LIST</span>
-  <span id="clock" class="mono">2026-07-15 20:44:25</span>
+  <span id="clock" class="mono">2026-07-16 21:37:27</span>
 </div>
 
 <header>
@@ -1241,6 +1357,8 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
       
       
       
+      
+      <!-- [جديد - المرحلة 3B] زر فتح مركز الطلبات الواردة (أداة شركة) -->
       
       
     </div>
@@ -1305,9 +1423,9 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
       </div>
       <div class="grid">
         
-          <div class="card  in-cart " data-key="0-1">
+          <div class="card   " data-key="0-1">
             
-            <span class="in-cart-tag">✓ في السلة</span>
+            
             <span class="cbracket tl"></span><span class="cbracket br"></span>
             
       <div class="card-img-wrap">
@@ -1324,19 +1442,15 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
             
               <div class="qty-row">
                 
-                  <div class="qty-stepper">
-                    <button class="qty-btn minus" data-key="0-1" type="button">−</button>
-                    <input class="qty-val" data-key="0-1" type="number" inputmode="numeric" min="1" value="1">
-                    <button class="qty-btn plus" data-key="0-1" type="button">+</button>
-                  </div>
+                  <button class="order-now-btn" data-key="0-1" data-out="0" type="button">🛒 اطلب الآن</button>
                 
               </div>
             
           </div>
         
-          <div class="card  in-cart " data-key="0-2">
+          <div class="card   " data-key="0-2">
             
-            <span class="in-cart-tag">✓ في السلة</span>
+            
             <span class="cbracket tl"></span><span class="cbracket br"></span>
             
       <div class="card-img-wrap">
@@ -1353,19 +1467,15 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
             
               <div class="qty-row">
                 
-                  <div class="qty-stepper">
-                    <button class="qty-btn minus" data-key="0-2" type="button">−</button>
-                    <input class="qty-val" data-key="0-2" type="number" inputmode="numeric" min="1" value="3">
-                    <button class="qty-btn plus" data-key="0-2" type="button">+</button>
-                  </div>
+                  <button class="order-now-btn" data-key="0-2" data-out="0" type="button">🛒 اطلب الآن</button>
                 
               </div>
             
           </div>
         
-          <div class="card  in-cart " data-key="0-3">
+          <div class="card   " data-key="0-3">
             
-            <span class="in-cart-tag">✓ في السلة</span>
+            
             <span class="cbracket tl"></span><span class="cbracket br"></span>
             
       <div class="card-img-wrap">
@@ -1382,19 +1492,15 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
             
               <div class="qty-row">
                 
-                  <div class="qty-stepper">
-                    <button class="qty-btn minus" data-key="0-3" type="button">−</button>
-                    <input class="qty-val" data-key="0-3" type="number" inputmode="numeric" min="1" value="1">
-                    <button class="qty-btn plus" data-key="0-3" type="button">+</button>
-                  </div>
+                  <button class="order-now-btn" data-key="0-3" data-out="0" type="button">🛒 اطلب الآن</button>
                 
               </div>
             
           </div>
         
-          <div class="card  in-cart " data-key="0-9">
+          <div class="card   " data-key="0-9">
             
-            <span class="in-cart-tag">✓ في السلة</span>
+            
             <span class="cbracket tl"></span><span class="cbracket br"></span>
             
       <div class="card-img-wrap">
@@ -1411,11 +1517,7 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
             
               <div class="qty-row">
                 
-                  <div class="qty-stepper">
-                    <button class="qty-btn minus" data-key="0-9" type="button">−</button>
-                    <input class="qty-val" data-key="0-9" type="number" inputmode="numeric" min="1" value="1">
-                    <button class="qty-btn plus" data-key="0-9" type="button">+</button>
-                  </div>
+                  <button class="order-now-btn" data-key="0-9" data-out="0" type="button">🛒 اطلب الآن</button>
                 
               </div>
             
@@ -22529,7 +22631,7 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
 
 <button class="float-cart" id="cartFloatBtn" type="button" aria-label="سلة الطلبات">
   🧾 <span class="cart-label">سلة الطلبات</span>
-  <span class="cart-badge" id="cartBadge" style="display: flex;">6</span>
+  <span class="cart-badge" id="cartBadge" style="display: flex;">10</span>
 </button>
 
 <!-- ================= DATA SCRIPTS ================= -->
@@ -22609,6 +22711,7 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
     <div class="cart-head">
       <h3>سلة الطلبات 🧾</h3>
       <button id="myOrdersArchiveBtn" type="button" class="cart-clear-btn" title="طلباتي السابقة" style="margin-inline-end:6px;">🗂️</button>
+      <button id="trackMyOrdersBtn" type="button" class="cart-clear-btn" title="طلباتي (متابعة حالة الطلب)" style="margin-inline-end:6px;">📦</button>
       <button id="clearCartBtn" type="button" class="cart-clear-btn" title="حذف جميع الأصناف من السلة"><svg class="btn-ic" style="margin-inline-end:0;width:15px;height:15px;" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg></button>
     </div>
     <div class="cart-subtitle">طلبك بيتحفظ تلقائيًا على جهازك، تقدر تسيب الصفحة وترجع تكمله في أي وقت.</div>
@@ -22713,6 +22816,43 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
       <button id="myOrdersArchiveDeleteAllBtn" class="btn-cancel" type="button" style="flex:1 1 100%; color:var(--red-rec); border-color:var(--red-rec);">🗑 حذف كل الطلبات المحفوظة</button>
       <button id="myOrdersArchiveClose" class="btn-cancel cart-action-btn" type="button" style="flex:1 1 100%;">إغلاق</button>
     </div>
+
+    <!-- شاشة تفاصيل طلب واحد (بيانات العميل + المنتجات + الكميات + الأسعار + الصور + التاريخ/الوقت) -->
+    <div id="myOrderDetailsView" style="display:none;">
+      <div id="myOrderDetailsBody" style="max-height:60vh; overflow-y:auto;"></div>
+      <div class="cart-actions" style="margin-top:12px;">
+        <button id="myOrderDetailsBackBtn" class="btn-cancel" type="button" style="flex:1 1 100%;">⬅️ رجوع لقائمة الطلبات</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= [جديد - المرحلة 5] طلباتي (متابعة حالة الطلب من الشيت) =================
+     نافذة مستقلة عن "طلباتي السابقة" (المحلية على الجهاز). هذه تجيب حالة الطلبات
+     الفعلية من نفس Google Sheet عبر نفس Web App الحالي (action=getOrders&phone=...)،
+     بحيث لو الشركة غيّرت حالة الطلب، العميل يشوف آخر حالة بعد الضغط على "تحديث". -->
+<div class="modal-overlay" id="trackMyOrdersModal">
+  <div class="modal-box">
+    <h3>📦 طلباتي</h3>
+    <div style="font-size:12px;color:var(--text-dim);margin-bottom:14px;line-height:1.7;">
+      بيعرض هنا كل الطلبات المرتبطة برقم هاتفك المسجل، مع آخر حالة وصلت من الشركة.
+    </div>
+    <label>رقم الهاتف المسجل بالطلب</label>
+    <input id="trackMyOrdersPhone" type="text" placeholder="01xxxxxxxxx">
+    <div class="cart-actions" style="margin-top:10px;">
+      <button id="trackMyOrdersRefreshBtn" class="btn-save cart-action-btn" type="button" style="background:var(--green-phos);">🔄 تحديث</button>
+      <button id="trackMyOrdersClose" class="btn-cancel cart-action-btn" type="button">إغلاق</button>
+    </div>
+    <div class="section-divider"></div>
+    <div id="trackMyOrdersList"><div class="cart-empty">اكتب رقم هاتفك واضغط "تحديث" عشان تشوف طلباتك.</div></div>
+
+    <!-- شاشة تفاصيل طلب واحد -->
+    <div id="trackMyOrderDetailsView" style="display:none;">
+      <div id="trackMyOrderDetailsBody" style="max-height:60vh; overflow-y:auto;"></div>
+      <div class="cart-actions" style="margin-top:12px;">
+        <button id="trackMyOrderDetailsBackBtn" class="btn-cancel" type="button" style="flex:1 1 100%;">⬅️ رجوع لقائمة الطلبات</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -22748,6 +22888,9 @@ select:not(.gear-btn):not(.q-disc-type-input) option{
 
 
 <!-- ================= OFFERS MANAGEMENT MODAL (Stage 2 — structure only; CRUD wiring comes in a later stage) ================= -->
+
+
+<!-- ================= [جديد - المرحلة 3B] ORDERS CENTER MODAL ================= -->
 
 
 <!-- ================= OFFER ADD / EDIT FORM MODAL ================= -->
@@ -23045,6 +23188,99 @@ const Storage = {
   }
 };
 
+/* ================= تحسين تجربة الاستخدام (UX layer) =================
+   إشعارات (نجاح/خطأ/تحذير) + مؤشر تحميل عام + مؤشر تحميل داخل الأزرار + حارس
+   ضد الضغط المتكرر على نفس الزر. هذه الطبقة لا تضيف أي ميزة جديدة ولا تغيّر أي
+   منطق عمل: فقط طريقة عرض الرسائل والحالة أثناء الانتظار. alert() الأصلي لسه
+   موجود كـ fallback لو حصل أي خطأ غير متوقع في الطبقة دي. */
+function uxToastIcon(kind){
+  if(kind === 'success') return '✅';
+  if(kind === 'error') return '⛔';
+  if(kind === 'warning') return '⚠️';
+  return 'ℹ️';
+}
+function notify(message, kind){
+  try{
+    kind = kind || 'info';
+    const stack = document.getElementById('uxToastStack');
+    if(!stack){ window.alert(message); return; }
+    const el = document.createElement('div');
+    el.className = 'ux-toast ux-toast-' + kind;
+    el.innerHTML =
+      '<span class="ux-toast-icon">' + uxToastIcon(kind) + '</span>' +
+      '<span class="ux-toast-msg"></span>' +
+      '<button type="button" class="ux-toast-close" aria-label="إغلاق">✕</button>';
+    el.querySelector('.ux-toast-msg').textContent = String(message);
+    const removeToast = () => {
+      if(!el.parentNode) return;
+      el.classList.add('ux-toast-out');
+      setTimeout(() => { if(el.parentNode) el.parentNode.removeChild(el); }, 220);
+    };
+    el.querySelector('.ux-toast-close').addEventListener('click', removeToast);
+    stack.appendChild(el);
+    const autoHideMs = kind === 'error' ? 6500 : (kind === 'warning' ? 5500 : 4200);
+    setTimeout(removeToast, autoHideMs);
+  }catch(e){ try{ window.alert(message); }catch(e2){} }
+}
+/* تصنيف تلقائي لرسائل alert() القديمة (نجاح/خطأ/تحذير) حسب مضمون النص نفسه،
+   بدون تغيير أي كلمة من نص الرسالة الأصلي. */
+function classifyLegacyAlert(message){
+  const t = String(message);
+  if(/(بنجاح|تم\s|جاهز|✓|✅)/.test(t) && !/(تعذّر|خطأ|فشل|غير صحيح|غير متطابق|منع)/.test(t)) return 'success';
+  if(/(تعذّر|خطأ|فشل|حصل خطأ|غير صحيحة|غير متطابق|منع فتح|غير صالح|تالف)/.test(t)) return 'error';
+  return 'warning';
+}
+/* alertUX تحل محل alertUX() العادي لعرض نفس الرسالة بنفس النص تمامًا، بشكل غير
+   معطّل لواجهة الاستخدام (non-blocking) بدل نافذة alert الافتراضية. */
+function alertUX(message){
+  notify(message, classifyLegacyAlert(message));
+}
+
+let uxLoadingDepth = 0;
+function showLoading(text){
+  uxLoadingDepth++;
+  const overlay = document.getElementById('uxLoadingOverlay');
+  const textEl = document.getElementById('uxLoadingText');
+  if(textEl) textEl.textContent = text || 'جاري التنفيذ...';
+  if(overlay) overlay.classList.add('active');
+  // صمام أمان: لو لأي سبب غير متوقع لم يُستدعَ hideLoading خلال دقيقة، يختفي
+  // المؤشر تلقائيًا حتى لا يبقى عالقًا على الشاشة ويمنع استخدام الصفحة.
+  clearTimeout(window.__uxLoadingSafetyTimer);
+  window.__uxLoadingSafetyTimer = setTimeout(() => hideLoading(true), 60000);
+}
+function hideLoading(force){
+  uxLoadingDepth = force ? 0 : Math.max(0, uxLoadingDepth - 1);
+  if(uxLoadingDepth === 0){
+    const overlay = document.getElementById('uxLoadingOverlay');
+    if(overlay) overlay.classList.remove('active');
+  }
+}
+
+/* حارس ضد الضغط المتكرر: يعطّل الزر فورًا عند الضغط، يظهر مؤشر تحميل صغير داخله
+   إن رغبت، وينفّذ الدالة الممرّرة، ثم يعيد تفعيل الزر تلقائيًا بعد انتهائها (نجاح
+   أو فشل)، حتى لو كانت الدالة async. لا يغيّر أي شرط أو نتيجة للعملية نفسها. */
+function guardClick(btn, fn, opts){
+  if(!btn || btn.disabled) return;
+  opts = opts || {};
+  btn.disabled = true;
+  if(opts.spinner !== false) btn.classList.add('ux-btn-busy');
+  const release = () => {
+    btn.disabled = false;
+    btn.classList.remove('ux-btn-busy');
+  };
+  try{
+    const result = fn();
+    if(result && typeof result.then === 'function'){
+      result.then(release, release);
+    } else {
+      release();
+    }
+  }catch(e){
+    release();
+    throw e;
+  }
+}
+
 const DATA = JSON.parse(document.getElementById('price-data').textContent);
 const BRAND = JSON.parse(document.getElementById('brand-data').textContent);
 const HERO = JSON.parse(document.getElementById('hero-data').textContent);
@@ -23058,8 +23294,75 @@ const PROMO = JSON.parse(document.getElementById('promo-data').textContent);
    README-GOOGLE-SHEETS-ORDERS.md for full setup steps). Leaving it empty simply skips the
    Sheets save and the WhatsApp button keeps working exactly as before — nothing breaks. */
 // [ربط جديد - المرحلة الأولى] متغير رابط Google Apps Script Web App
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxVd_8s-HLIioRue4-nPr2ymO89lupaUM_-mF80AqLbqLVfcjY0Z1YOLYGO6Q-xqsS8eg/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzpCwiYl20QFnc6x-zH48okk9qkkGqsnbpQ1yVVUe_Qv2AH0D-N0_oyma1PICcd1o1oSw/exec";
 const GAS_ORDERS_WEBHOOK_URL = WEB_APP_URL; // <-- تم الربط: يشير الآن لنفس رابط WEB_APP_URL أعلاه
+
+/* ================= [مرحلة: نظام استقبال الطلبات] دوال مساعدة موحّدة =================
+   تُستخدم هذه الدوال في كل مسارات إرسال الطلب (واتساب / بيانات فقط / PDF / صورة) لضمان
+   أن جميع الحقول الجديدة (Order ID، تاريخ الطلب، وقت الطلب، حالة الدفع، طريقة الدفع)
+   تُرسل بنفس الشكل بدون استثناء. لا تُغيّر أي دالة أو منطق موجود من قبل. */
+
+const LOCAL_ORDER_SEQ_KEY = 'omega_tanta_order_seq_v1';
+
+function getOrderDateYYYYMMDD(d){
+  d = d || new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  return `${y}${m}${day}`;
+}
+
+function getOrderDateReadable(d){
+  d = d || new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+
+function getOrderTimeReadable(d){
+  d = d || new Date();
+  const h = String(d.getHours()).padStart(2,'0');
+  const mi = String(d.getMinutes()).padStart(2,'0');
+  const s = String(d.getSeconds()).padStart(2,'0');
+  return `${h}:${mi}:${s}`;
+}
+
+function generateLocalOrderId(){
+  const todayKey = getOrderDateYYYYMMDD();
+  let seqMap = Storage.getJSON(LOCAL_ORDER_SEQ_KEY, {}) || {};
+  const nextSeq = (seqMap[todayKey] || 0) + 1;
+  seqMap = {[todayKey]: nextSeq};
+  Storage.setJSON(LOCAL_ORDER_SEQ_KEY, seqMap);
+  const seqStr = String(nextSeq).padStart(3, '0');
+  return `ORD-${todayKey}-${seqStr}`;
+}
+
+function getInitialOrderStatus(){
+  return 'جديد';
+}
+
+function computeOrderPaymentStatus(grandTotal, paidAmount){
+  const total = +grandTotal || 0;
+  const paid = +paidAmount || 0;
+  if(paid <= 0) return 'غير مدفوع';
+  if(paid < total) return 'مدفوع جزئيًا';
+  return 'مدفوع بالكامل';
+}
+
+function buildOrderReceivingFields(grandTotal, paidAmount){
+  const now = new Date();
+  paidAmount = (paidAmount === undefined || paidAmount === null) ? 0 : (+paidAmount || 0);
+  return {
+    orderId: generateLocalOrderId(),
+    orderDate: getOrderDateReadable(now),
+    orderTime: getOrderTimeReadable(now),
+    orderStatus: getInitialOrderStatus(),
+    paidAmount: paidAmount,
+    paymentStatus: computeOrderPaymentStatus(grandTotal, paidAmount)
+  };
+}
+
 async function sendOrderToGoogleSheetOnce(payload){
   const bodyString = JSON.stringify(payload);
 
@@ -23131,6 +23434,150 @@ async function sendOrderToGoogleSheet(payload){
   }
 }
 
+/* ================= [مرحلة: نظام استقبال الطلبات — المرحلة 2] قائمة انتظار محلية (Offline Queue) =================
+   هدف هذه الطبقة: لو فشل إرسال الطلب (مفيش إنترنت أو أي خطأ شبكة)، لا نكتفي بعرض رسالة
+   خطأ فقط، بل نحفظ "بيانات الطلب الأساسية" (بدون ملفات PDF/صورة — دي بتتطلب إعادة إرسال
+   يدوي لاحقًا كما تم الاتفاق) في localStorage، ونحاول إعادة إرسالها تلقائيًا لاحقًا
+   (عند رجوع الاتصال بالإنترنت أو عند فتح الصفحة من جديد)، مع استخدام نفس آلية توقيع
+   الطلب computeOrderSignature الموجودة بالفعل لمنع أي تكرار.
+
+   هذه الطبقة مستقلة تمامًا ولا تُعدّل أي دالة قديمة: فقط تُستخدم من نقطة واحدة إضافية
+   داخل attemptSendOrderToSheet و runGuardedElectronicSend (استدعاء إضافي عند الفشل،
+   وليس تغييرًا في منطقهما الأصلي). */
+
+const PENDING_ORDERS_QUEUE_KEY = 'omega_tanta_pending_orders_v1';
+
+// كل عنصر في القائمة: { id, payload, kindLabel, savedAt, lastAttemptAt, lastError, hasFileToResend }
+function getPendingOrdersQueue(){
+  return Storage.getJSON(PENDING_ORDERS_QUEUE_KEY, []) || [];
+}
+
+function savePendingOrdersQueue(list){
+  Storage.setJSON(PENDING_ORDERS_QUEUE_KEY, list);
+}
+
+function generatePendingQueueId(){
+  return 'pend_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+}
+
+// يضيف طلبًا لقائمة الانتظار المحلية فقط لو لم يكن موجودًا بالفعل (بنفس التوقيع)،
+// لتفادي تكرار نفس الطلب في القائمة عند تكرار محاولات الإرسال.
+// hasFileToResend: true لو الطلب كان من نوع order_pdf/order_image (الملف نفسه غير
+// مخزَّن هنا؛ فقط نُعلم المستخدم لاحقًا أنه يحتاج إعادة إرسال الملف يدويًا).
+function addOrderToPendingQueue(payload, kindLabel, hasFileToResend){
+  if(!payload) return null;
+  const signature = (typeof computeOrderSignature === 'function') ? computeOrderSignature(payload) : '';
+  let queue = getPendingOrdersQueue();
+
+  const alreadyQueued = signature && queue.some(item => item.signature === signature);
+  if(alreadyQueued) return null;
+
+  // لا نخزّن أي حقول ملف (fileData) داخل قائمة الانتظار — فقط بيانات الطلب الأساسية،
+  // بالإضافة لعلامة "كان فيه ملف مرفق" ليعرف المستخدم إنه محتاج يعيد إرسال الملف يدويًا.
+  const safePayload = Object.assign({}, payload);
+  delete safePayload.fileData; // لا نخزن الملفات الكبيرة في localStorage إطلاقًا
+
+  const entry = {
+    id: generatePendingQueueId(),
+    signature: signature,
+    payload: safePayload,
+    kindLabel: kindLabel || 'الطلب',
+    hasFileToResend: !!hasFileToResend,
+    savedAt: new Date().toISOString(),
+    lastAttemptAt: null,
+    lastError: null
+  };
+
+  queue.push(entry);
+  savePendingOrdersQueue(queue);
+  updatePendingOrdersBadge();
+  return entry.id;
+}
+
+function removeOrderFromPendingQueue(id){
+  let queue = getPendingOrdersQueue();
+  queue = queue.filter(item => item.id !== id);
+  savePendingOrdersQueue(queue);
+  updatePendingOrdersBadge();
+}
+
+function getPendingOrdersCount(){
+  return getPendingOrdersQueue().length;
+}
+
+// قفل بسيط لمنع تشغيل أكثر من محاولة مزامنة في نفس الوقت (مثلاً لو حدث event
+// "online" وفتح المستخدم الصفحة في نفس اللحظة تقريبًا).
+let PENDING_SYNC_IN_PROGRESS = false;
+
+// يحاول إعادة إرسال كل الطلبات المعلّقة بالترتيب (الأقدم أولًا)، ويشيل من القائمة
+// كل طلب نجح إرساله فورًا. لا يوقف باقي القائمة لو طلب واحد فشل.
+async function syncPendingOrders(){
+  if(PENDING_SYNC_IN_PROGRESS) return;
+  const queue = getPendingOrdersQueue();
+  if(queue.length === 0) return;
+
+  PENDING_SYNC_IN_PROGRESS = true;
+  try{
+    for(const entry of queue.slice()){ // نسخة عشان نقدر نعدل القائمة الأصلية أثناء التكرار
+      try{
+        const result = await sendOrderToGoogleSheetOnce(entry.payload);
+        if(result && result.ok){
+          removeOrderFromPendingQueue(entry.id);
+          if(typeof markOrderSignatureAsSent === 'function' && entry.signature){
+            markOrderSignatureAsSent(entry.signature);
+          }
+          notify(`✅ تم إرسال طلب معلّق بنجاح (${entry.kindLabel})${entry.hasFileToResend ? ' — لسه محتاج تعيد إرسال الملف المرفق يدويًا.' : ''}`, 'success');
+        } else {
+          updatePendingOrderAttempt(entry.id, 'فشل الإرسال (رد غير ناجح من السيرفر)');
+        }
+      }catch(err){
+        updatePendingOrderAttempt(entry.id, (err && err.message) ? err.message : 'خطأ غير معروف أثناء الإرسال');
+      }
+    }
+  } finally {
+    PENDING_SYNC_IN_PROGRESS = false;
+    updatePendingOrdersBadge();
+  }
+}
+
+function updatePendingOrderAttempt(id, errorMessage){
+  const queue = getPendingOrdersQueue();
+  const idx = queue.findIndex(item => item.id === id);
+  if(idx === -1) return;
+  queue[idx].lastAttemptAt = new Date().toISOString();
+  queue[idx].lastError = errorMessage || null;
+  savePendingOrdersQueue(queue);
+}
+
+// شارة بسيطة (badge) تُظهر عدد الطلبات المعلّقة لو موجود عنصر بهذا الـ id في الصفحة.
+// لا تفرض أي عنصر جديد إجباري في الواجهة؛ لو العنصر مش موجود، تتجاهل بأمان.
+function updatePendingOrdersBadge(){
+  const el = document.getElementById('pendingOrdersBadge');
+  const count = getPendingOrdersCount();
+  if(!el) return;
+  if(count > 0){
+    el.style.display = 'inline-flex';
+    el.textContent = count;
+  } else {
+    el.style.display = 'none';
+  }
+}
+
+// محاولة مزامنة تلقائية: عند رجوع الاتصال بالإنترنت، وعند تحميل الصفحة لأول مرة
+// (لو كان فيه طلبات معلّقة من زيارة سابقة والنت شغال أصلاً).
+window.addEventListener('online', () => {
+  notify('🔄 تم استعادة الاتصال بالإنترنت — جاري محاولة إرسال الطلبات المعلّقة...', 'info');
+  syncPendingOrders();
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  updatePendingOrdersBadge();
+  if(navigator.onLine !== false && getPendingOrdersCount() > 0){
+    syncPendingOrders();
+  }
+});
+
+
 const CART_STORAGE_KEY = 'omega_tanta_cart_v1';
 let CART = {}; // key "secIdx-itemIdx" -> qty
 /* ================= استعادة السلة المحفوظة (Local Storage فقط) =================
@@ -23139,15 +23586,58 @@ let CART = {}; // key "secIdx-itemIdx" -> qty
    للمستخدم ليختار: استعادة السلة / بدء سلة جديدة / حذف السلة المحفوظة.
    راجع الدالة showCartRestorePrompt() في آخر الملف. */
 const SAVED_CART_SNAPSHOT = Storage.getJSON(CART_STORAGE_KEY, {}) || {};
-function saveCart(){
-  Storage.setJSON(CART_STORAGE_KEY, CART);
-}
 const CUSTOM_ITEMS_KEY = 'omega_tanta_custom_items_v1';
 let CUSTOM_ITEMS = []; // {id, desc, type, qty, price}
 CUSTOM_ITEMS = Storage.getJSON(CUSTOM_ITEMS_KEY, []) || [];
+
+/* ================= لقطة سلة الطلبات الكاملة (منتجات + كميات + ملاحظات/أصناف غير مدرجة + إجمالي) =================
+   Storage.setJSON(CART_STORAGE_KEY, CART) و Storage.setJSON(CUSTOM_ITEMS_KEY, CUSTOM_ITEMS) أعلاه
+   يحفظان بيانات السلة نفسها بالفعل (كما كان الحال من قبل، بدون أي تغيير). هذه الإضافة توفر
+   بالإضافة لذلك لقطة موحّدة واحدة تجمع: الأصناف والكميات، الأصناف غير المدرجة مع وصفها/نوعها
+   (اللي بتلعب دور الملاحظات الحرة لكل صنف)، والإجمالي المحسوب وقت الحفظ، مع وقت آخر تحديث.
+   لا تُستخدم هذه اللقطة لاستعادة السلة (السلوك الحالي القائم على CART/CUSTOM_ITEMS يبقى كما هو
+   تمامًا)، وهي فقط سجل إضافي كامل ومتزامن تلقائيًا مع كل حفظ للسلة. لا علاقة لها بسجل الطلبات. */
+const CART_SNAPSHOT_KEY = 'omega_tanta_cart_snapshot_v1';
+function computeCartSnapshotTotal(){
+  let total = 0;
+  Object.keys(CART).forEach(key => {
+    if(!(CART[key] > 0)) return;
+    const [s, i] = key.split('-').map(Number);
+    const sec = DATA[s];
+    const it = sec && sec.items[i];
+    if(!it) return;
+    const unitPrice = getEffectiveUnitPrice(s, i);
+    total += unitPrice * CART[key];
+  });
+  CUSTOM_ITEMS.forEach(ci => { total += (ci.price || 0) * (ci.qty || 1); });
+  return total;
+}
+function saveCartSnapshot(){
+  const snapshot = {
+    cart: CART,
+    customItems: CUSTOM_ITEMS, // كل صنف يحمل وصفه/نوعه الخاص به كملاحظات حرة
+    total: computeCartSnapshotTotal(),
+    savedAt: new Date().toISOString()
+  };
+  Storage.setJSON(CART_SNAPSHOT_KEY, snapshot);
+}
+function saveCart(){
+  Storage.setJSON(CART_STORAGE_KEY, CART);
+  saveCartSnapshot();
+}
 function saveCustomItems(){
   Storage.setJSON(CUSTOM_ITEMS_KEY, CUSTOM_ITEMS);
+  saveCartSnapshot();
 }
+/* تفريغ كامل للسلة بعد إرسال الطلب بنجاح — يشمل الأصناف والكميات والأصناف غير المدرجة
+   ولقطة السلة الموحّدة، حتى لا يظل الطلب المُرسَل معروضًا كسلة حالية على جهاز العميل. */
+function clearCartAfterSuccessfulSend(){
+  CART = {};
+  CUSTOM_ITEMS = [];
+  saveCart();
+  saveCustomItems();
+}
+
 
 /* ================= حفظ بيانات العميل تلقائيًا في نموذج الطلب (Local Storage فقط) =================
    يحفظ حقول الاسم/الهاتف/العنوان/طريقة الشحن/شركة الشحن/طريقة الدفع في localStorage بمجرد
@@ -24130,17 +24620,20 @@ function nextOfferOrderNumber(){
    server backend, so "sending the order to the company" means composing a WhatsApp
    message to the company's own number with every detail and opening it directly) ---- */
 document.getElementById('sendOfferOrderBtn').addEventListener('click', () => {
+  const sendOfferOrderBtnEl = document.getElementById('sendOfferOrderBtn');
+  if(sendOfferOrderBtnEl && sendOfferOrderBtnEl.disabled) return; // منع الضغط المكرر
   const offer = getOfferById(CURRENT_OFFER_ORDER_ID);
-  if(!offer){ alert('حصل خطأ، افتح العرض تاني من صفحة العروض.'); return; }
+  if(!offer){ alertUX('حصل خطأ، افتح العرض تاني من صفحة العروض.'); return; }
   const totals = offerOrderComputeTotals(offer);
   const f = offerOrderCustomerFields();
   if(!f.custName || !f.phone || !f.governorate || !f.city || !f.address){
-    alert('من فضلك اكتب اسم العميل ورقم الهاتف والمحافظة والمدينة/المركز والعنوان بالتفصيل قبل إرسال طلب العرض.');
+    alertUX('من فضلك اكتب اسم العميل ورقم الهاتف والمحافظة والمدينة/المركز والعنوان بالتفصيل قبل إرسال طلب العرض.');
     return;
   }
-  if(!f.shippingMethod){ alert('من فضلك اختار طريقة الشحن قبل إرسال طلب العرض.'); return; }
-  if(!f.paymentMethod){ alert('من فضلك اختار طريقة الدفع قبل إرسال طلب العرض.'); return; }
+  if(!f.shippingMethod){ alertUX('من فضلك اختار طريقة الشحن قبل إرسال طلب العرض.'); return; }
+  if(!f.paymentMethod){ alertUX('من فضلك اختار طريقة الدفع قبل إرسال طلب العرض.'); return; }
 
+  if(sendOfferOrderBtnEl) sendOfferOrderBtnEl.disabled = true; // قفل فوري لمنع أي ضغطة ثانية وتوليد رقم طلب مكرر
   const orderNumber = nextOfferOrderNumber();
   const now = new Date();
   const dateDisplay = now.toLocaleDateString('ar-EG');
@@ -24188,13 +24681,14 @@ ${buildContactsText()}`;
   document.getElementById('offOrderSuccessDate').textContent = dateDisplay;
   document.getElementById('offOrderSuccessTitle').textContent = offer.title || 'عرض خاص';
   document.getElementById('offerOrderSuccessModal').classList.add('show');
+  if(sendOfferOrderBtnEl) sendOfferOrderBtnEl.disabled = false; // إعادة تفعيل الزر لطلب عرض جديد لاحقًا
 });
 
 /* ---- export: PNG / JPG / PDF / Excel / print — all built on the shared engine already
    used by the cart/quote/invoice documents (see renderDocPagesToCanvases and friends). ---- */
 document.getElementById('offOrderPngBtn').addEventListener('click', async () => {
   const offer = getOfferById(CURRENT_OFFER_ORDER_ID);
-  if(!offer){ alert('حصل خطأ، افتح العرض تاني من صفحة العروض.'); return; }
+  if(!offer){ alertUX('حصل خطأ، افتح العرض تاني من صفحة العروض.'); return; }
   const custName = document.getElementById('offOrderCustName').value.trim();
   const fileName = getDocFileName('offerOrder', custName || 'عميل', 'png');
   if(!fileName) return;
@@ -24202,7 +24696,7 @@ document.getElementById('offOrderPngBtn').addEventListener('click', async () => 
 });
 document.getElementById('offOrderJpgBtn').addEventListener('click', async () => {
   const offer = getOfferById(CURRENT_OFFER_ORDER_ID);
-  if(!offer){ alert('حصل خطأ، افتح العرض تاني من صفحة العروض.'); return; }
+  if(!offer){ alertUX('حصل خطأ، افتح العرض تاني من صفحة العروض.'); return; }
   const custName = document.getElementById('offOrderCustName').value.trim();
   const fileName = getDocFileName('offerOrder', custName || 'عميل', 'jpg');
   if(!fileName) return;
@@ -24210,7 +24704,7 @@ document.getElementById('offOrderJpgBtn').addEventListener('click', async () => 
 });
 document.getElementById('offOrderPdfBtn').addEventListener('click', async () => {
   const offer = getOfferById(CURRENT_OFFER_ORDER_ID);
-  if(!offer){ alert('حصل خطأ، افتح العرض تاني من صفحة العروض.'); return; }
+  if(!offer){ alertUX('حصل خطأ، افتح العرض تاني من صفحة العروض.'); return; }
   const custName = document.getElementById('offOrderCustName').value.trim();
   const fileName = getDocFileName('offerOrder', custName || 'عميل', 'pdf');
   if(!fileName) return;
@@ -24218,7 +24712,7 @@ document.getElementById('offOrderPdfBtn').addEventListener('click', async () => 
 });
 document.getElementById('offOrderExcelBtn').addEventListener('click', async () => {
   const offer = getOfferById(CURRENT_OFFER_ORDER_ID);
-  if(!offer){ alert('حصل خطأ، افتح العرض تاني من صفحة العروض.'); return; }
+  if(!offer){ alertUX('حصل خطأ، افتح العرض تاني من صفحة العروض.'); return; }
   const totals = offerOrderComputeTotals(offer);
   const f = offerOrderCustomerFields();
   const fileName = getDocFileName('offerOrder', f.custName || 'عميل', 'xlsx');
@@ -24253,7 +24747,7 @@ document.getElementById('offOrderExcelBtn').addEventListener('click', async () =
 });
 document.getElementById('offOrderPrintBtn').addEventListener('click', () => {
   const offer = getOfferById(CURRENT_OFFER_ORDER_ID);
-  if(!offer){ alert('حصل خطأ، افتح العرض تاني من صفحة العروض.'); return; }
+  if(!offer){ alertUX('حصل خطأ، افتح العرض تاني من صفحة العروض.'); return; }
   printDocPages(buildOfferOrderDocPages(), 'طلب العرض');
 });
 
@@ -24628,7 +25122,7 @@ document.getElementById('offerAddNewBtn').addEventListener('click', () => openOf
 document.getElementById('offerFormCancel').addEventListener('click', closeOfferForm);
 document.getElementById('offerFormSave').addEventListener('click', () => {
   const title = document.getElementById('offerTitleInput').value.trim();
-  if(!title){ alert('لازم تكتب عنوان للعرض.'); return; }
+  if(!title){ alertUX('لازم تكتب عنوان للعرض.'); return; }
   const id = document.getElementById('offerFormId').value;
   const data = collectOfferFormIntoRecord();
   if(id){
@@ -24942,7 +25436,7 @@ function ownerGate(actionLabel){
   if(SESSION_UNLOCKED) return true;
   const entered = prompt('من فضلك ادخل كلمة المرور للدخول إلى: ' + actionLabel);
   if(entered === null) return false;
-  if(entered !== getOwnerPassword()){ alert('كلمة المرور غير صحيحة.'); return false; }
+  if(entered !== getOwnerPassword()){ alertUX('كلمة المرور غير صحيحة.'); return false; }
   SESSION_UNLOCKED = true;
   return true;
 }
@@ -25758,7 +26252,7 @@ function render(){
       btn.addEventListener('click', () => {
         const key = btn.dataset.key;
         if(btn.dataset.out === '1'){
-          alert('⚠️ تنبيه: هذا المنتج غير متوفر حاليًا، وسيتم تسجيله في طلبك.');
+          alertUX('⚠️ تنبيه: هذا المنتج غير متوفر حاليًا، وسيتم تسجيله في طلبك.');
         }
         activeCart[key] = 1;
         if(!quoteMode) saveCart();
@@ -25953,7 +26447,7 @@ function openDocumentBlank(docType){
     document.getElementById('qProductSearch').value = '';
     document.getElementById('qSearchResults').style.display = 'none';
     document.getElementById('qSearchResults').innerHTML = '';
-    alert('وضع عرض السعر شغّال. اختار الأصناف والكميات من القائمة، أو اضغط "📦 اختيار منتج من الكتالوج" جوه شاشة عرض السعر، وبعدين افتح "عرض السعر" تحت لتحديد اسم العميل ونسبة الخصم وإرسال العرض.');
+    alertUX('وضع عرض السعر شغّال. اختار الأصناف والكميات من القائمة، أو اضغط "📦 اختيار منتج من الكتالوج" جوه شاشة عرض السعر، وبعدين افتح "عرض السعر" تحت لتحديد اسم العميل ونسبة الخصم وإرسال العرض.');
   } else {
     invoicePrefillItems = null;
     openContactProfileModal('open');
@@ -26845,7 +27339,7 @@ document.getElementById('paymentEntryClose').addEventListener('click', () => {
 });
 document.getElementById('paymentEntrySave').addEventListener('click', () => {
   const amount = Math.max(0, +document.getElementById('peAmount').value || 0);
-  if(amount <= 0){ alert('من فضلك اكتب مبلغ صحيح للدفعة.'); return; }
+  if(amount <= 0){ alertUX('من فضلك اكتب مبلغ صحيح للدفعة.'); return; }
   const date = document.getElementById('peDate').value || todayISODate();
   const method = document.getElementById('peMethod').value;
   const to = document.getElementById('peTo').value.trim();
@@ -26926,7 +27420,7 @@ document.getElementById('invReturnProductSearch').addEventListener('input', rend
 document.getElementById('invReturnOpenCatalogPickerBtn').addEventListener('click', () => openCatalogPicker('return'));
 document.getElementById('invReturnAddBtn').addEventListener('click', () => {
   const name = document.getElementById('invReturnName').value.trim();
-  if(!name){ alert('من فضلك اكتب اسم الصنف المرتجع أولًا، أو اختاره من الكتالوج.'); return; }
+  if(!name){ alertUX('من فضلك اكتب اسم الصنف المرتجع أولًا، أو اختاره من الكتالوج.'); return; }
   const qty = Math.max(1, parseInt(document.getElementById('invReturnQty').value, 10) || 1);
   const price = Math.max(0, +document.getElementById('invReturnPrice').value || 0);
   const returnDate = document.getElementById('invReturnDate').value;
@@ -27169,7 +27663,7 @@ document.getElementById('invAddCustomProductToggleBtn').addEventListener('click'
 });
 document.getElementById('invCustomProductAddBtn').addEventListener('click', () => {
   const name = document.getElementById('invCustomName').value.trim();
-  if(!name){ alert('من فضلك اكتب اسم المنتج أولًا.'); return; }
+  if(!name){ alertUX('من فضلك اكتب اسم المنتج أولًا.'); return; }
   const qty = Math.max(1, parseInt(document.getElementById('invCustomQty').value, 10) || 1);
   const unitPrice = Math.max(0, +document.getElementById('invCustomPrice').value || 0);
   const discountPct = Math.max(0, Math.min(100, +document.getElementById('invCustomDiscount').value || 0));
@@ -27332,13 +27826,14 @@ document.getElementById('invImportOrderBtn').addEventListener('click', () => {
 document.getElementById('invImportOrderInput').addEventListener('change', async (e) => {
   const file = e.target.files[0]; e.target.value = '';
   if(!file) return;
+  showLoading('جاري قراءة الملف واستيراد الطلب...');
   try{
     await loadSheetJS();
     const buf = await file.arrayBuffer();
     const wb = XLSX.read(buf, {type:'array'});
     const sheet = wb.Sheets[wb.SheetNames[0]];
     const rows = XLSX.utils.sheet_to_json(sheet, {header:1, defval:''});
-    if(!rows.length){ alert('الملف فاضي أو مش متعرف عليه.'); return; }
+    if(!rows.length){ alertUX('الملف فاضي أو مش متعرف عليه.'); return; }
 
     const infoMap = {};
     let itemsHeaderIdx = -1;
@@ -27349,7 +27844,7 @@ document.getElementById('invImportOrderInput').addEventListener('change', async 
       if(c0 && row[1] !== undefined && String(row[1]).trim() !== ''){ infoMap[c0] = String(row[1]).trim(); }
     }
     if(itemsHeaderIdx === -1){
-      alert('مقدرتش ألاقي جدول الأصناف جوه الملف ده. اتأكد إنه ملف إكسيل طلع من سلة الطلبات أو الفاتورة أو عرض السعر.');
+      alertUX('مقدرتش ألاقي جدول الأصناف جوه الملف ده. اتأكد إنه ملف إكسيل طلع من سلة الطلبات أو الفاتورة أو عرض السعر.');
       return;
     }
     const items = [];
@@ -27363,7 +27858,7 @@ document.getElementById('invImportOrderInput').addEventListener('change', async 
       const unitPrice = Math.max(0, +row[2] || 0);
       items.push({id: ++invoiceItemSeq, name, unitPrice, qty, discountPct: 0});
     }
-    if(!items.length){ alert('الملف مفيهوش أي أصناف اتعرفت.'); return; }
+    if(!items.length){ alertUX('الملف مفيهوش أي أصناف اتعرفت.'); return; }
 
     /* If this file was originally exported from an invoice (rather than a plain customer
        order), it also has a "المرتجعات" (returns) section and a "المدفوع" (paid) row further
@@ -27438,9 +27933,11 @@ document.getElementById('invImportOrderInput').addEventListener('change', async 
     const extraNote = (importedPaidAmount !== null || importedReturns.length)
       ? `\nتم أيضًا استرجاع ${importedPaidAmount !== null ? 'المبلغ المدفوع' : ''}${(importedPaidAmount !== null && importedReturns.length) ? ' و' : ''}${importedReturns.length ? 'المرتجعات (' + importedReturns.length + ')' : ''} من الملف.`
       : '';
-    alert('تم استيراد الطلب بنجاح (' + items.length + ' صنف).' + extraNote + '\nراجع البيانات وعدّل اللي محتاج تعديل قبل ما تحفظ أو تبعت الفاتورة.');
+    alertUX('تم استيراد الطلب بنجاح (' + items.length + ' صنف).' + extraNote + '\nراجع البيانات وعدّل اللي محتاج تعديل قبل ما تحفظ أو تبعت الفاتورة.');
   }catch(err){
-    alert('حصل خطأ أثناء قراءة الملف، تأكد إنه ملف إكسيل صحيح وحاول تاني.');
+    alertUX('حصل خطأ أثناء قراءة الملف، تأكد إنه ملف إكسيل صحيح وحاول تاني.');
+  } finally {
+    hideLoading();
   }
 });
 
@@ -27474,7 +27971,7 @@ const DOC_KIND_LABELS = {
 function getDocFileName(kind, custNameRaw, ext, docNumberRaw){
   if(!custNameRaw){
     const kindMsg = kind === 'invoice' ? 'الفاتورة' : (kind === 'offerOrder' ? 'طلب العرض' : 'عرض السعر');
-    alert(`من فضلك أدخل اسم العميل أولًا قبل حفظ أو تصدير ${kindMsg}.`);
+    alertUX(`من فضلك أدخل اسم العميل أولًا قبل حفظ أو تصدير ${kindMsg}.`);
     return null;
   }
   // preferred naming: "اسم العميل - رقم المستند" (e.g. "Ahmed Ali - INV-2026-0001").
@@ -27643,7 +28140,10 @@ function renderQuotePagesToCanvases(){
 
 /* ---- export: PNG / JPG (shared) ---- */
 async function exportDocAsImage(buildPagesFn, holderId, format, fileName, btn){
-  const oldText = btn.textContent; btn.textContent = 'جاري التجهيز...'; btn.disabled = true;
+  if(btn && btn.disabled) return; // منع الضغط المكرر أثناء التجهيز
+  const oldText = btn ? btn.textContent : '';
+  if(btn){ btn.textContent = 'جاري التجهيز...'; btn.disabled = true; btn.classList.add('ux-btn-busy'); }
+  showLoading('جاري تجهيز الصورة...');
   try{
     const canvases = await renderDocPagesToCanvases(buildPagesFn, holderId);
     const finalCanvas = stackCanvasesToImage(canvases);
@@ -27651,12 +28151,18 @@ async function exportDocAsImage(buildPagesFn, holderId, format, fileName, btn){
     a.href = finalCanvas.toDataURL(format === 'jpeg' ? 'image/jpeg' : 'image/png', 0.95);
     a.download = fileName;
     a.click();
-  }catch(e){ alert('حصل خطأ أثناء إنشاء الصورة، تأكد من الاتصال بالإنترنت وحاول تاني.'); }
-  btn.textContent = oldText; btn.disabled = false;
+    notify('✅ تم تجهيز الصورة وتنزيلها بنجاح.', 'success');
+  }catch(e){
+    console.error('[EXPORT][IMAGE] فشل إنشاء الصورة:', e);
+    alertUX('⚠️ تعذّر إنشاء الصورة. الرجاء التأكد من اتصال الإنترنت (لتحميل مكتبة الرسم أول مرة) ثم إعادة المحاولة.\nإذا استمرت المشكلة، جرّب تحديث الصفحة.');
+  } finally {
+    if(btn){ btn.textContent = oldText; btn.disabled = false; btn.classList.remove('ux-btn-busy'); }
+    hideLoading();
+  }
 }
 async function saveInvoiceImage(format){
   const {lines} = computeInvoiceTotals();
-  if(lines.length === 0){ alert('ضيف منتج واحد على الأقل للفاتورة الأول.'); return; }
+  if(lines.length === 0){ alertUX('ضيف منتج واحد على الأقل للفاتورة الأول.'); return; }
   const ext = format === 'jpeg' ? 'jpg' : 'png';
   const fileName = getInvoiceFileName(ext);
   if(!fileName) return;
@@ -27669,7 +28175,10 @@ document.getElementById('invoiceJpgBtn').addEventListener('click', () => saveInv
 
 /* ---- export: PDF (shared) ---- */
 async function exportDocAsPDF(buildPagesFn, holderId, fileName, btn){
-  const oldText = btn.textContent; btn.textContent = 'جاري التجهيز...'; btn.disabled = true;
+  if(btn && btn.disabled) return; // منع الضغط المكرر أثناء التجهيز
+  const oldText = btn ? btn.textContent : '';
+  if(btn){ btn.textContent = 'جاري التجهيز...'; btn.disabled = true; btn.classList.add('ux-btn-busy'); }
+  showLoading('جاري تجهيز ملف PDF...');
   try{
     const canvases = await renderDocPagesToCanvases(buildPagesFn, holderId);
     const { jsPDF } = window.jspdf;
@@ -27713,12 +28222,18 @@ async function exportDocAsPDF(buildPagesFn, holderId, fileName, btn){
       }
     });
     pdf.save(fileName);
-  }catch(e){ alert('حصل خطأ أثناء إنشاء ملف PDF، تأكد من الاتصال بالإنترنت وحاول تاني.'); }
-  btn.textContent = oldText; btn.disabled = false;
+    notify('✅ تم تجهيز ملف PDF وتنزيله بنجاح.', 'success');
+  }catch(e){
+    console.error('[EXPORT][PDF] فشل إنشاء ملف PDF:', e);
+    alertUX('⚠️ تعذّر إنشاء ملف PDF. الرجاء التأكد من اتصال الإنترنت (لتحميل مكتبة PDF أول مرة) ثم إعادة المحاولة.\nإذا استمرت المشكلة، جرّب تحديث الصفحة.');
+  } finally {
+    if(btn){ btn.textContent = oldText; btn.disabled = false; btn.classList.remove('ux-btn-busy'); }
+    hideLoading();
+  }
 }
 document.getElementById('invoicePdfBtn').addEventListener('click', async () => {
   const {lines} = computeInvoiceTotals();
-  if(lines.length === 0){ alert('ضيف منتج واحد على الأقل للفاتورة الأول.'); return; }
+  if(lines.length === 0){ alertUX('ضيف منتج واحد على الأقل للفاتورة الأول.'); return; }
   const fileName = getInvoiceFileName('pdf');
   if(!fileName) return;
   archiveCurrentInvoice();
@@ -27727,19 +28242,28 @@ document.getElementById('invoicePdfBtn').addEventListener('click', async () => {
 
 /* ---- export: Excel (.xlsx) (shared) ---- */
 async function exportDocAsExcel(rows, sheetName, fileName, btn){
-  const oldText = btn.textContent; btn.textContent = 'جاري التجهيز...'; btn.disabled = true;
+  if(btn && btn.disabled) return; // منع الضغط المكرر أثناء التجهيز
+  const oldText = btn ? btn.textContent : '';
+  if(btn){ btn.textContent = 'جاري التجهيز...'; btn.disabled = true; btn.classList.add('ux-btn-busy'); }
+  showLoading('جاري تجهيز ملف الإكسيل...');
   try{
     await loadSheetJS();
     const ws = XLSX.utils.aoa_to_sheet(rows);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, sheetName);
     XLSX.writeFile(wb, fileName);
-  }catch(e){ alert('حصل خطأ أثناء إنشاء ملف الإكسيل، تأكد من الاتصال بالإنترنت وحاول تاني.'); }
-  btn.textContent = oldText; btn.disabled = false;
+    notify('✅ تم تجهيز ملف الإكسيل وتنزيله بنجاح.', 'success');
+  }catch(e){
+    console.error('[EXPORT][EXCEL] فشل إنشاء ملف الإكسيل:', e);
+    alertUX('⚠️ تعذّر إنشاء ملف الإكسيل. الرجاء التأكد من اتصال الإنترنت (لتحميل مكتبة الإكسيل أول مرة) ثم إعادة المحاولة.\nإذا استمرت المشكلة، جرّب تحديث الصفحة.');
+  } finally {
+    if(btn){ btn.textContent = oldText; btn.disabled = false; btn.classList.remove('ux-btn-busy'); }
+    hideLoading();
+  }
 }
 document.getElementById('invoiceExcelBtn').addEventListener('click', async () => {
   const {lines, invoiceSubtotal, globalDiscountPct, globalDiscountVal, grandTotal, returns, returnsTotal, netTotal, paidAmount, remainingAmount} = computeInvoiceTotals();
-  if(lines.length === 0){ alert('ضيف منتج واحد على الأقل للفاتورة الأول.'); return; }
+  if(lines.length === 0){ alertUX('ضيف منتج واحد على الأقل للفاتورة الأول.'); return; }
   const fileName = getInvoiceFileName('xlsx');
   if(!fileName) return;
   archiveCurrentInvoice();
@@ -27793,7 +28317,7 @@ document.getElementById('invoiceExcelBtn').addEventListener('click', async () =>
 /* ---- direct print (shared) ---- */
 function printDocPages(pagesHTML, title){
   const printWindow = window.open('', '_blank');
-  if(!printWindow){ alert('المتصفح منع فتح نافذة الطباعة. اسمح بالنوافذ المنبثقة وجرّب تاني.'); return; }
+  if(!printWindow){ alertUX('المتصفح منع فتح نافذة الطباعة. اسمح بالنوافذ المنبثقة وجرّب تاني.'); return; }
   printWindow.document.write(`<!DOCTYPE html><html dir="rtl" lang="ar"><head><meta charset="UTF-8"><title>${title}</title>
 <style>
   body{margin:0; padding:20px; background:#fff; font-family:'Tajawal',sans-serif;}
@@ -27808,7 +28332,7 @@ ${pagesHTML.map(html => `<div class="doc-page">${html}</div>`).join('')}
 }
 document.getElementById('invoicePrintBtn').addEventListener('click', () => {
   const {lines} = computeInvoiceTotals();
-  if(lines.length === 0){ alert('ضيف منتج واحد على الأقل للفاتورة الأول.'); return; }
+  if(lines.length === 0){ alertUX('ضيف منتج واحد على الأقل للفاتورة الأول.'); return; }
   archiveCurrentInvoice();
   printDocPages(buildInvoiceDocPages(undefined, {includePaymentsLog:true}), 'فاتورة');
 });
@@ -27816,7 +28340,7 @@ document.getElementById('invoicePrintBtn').addEventListener('click', () => {
 /* ---- WhatsApp ---- */
 document.getElementById('invoiceWaBtn').addEventListener('click', () => {
   const {lines, invoiceSubtotal, globalDiscountPct, globalDiscountVal, grandTotal, returns, returnsTotal, netTotal, payments, paidAmount, remainingAmount} = computeInvoiceTotals();
-  if(lines.length === 0){ alert('ضيف منتج واحد على الأقل للفاتورة الأول.'); return; }
+  if(lines.length === 0){ alertUX('ضيف منتج واحد على الأقل للفاتورة الأول.'); return; }
   archiveCurrentInvoice();
   const custName = document.getElementById('invCustName').value.trim() || 'عميل';
   const custPhone = document.getElementById('invCustPhone').value.trim();
@@ -27966,11 +28490,13 @@ document.getElementById('changeLogoBtn').addEventListener('click', () => documen
 document.getElementById('logoFileInput').addEventListener('change', async (e) => {
   const file = e.target.files[0]; e.target.value = '';
   if(!file) return;
+  showLoading('جاري تجهيز الشعار...');
   try{
     const dataUrl = await fileToCompressedDataURL(file, 300, 0.85);
     BRAND.logo = dataUrl;
     document.getElementById('logoPreview').src = dataUrl;
-  }catch(err){ alert('حصل خطأ أثناء تحميل الشعار، جرّب صورة تانية.'); }
+  }catch(err){ alertUX('حصل خطأ أثناء تحميل الشعار، جرّب صورة تانية.'); }
+  finally{ hideLoading(); }
 });
 
 /* live theme preview while adjusting colors */
@@ -28040,24 +28566,24 @@ document.getElementById('secSaveBtn').addEventListener('click', () => {
   const current = document.getElementById('secCurrentPass').value;
   const next = document.getElementById('secNewPass').value;
   const confirmVal = document.getElementById('secConfirmPass').value;
-  if(current !== getOwnerPassword()){ alert('كلمة المرور الحالية غير صحيحة.'); return; }
-  if(!next){ alert('من فضلك اكتب كلمة المرور الجديدة.'); return; }
-  if(next !== confirmVal){ alert('كلمة المرور الجديدة وتأكيدها غير متطابقين.'); return; }
+  if(current !== getOwnerPassword()){ alertUX('كلمة المرور الحالية غير صحيحة.'); return; }
+  if(!next){ alertUX('من فضلك اكتب كلمة المرور الجديدة.'); return; }
+  if(next !== confirmVal){ alertUX('كلمة المرور الجديدة وتأكيدها غير متطابقين.'); return; }
   setOwnerPassword(next);
   document.getElementById('secCurrentPass').value = '';
   document.getElementById('secNewPass').value = '';
   document.getElementById('secConfirmPass').value = '';
-  alert('اتغيرت كلمة المرور بنجاح ✓');
+  alertUX('اتغيرت كلمة المرور بنجاح ✓');
 });
 document.getElementById('secResetBtn').addEventListener('click', () => {
   const current = document.getElementById('secCurrentPass').value;
-  if(current !== getOwnerPassword()){ alert('كلمة المرور الحالية غير صحيحة.'); return; }
+  if(current !== getOwnerPassword()){ alertUX('كلمة المرور الحالية غير صحيحة.'); return; }
   if(!confirm('هيتم إعادة تعيين كلمة المرور إلى الكلمة الافتراضية. تأكيد؟')) return;
   setOwnerPassword(OWNER_DEFAULT_PASSWORD);
   document.getElementById('secCurrentPass').value = '';
   document.getElementById('secNewPass').value = '';
   document.getElementById('secConfirmPass').value = '';
-  alert('اتعادت كلمة المرور للوضع الافتراضي بنجاح ✓');
+  alertUX('اتعادت كلمة المرور للوضع الافتراضي بنجاح ✓');
 });
 
 /* ================= IMAGE UPLOAD (products) ================= */
@@ -28086,11 +28612,13 @@ function fileToCompressedDataURL(file, maxDim, quality){
 document.getElementById('imgFileInput').addEventListener('change', async (e) => {
   const file = e.target.files[0]; e.target.value = '';
   if(!file || !currentImgTarget) return;
+  showLoading('جاري تجهيز الصورة...');
   try{
     const dataUrl = await fileToCompressedDataURL(file, 480, 0.72);
     const slot = currentImgTarget.slot || 'image';
     DATA[currentImgTarget.sec].items[currentImgTarget.item][slot] = dataUrl;
-  }catch(err){ alert('حصل خطأ أثناء تحميل الصورة، جرّب صورة تانية.'); }
+  }catch(err){ alertUX('حصل خطأ أثناء تحميل الصورة، جرّب صورة تانية.'); }
+  finally{ hideLoading(); }
   currentImgTarget = null;
   render();
 });
@@ -28251,7 +28779,7 @@ document.getElementById('ciCancelBtn').addEventListener('click', () => {
 });
 document.getElementById('ciAddBtn').addEventListener('click', () => {
   const desc = document.getElementById('ciDesc').value.trim();
-  if(!desc){ alert('من فضلك اكتب وصف الصنف اللي محتاجه.'); return; }
+  if(!desc){ alertUX('من فضلك اكتب وصف الصنف اللي محتاجه.'); return; }
   const type = document.getElementById('ciType').value.trim();
   const qty = Math.max(1, parseInt(document.getElementById('ciQty').value, 10) || 1);
   const priceRaw = document.getElementById('ciPrice').value.trim();
@@ -28280,23 +28808,44 @@ function showOrderSendStatus(kind, html){
 let lastOrderPayload = null;
 function attemptSendOrderToSheet(payload, waUrl){
   const btn = document.getElementById('sendOrderBtn');
-  if(btn) btn.disabled = true;
+  if(btn){ btn.disabled = true; btn.classList.add('ux-btn-busy'); }
   showOrderSendStatus('sending', '⏳ جاري حفظ الطلب...');
   sendOrderToGoogleSheet(payload).then(result => {
-    if(btn) btn.disabled = false;
     if(result.ok){
       showOrderSendStatus('success', '✅ تم حفظ طلبك بنجاح. تقدر كمان تأكد إرساله عبر واتساب.');
       archiveCurrentCustomerOrder(payload);
+      clearCartAfterSuccessfulSend();
+      updateCartBadge();
+      renderCartModal();
+      render();
     } else if(result.skipped){
       // No webhook configured yet — behave exactly like the original version (WhatsApp only).
       showOrderSendStatus('success', '✅ الطلب جاهز.');
       archiveCurrentCustomerOrder(payload);
+      clearCartAfterSuccessfulSend();
+      updateCartBadge();
+      renderCartModal();
+      render();
     } else {
-      showOrderSendStatus('error', '⚠️ حصل خطأ أثناء حفظ الطلب. تقدر تعيد المحاولة أو ترسله مباشرة عبر واتساب. <button id="retryOrderSendBtn" type="button" class="btn-cancel" style="margin-top:6px;padding:6px 14px;">إعادة المحاولة</button>');
+      showOrderSendStatus('error', '⚠️ تعذّر حفظ الطلب على السيرفر (تأكد من اتصال الإنترنت). تم حفظ الطلب محليًا وسيتم إرساله تلقائيًا عند توفر الإنترنت، وتقدر كمان ترسله مباشرة عبر واتساب. <button id="retryOrderSendBtn" type="button" class="btn-cancel" style="margin-top:6px;padding:6px 14px;">إعادة المحاولة الآن</button>');
+      // [مرحلة 2 - أوفلاين] حفظ الطلب في قائمة الانتظار المحلية لإعادة المحاولة تلقائيًا لاحقًا.
+      addOrderToPendingQueue(payload, 'طلب عبر واتساب', false);
       const retryBtn = document.getElementById('retryOrderSendBtn');
       if(retryBtn) retryBtn.addEventListener('click', () => attemptSendOrderToSheet(payload, waUrl));
     }
     window.open(waUrl, '_blank');
+  }).catch(err => {
+    // sendOrderToGoogleSheet already catches internally and never rejects in practice,
+    // but this safety net guarantees the button is never left stuck if that ever changes.
+    console.error('[GAS ORDER] خطأ غير متوقع في attemptSendOrderToSheet:', err);
+    showOrderSendStatus('error', '⚠️ حصل خطأ غير متوقع أثناء حفظ الطلب. تم حفظ الطلب محليًا وسيتم إرساله تلقائيًا عند توفر الإنترنت، وتقدر كمان ترسله مباشرة عبر واتساب. <button id="retryOrderSendBtn" type="button" class="btn-cancel" style="margin-top:6px;padding:6px 14px;">إعادة المحاولة الآن</button>');
+    // [مرحلة 2 - أوفلاين] حفظ الطلب في قائمة الانتظار المحلية لإعادة المحاولة تلقائيًا لاحقًا.
+    addOrderToPendingQueue(payload, 'طلب عبر واتساب', false);
+    const retryBtn = document.getElementById('retryOrderSendBtn');
+    if(retryBtn) retryBtn.addEventListener('click', () => attemptSendOrderToSheet(payload, waUrl));
+    window.open(waUrl, '_blank');
+  }).finally(() => {
+    if(btn){ btn.disabled = false; btn.classList.remove('ux-btn-busy'); }
   });
 }
 
@@ -28353,8 +28902,43 @@ function findMyOrder(id){
 function openMyOrderDetails(id){
   const rec = findMyOrder(id);
   if(!rec) return;
-  alert(rec.message || rec.itemsText || 'لا توجد تفاصيل محفوظة لهذا الطلب.');
+  const body = document.getElementById('myOrderDetailsBody');
+  if(!body) return;
+  const dt = rec.date ? new Date(rec.date) : (rec.savedAt ? new Date(rec.savedAt) : null);
+  const dateDisplay = dt ? dt.toLocaleDateString('ar-EG') : '—';
+  const timeDisplay = dt ? dt.toLocaleTimeString('ar-EG') : '—';
+  const itemsHtml = (rec.items || []).map(it => {
+    const img = it.image ? `<img src="${it.image}" alt="" style="width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid var(--hair);flex:0 0 auto;">` : `<div style="width:56px;height:56px;border-radius:8px;border:1px solid var(--hair);flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:20px;">📦</div>`;
+    return `
+      <div style="display:flex; gap:10px; align-items:center; border:1px solid var(--hair); border-radius:10px; padding:8px; margin-bottom:8px;">
+        ${img}
+        <div style="flex:1 1 auto; font-size:13px;">
+          <div style="font-weight:700;">${it.name}</div>
+          <div style="color:var(--text-dim);">الكمية: ${it.qty} — السعر: ${(it.unitPrice||0).toLocaleString('en-US')} ج.م — الإجمالي: ${(it.lineTotal||0).toLocaleString('en-US')} ج.م</div>
+        </div>
+      </div>`;
+  }).join('') || '<div class="cart-empty">لا توجد أصناف محفوظة لهذا الطلب.</div>';
+  body.innerHTML = `
+    <div style="font-size:13px; line-height:1.9; border:1px solid var(--hair); border-radius:10px; padding:10px; margin-bottom:12px;">
+      <div><b>العميل:</b> ${rec.name || '—'}</div>
+      <div><b>الهاتف:</b> ${rec.phone || '—'}</div>
+      <div><b>العنوان:</b> ${rec.address || '—'}</div>
+      <div><b>طريقة الشحن:</b> ${rec.shipping || '—'}${rec.shippingCompany ? ' — ' + rec.shippingCompany : ''}</div>
+      <div><b>طريقة الدفع:</b> ${rec.payment || '—'}</div>
+      <div><b>التاريخ:</b> ${dateDisplay} &nbsp; <b>الوقت:</b> ${timeDisplay}</div>
+      <div><b>الإجمالي:</b> ${Math.round(+rec.grandTotal || 0).toLocaleString('en-US')} ج.م</div>
+    </div>
+    ${itemsHtml}
+  `;
+  document.getElementById('myOrdersArchiveList').style.display = 'none';
+  document.querySelector('#myOrdersArchiveModal .cart-actions').style.display = 'none';
+  document.getElementById('myOrderDetailsView').style.display = 'block';
 }
+document.getElementById('myOrderDetailsBackBtn').addEventListener('click', () => {
+  document.getElementById('myOrderDetailsView').style.display = 'none';
+  document.getElementById('myOrdersArchiveList').style.display = '';
+  document.querySelector('#myOrdersArchiveModal .cart-actions').style.display = '';
+});
 function restoreMyOrderToCart(id){
   const rec = findMyOrder(id);
   if(!rec) return;
@@ -28395,6 +28979,9 @@ function deleteMyOrder(id){
 }
 document.getElementById('myOrdersArchiveBtn').addEventListener('click', () => {
   renderMyOrdersArchiveList();
+  document.getElementById('myOrderDetailsView').style.display = 'none';
+  document.getElementById('myOrdersArchiveList').style.display = '';
+  document.querySelector('#myOrdersArchiveModal .cart-actions').style.display = '';
   document.getElementById('myOrdersArchiveModal').classList.add('show');
 });
 document.getElementById('myOrdersArchiveClose').addEventListener('click', () => {
@@ -28415,9 +29002,160 @@ document.getElementById('myOrdersArchiveList').addEventListener('click', (e) => 
   else if(btn.classList.contains('my-order-delete')) deleteMyOrder(id);
 });
 
+/* ================= [جديد - المرحلة 5] طلباتي (متابعة حالة الطلب من الشيت) =================
+   إضافة مستقلة بالكامل: لا تعدّل أي دالة أو Endpoint موجود، فقط تستهلك نفس
+   action=getOrders الموجود بالفعل (الذي يدعم فلترة "search" على حقل الهاتف من
+   ضمن حقول أخرى). هنا نستخدم فلترة إضافية دقيقة على رقم الهاتف بعد الجلب،
+   لضمان تطابق دقيق ومنع ظهور طلبات عملاء آخرين بسبب تطابق نصي جزئي. */
+(function(){
+  let trackMyOrdersData = [];
+
+  function trackMyOrdersEndpointUrl(){
+    return (typeof GAS_ORDERS_WEBHOOK_URL !== 'undefined' && GAS_ORDERS_WEBHOOK_URL) ? GAS_ORDERS_WEBHOOK_URL : '';
+  }
+
+  function trackMyOrdersNormalizePhone(p){
+    return String(p || '').replace(/[^\d]/g, '');
+  }
+
+  function trackMyOrdersFormatTimestamp(iso){
+    if(!iso) return '—';
+    const d = new Date(iso);
+    if(isNaN(d.getTime())) return escapeHTML(String(iso));
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const day = String(d.getDate()).padStart(2,'0');
+    const h = String(d.getHours()).padStart(2,'0');
+    const mi = String(d.getMinutes()).padStart(2,'0');
+    return `${y}-${m}-${day} ${h}:${mi}`;
+  }
+
+  async function trackMyOrdersFetch(){
+    const endpoint = trackMyOrdersEndpointUrl();
+    const phoneInput = document.getElementById('trackMyOrdersPhone');
+    const listEl = document.getElementById('trackMyOrdersList');
+    const phone = phoneInput ? phoneInput.value.trim() : '';
+
+    if(!phone){
+      alertUX('من فضلك اكتب رقم الهاتف المسجل بالطلب أولاً.');
+      return;
+    }
+    if(!endpoint){
+      notify('لا يوجد رابط Google Apps Script مربوط، لا يمكن تحميل الطلبات.', 'warning');
+      return;
+    }
+
+    showLoading('جاري تحميل طلباتك...');
+    try{
+      const sep = endpoint.indexOf('?') === -1 ? '?' : '&';
+      const url = endpoint + sep + 'action=getOrders&phone=' + encodeURIComponent(phone);
+      const res = await fetch(url, { method: 'GET' });
+      const resText = await res.text();
+      let data = null;
+      try{ data = JSON.parse(resText); }catch(parseErr){ data = null; }
+
+      if(!res.ok || !data || data.ok === false){
+        console.error('[طلباتي] فشل تحميل الطلبات:', res.status, resText);
+        notify('تعذّر تحميل طلباتك من الخادم.', 'error');
+        return;
+      }
+
+      const wantedPhone = trackMyOrdersNormalizePhone(phone);
+      const allOrders = Array.isArray(data.orders) ? data.orders : [];
+      trackMyOrdersData = allOrders.filter(o => trackMyOrdersNormalizePhone(o.phone) === wantedPhone);
+
+      trackMyOrdersRenderList();
+      if(!trackMyOrdersData.length){
+        notify('مفيش طلبات مرتبطة بالرقم ده.', 'info');
+      } else {
+        notify('تم تحميل ' + trackMyOrdersData.length + ' طلب.', 'success');
+      }
+    }catch(err){
+      console.error('[طلباتي] خطأ أثناء تحميل الطلبات:', err);
+      notify('حصل خطأ أثناء الاتصال بالخادم لتحميل طلباتك.', 'error');
+    }finally{
+      hideLoading();
+    }
+  }
+
+  function trackMyOrdersRenderList(){
+    const listEl = document.getElementById('trackMyOrdersList');
+    if(!listEl) return;
+
+    if(!trackMyOrdersData.length){
+      listEl.innerHTML = '<div class="cart-empty">لسه مفيش طلبات لعرضها. اكتب رقم هاتفك واضغط "تحديث".</div>';
+      return;
+    }
+
+    let html = '';
+    trackMyOrdersData.forEach((o, idx) => {
+      html += '<div class="cart-line" style="flex-direction:column; align-items:stretch; gap:6px;">' +
+        '<div><b>رقم الطلب:</b> ' + escapeHTML(o.orderId || '—') + '</div>' +
+        '<div><b>تاريخ الطلب:</b> ' + trackMyOrdersFormatTimestamp(o.timestamp) + '</div>' +
+        '<div><b>حالة الطلب:</b> <span class="orders-status-badge">' + escapeHTML(o.orderStatus || 'قيد المراجعة') + '</span></div>' +
+        '<div><b>آخر تحديث:</b> ' + trackMyOrdersFormatTimestamp(o.timestamp) + '</div>' +
+        '<button type="button" class="btn-cancel track-my-order-open" data-idx="' + idx + '" style="width:100%;">عرض التفاصيل</button>' +
+      '</div>';
+    });
+    listEl.innerHTML = html;
+  }
+
+  function trackMyOrderOpenDetails(idx){
+    const o = trackMyOrdersData[idx];
+    if(!o){ notify('تعذّر إيجاد بيانات هذا الطلب.', 'error'); return; }
+
+    const body = document.getElementById('trackMyOrderDetailsBody');
+    if(body){
+      body.innerHTML =
+        '<div><b>رقم الطلب:</b> ' + escapeHTML(o.orderId || '—') + '</div>' +
+        '<div><b>الاسم:</b> ' + escapeHTML(o.customerName || '—') + '</div>' +
+        '<div><b>الهاتف:</b> ' + escapeHTML(o.phone || '—') + '</div>' +
+        '<div><b>العنوان:</b> ' + escapeHTML(o.address || '—') + '</div>' +
+        '<div><b>طريقة الشحن:</b> ' + escapeHTML(o.shippingMethod || '—') + '</div>' +
+        '<div><b>طريقة الدفع:</b> ' + escapeHTML(o.paymentMethod || '—') + '</div>' +
+        '<div><b>الإجمالي:</b> ' + escapeHTML(String(o.grandTotal || 0)) + ' ج.م</div>' +
+        '<div><b>حالة الطلب:</b> ' + escapeHTML(o.orderStatus || 'قيد المراجعة') + '</div>' +
+        '<div><b>حالة الدفع:</b> ' + escapeHTML(o.paymentStatus || '—') + '</div>' +
+        '<div style="margin-top:8px;"><b>الأصناف:</b><br>' + escapeHTML(o.itemsText || '—').replace(/\n/g, '<br>') + '</div>';
+    }
+    document.getElementById('trackMyOrdersList').style.display = 'none';
+    document.querySelector('#trackMyOrdersModal .cart-actions').style.display = 'none';
+    document.getElementById('trackMyOrderDetailsView').style.display = '';
+  }
+
+  document.getElementById('trackMyOrdersBtn').addEventListener('click', () => {
+    document.getElementById('trackMyOrderDetailsView').style.display = 'none';
+    document.getElementById('trackMyOrdersList').style.display = '';
+    document.querySelector('#trackMyOrdersModal .cart-actions').style.display = '';
+    const phoneInput = document.getElementById('trackMyOrdersPhone');
+    const custPhoneEl = document.getElementById('custPhone');
+    if(phoneInput && custPhoneEl && custPhoneEl.value.trim() && !phoneInput.value.trim()){
+      phoneInput.value = custPhoneEl.value.trim();
+    }
+    trackMyOrdersRenderList();
+    document.getElementById('trackMyOrdersModal').classList.add('show');
+  });
+  document.getElementById('trackMyOrdersClose').addEventListener('click', () => {
+    document.getElementById('trackMyOrdersModal').classList.remove('show');
+  });
+  document.getElementById('trackMyOrdersRefreshBtn').addEventListener('click', trackMyOrdersFetch);
+  document.getElementById('trackMyOrdersList').addEventListener('click', (e) => {
+    const btn = e.target.closest('.track-my-order-open');
+    if(!btn) return;
+    trackMyOrderOpenDetails(+btn.dataset.idx);
+  });
+  document.getElementById('trackMyOrderDetailsBackBtn').addEventListener('click', () => {
+    document.getElementById('trackMyOrderDetailsView').style.display = 'none';
+    document.getElementById('trackMyOrdersList').style.display = '';
+    document.querySelector('#trackMyOrdersModal .cart-actions').style.display = '';
+  });
+})();
+
 document.getElementById('sendOrderBtn').addEventListener('click', () => {
+  const sendOrderBtnEl = document.getElementById('sendOrderBtn');
+  if(sendOrderBtnEl && sendOrderBtnEl.disabled) return; // منع الضغط المكرر
   const keys = Object.keys(CART).filter(k => CART[k] > 0);
-  if(keys.length === 0 && CUSTOM_ITEMS.length === 0){ alert('اختار الأصناف اللي عايزها الأول من القائمة.'); return; }
+  if(keys.length === 0 && CUSTOM_ITEMS.length === 0){ alertUX('اختار الأصناف اللي عايزها الأول من القائمة.'); return; }
   const name = document.getElementById('custName').value.trim();
   const phone = document.getElementById('custPhone').value.trim();
   const address = document.getElementById('custAddress').value.trim();
@@ -28425,15 +29163,15 @@ document.getElementById('sendOrderBtn').addEventListener('click', () => {
   const shippingCompany = document.getElementById('custShippingCompany').value;
   const payment = document.getElementById('custPayment').value;
   if(!name || !phone || !address){
-    alert('من فضلك اكتب الاسم ورقم الهاتف والعنوان قبل إرسال الطلب.');
+    alertUX('من فضلك اكتب الاسم ورقم الهاتف والعنوان قبل إرسال الطلب.');
     return;
   }
   if(!shipping){
-    alert('من فضلك اختار طريقة الشحن قبل إرسال الطلب.');
+    alertUX('من فضلك اختار طريقة الشحن قبل إرسال الطلب.');
     return;
   }
   if(!payment){
-    alert('من فضلك اختار طريقة الدفع قبل إرسال الطلب.');
+    alertUX('من فضلك اختار طريقة الدفع قبل إرسال الطلب.');
     return;
   }
   let grand = 0;
@@ -28447,7 +29185,7 @@ document.getElementById('sendOrderBtn').addEventListener('click', () => {
     const lineTotal = unitPrice * qty;
     grand += lineTotal;
     itemsText += `${idx+1}) ${it.name} × ${qty} = ${lineTotal.toLocaleString('en-US')} ج.م${unitPrice !== (+it.price||0) ? ' (سعر بعد الخصم 🏷️)' : ''}\n`;
-    itemsList.push({name: it.name, qty, unitPrice, lineTotal, key});
+    itemsList.push({name: it.name, qty, unitPrice, lineTotal, key, image: it.image || null});
   });
   let hasReviewItems = false;
   CUSTOM_ITEMS.forEach((ci, idx) => {
@@ -28482,12 +29220,14 @@ ${buildContactsText()}`;
   const waNumber = (CONTACTS[0] && CONTACTS[0].whatsapp) || '201025459277';
   const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
 
-  const payload = {
+  const orderReceivingFields = buildOrderReceivingFields(grand, 0);
+  const payload = Object.assign({
     brand: BRAND.name, date: new Date().toISOString(),
     name, phone, address, shipping, shippingCompany, payment,
     items: itemsList, itemsText, grandTotal: grand, hasReviewItems, message
-  };
+  }, orderReceivingFields);
   lastOrderPayload = payload;
+  if(sendOrderBtnEl) sendOrderBtnEl.disabled = true; // قفل فوري لمنع أي ضغطة ثانية قبل بدء الإرسال
   attemptSendOrderToSheet(payload, waUrl);
 });
 
@@ -28705,7 +29445,7 @@ async function renderOrderPagesToCanvases(){
 }
 document.getElementById('orderExcelBtn').addEventListener('click', async () => {
   const lines = customerOrderLineData();
-  if(lines.length === 0){ alert('اختار الأصناف اللي عايزها الأول من القائمة.'); return; }
+  if(lines.length === 0){ alertUX('اختار الأصناف اللي عايزها الأول من القائمة.'); return; }
   const name = document.getElementById('custName').value.trim();
   const phone = document.getElementById('custPhone').value.trim();
   const address = document.getElementById('custAddress').value.trim();
@@ -28732,9 +29472,11 @@ document.getElementById('orderExcelBtn').addEventListener('click', async () => {
   await exportDocAsExcel(rows, 'طلب عميل', fileName, document.getElementById('orderExcelBtn'));
 });
 document.getElementById('orderImgBtn').addEventListener('click', async () => {
-  if(customerOrderLineData().length === 0){ alert('اختار الأصناف اللي عايزها الأول من القائمة.'); return; }
+  if(customerOrderLineData().length === 0){ alertUX('اختار الأصناف اللي عايزها الأول من القائمة.'); return; }
   const btn = document.getElementById('orderImgBtn');
-  const oldText = btn.textContent; btn.textContent = 'جاري التجهيز...'; btn.disabled = true;
+  if(btn.disabled) return; // منع الضغط المكرر
+  const oldText = btn.textContent; btn.textContent = 'جاري التجهيز...'; btn.disabled = true; btn.classList.add('ux-btn-busy');
+  showLoading('جاري تجهيز صورة الطلب...');
   try{
     const canvases = await renderOrderPagesToCanvases();
     const finalCanvas = stackCanvasesToImage(canvases);
@@ -28743,13 +29485,19 @@ document.getElementById('orderImgBtn').addEventListener('click', async () => {
     const custName = (document.getElementById('custName').value.trim() || 'عميل').replace(/\s+/g,'-');
     a.download = `الطلب-وفق-العميل-${custName}.png`;
     a.click();
-  }catch(e){ alert('حصل خطأ أثناء إنشاء الصورة، تأكد من الاتصال بالإنترنت وحاول تاني.'); }
-  btn.textContent = oldText; btn.disabled = false;
+    notify('✅ تم تجهيز صورة الطلب وتنزيلها بنجاح.', 'success');
+  }catch(e){ alertUX('حصل خطأ أثناء إنشاء الصورة، تأكد من الاتصال بالإنترنت وحاول تاني.'); }
+  finally{
+    btn.textContent = oldText; btn.disabled = false; btn.classList.remove('ux-btn-busy');
+    hideLoading();
+  }
 });
 document.getElementById('orderPdfBtn').addEventListener('click', async () => {
-  if(customerOrderLineData().length === 0){ alert('اختار الأصناف اللي عايزها الأول من القائمة.'); return; }
+  if(customerOrderLineData().length === 0){ alertUX('اختار الأصناف اللي عايزها الأول من القائمة.'); return; }
   const btn = document.getElementById('orderPdfBtn');
-  const oldText = btn.textContent; btn.textContent = 'جاري التجهيز...'; btn.disabled = true;
+  if(btn.disabled) return; // منع الضغط المكرر
+  const oldText = btn.textContent; btn.textContent = 'جاري التجهيز...'; btn.disabled = true; btn.classList.add('ux-btn-busy');
+  showLoading('جاري تجهيز ملف PDF للطلب...');
   try{
     const canvases = await renderOrderPagesToCanvases();
     const { jsPDF } = window.jspdf;
@@ -28765,8 +29513,12 @@ document.getElementById('orderPdfBtn').addEventListener('click', async () => {
     });
     const custName = (document.getElementById('custName').value.trim() || 'عميل').replace(/\s+/g,'-');
     pdf.save(`الطلب-وفق-العميل-${custName}.pdf`);
-  }catch(e){ alert('حصل خطأ أثناء إنشاء ملف PDF، تأكد من الاتصال بالإنترنت وحاول تاني.'); }
-  btn.textContent = oldText; btn.disabled = false;
+    notify('✅ تم تجهيز ملف PDF للطلب وتنزيله بنجاح.', 'success');
+  }catch(e){ alertUX('حصل خطأ أثناء إنشاء ملف PDF، تأكد من الاتصال بالإنترنت وحاول تاني.'); }
+  finally{
+    btn.textContent = oldText; btn.disabled = false; btn.classList.remove('ux-btn-busy');
+    hideLoading();
+  }
 });
 
 /* ================= نافذة "تنفيذ الطلب إلكترونيًا" (Stage: order-send-electronic-only) =================
@@ -28781,6 +29533,127 @@ function showElectronicSendSuccess(){
   showOrderSendStatus('success', '✅ تم استلام الطلب بنجاح.<br>وسيتم التواصل معكم في أقرب وقت.');
 }
 
+/* ================= [مرحلة: تطوير نظام استقبال الطلبات] طبقة حماية موحّدة =================
+   دوال مستقلة تمامًا، لا تُعدّل أي دالة موجودة، وتُستخدم فقط داخل نقاط الإرسال الإلكتروني
+   الثلاث (sendOrderDataElectronically / sendOrderPdfElectronically / sendOrderImageElectronically):
+   1) منع إرسال نفس الطلب مرتين (توقيع الطلب + قفل إرسال).
+   2) التحقق من جميع بيانات العميل قبل الإرسال (بالإضافة للتحقق الموجود أصلاً في buildOrderDataPayload).
+   3) التأكد من نجاح رفع الصورة/PDF (نتيجة الشبكة + تحقق من حجم/محتوى الملف الناتج).
+   4) معالجة موحّدة لكل الأخطاء المحتملة مع رسائل واضحة للعميل. */
+
+// -------- 1) منع الإرسال المكرر لنفس الطلب --------
+let ORDER_SEND_IN_PROGRESS = false; // قفل عام يمنع أي عملية إرسال إلكتروني أخرى أثناء تنفيذ واحدة
+const SENT_ORDER_SIGNATURES_KEY = 'omega_tanta_sent_order_signatures_v1';
+
+// توقيع فريد للطلب مبني على بيانات العميل + الأصناف + الإجمالي (بدون orderId/الوقت
+// حتى يتم اكتشاف نفس الطلب حتى لو أُعيد بناء payload من جديد بنفس المحتوى).
+function computeOrderSignature(payload){
+  if(!payload) return '';
+  const itemsKey = (payload.items || [])
+    .map(l => `${l.name}|${l.qty}|${l.unitPrice}`)
+    .join(';');
+  return [
+    payload.name, payload.phone, payload.address,
+    payload.shipping, payload.shippingCompany, payload.payment,
+    payload.grandTotal, itemsKey
+  ].join('::');
+}
+
+function getSentOrderSignatures(){
+  return Storage.getJSON(SENT_ORDER_SIGNATURES_KEY, []) || [];
+}
+
+function isOrderSignatureAlreadySent(signature){
+  if(!signature) return false;
+  const list = getSentOrderSignatures();
+  return list.includes(signature);
+}
+
+// تُستدعى فقط بعد نجاح الإرسال فعليًا (وليس فقط بعد بناء الطلب)، ونحتفظ بآخر 30 توقيع
+// فقط لتفادي تضخّم localStorage بلا داعٍ.
+function markOrderSignatureAsSent(signature){
+  if(!signature) return;
+  let list = getSentOrderSignatures();
+  list.push(signature);
+  if(list.length > 30) list = list.slice(list.length - 30);
+  Storage.setJSON(SENT_ORDER_SIGNATURES_KEY, list);
+}
+
+// -------- 2) تحقق موسّع من صحة بيانات الطلب قبل أي إرسال --------
+// يعمل بالإضافة إلى التحقق الأساسي الموجود بالفعل داخل buildOrderDataPayload (الاسم/الهاتف/
+// العنوان/الشحن/الدفع)، ويضيف تحققات إضافية لا تُكرر ولا تُبدّل المنطق الأصلي.
+function validateOrderPayloadBeforeSend(payload){
+  if(!payload) return {valid:false, message:'لا يوجد أصناف في السلة لإرسال الطلب.'};
+  if(!Array.isArray(payload.items) || payload.items.length === 0){
+    return {valid:false, message:'السلة فارغة، من فضلك أضف صنف واحد على الأقل قبل الإرسال.'};
+  }
+  const hasInvalidLine = payload.items.some(l => !l.name || !(l.qty > 0) || !(l.lineTotal >= 0));
+  if(hasInvalidLine){
+    return {valid:false, message:'تم اكتشاف بيانات غير صحيحة في أحد أصناف الطلب. من فضلك راجع السلة وحاول مرة أخرى.'};
+  }
+  if(!(payload.grandTotal >= 0)){
+    return {valid:false, message:'إجمالي الطلب غير صحيح. من فضلك راجع السلة وحاول مرة أخرى.'};
+  }
+  // تحقق مبسّط من صحة رقم الهاتف (أرقام فقط، بحد أدنى معقول من الخانات) دون رفض رموز الدولية (+).
+  const phoneDigitsOnly = (payload.phone || '').replace(/[^\d]/g, '');
+  if(phoneDigitsOnly.length < 8){
+    return {valid:false, message:'رقم الهاتف الذي تم إدخاله غير صحيح. من فضلك تأكد من الرقم وحاول مرة أخرى.'};
+  }
+  return {valid:true};
+}
+
+// -------- 3) التأكد من نجاح رفع الملف (صورة/PDF) قبل اعتبار الإرسال ناجحًا --------
+// فحص أساسي أن البيانات الناتجة (Base64) ليست فارغة أو تالفة قبل محاولة رفعها إطلاقًا،
+// لتفادي إرسال طلب "ناجح" في السجل بينما الملف المرفق تالف أو غير موجود فعليًا.
+function assertGeneratedFileIsValid(fileDataBase64, kindLabel){
+  if(!fileDataBase64 || typeof fileDataBase64 !== 'string' || fileDataBase64.length < 100){
+    throw new Error(`تعذّر إنشاء ${kindLabel} بشكل صحيح (الملف الناتج فارغ أو غير مكتمل).`);
+  }
+}
+
+// -------- 4) معالج موحّد لكل مسارات الإرسال الإلكتروني الثلاث --------
+// يغلّف أي دالة إرسال إلكتروني (data/pdf/image) بمنطق موحّد: منع التكرار، التحقق من البيانات،
+// معالجة الأخطاء، وتحديث القفل + توقيع الطلب المُرسَل بنجاح فقط بعد نجاح فعلي من الخادم.
+async function runGuardedElectronicSend(kindLabel, buildAndSendFn){
+  if(ORDER_SEND_IN_PROGRESS){
+    showOrderSendStatus('error', '⏳ جاري تنفيذ عملية إرسال أخرى بالفعل، من فضلك انتظر حتى تنتهي.');
+    return;
+  }
+
+  const payload = buildOrderDataPayload();
+  if(!payload) return; // buildOrderDataPayload تعرض رسالة الخطأ المناسبة بنفسها بالفعل
+
+  const validation = validateOrderPayloadBeforeSend(payload);
+  if(!validation.valid){
+    showOrderSendStatus('error', `⚠️ ${validation.message}`);
+    return;
+  }
+
+  const signature = computeOrderSignature(payload);
+  if(isOrderSignatureAlreadySent(signature)){
+    showOrderSendStatus('error', '⚠️ يبدو أن هذا الطلب بنفس البيانات تم إرساله بنجاح من قبل. إذا كنت تقصد إرسال طلب جديد، من فضلك عدّل السلة أو البيانات أولًا.');
+    return;
+  }
+
+  ORDER_SEND_IN_PROGRESS = true;
+  try{
+    const result = await buildAndSendFn(payload);
+    if(result && (result.ok || result.skipped)){
+      markOrderSignatureAsSent(signature);
+      showElectronicSendSuccess();
+    } else {
+      showOrderSendStatus('error', `⚠️ تعذّر إرسال ${kindLabel}. تأكد من اتصال الإنترنت وحاول مرة أخرى.`);
+    }
+  }catch(e){
+    console.error(`[GAS ORDER][${kindLabel}] استثناء أثناء التجهيز أو الإرسال:`, e);
+    const detail = (e && e.message) ? ` (${e.message})` : '';
+    showOrderSendStatus('error', `⚠️ تعذّر إنشاء أو إرسال ${kindLabel}${detail}. تأكد من اتصال الإنترنت وحاول مرة أخرى.`);
+  } finally {
+    ORDER_SEND_IN_PROGRESS = false;
+  }
+}
+
+
 // تجهيز بيانات العميل + الأصناف + الإجمالي بنفس الشكل المُستخدم فعليًا في sendOrderBtn،
 // لضمان تطابق البيانات المُرسلة من كل نقاط الإرسال (واتساب / إلكتروني).
 function buildOrderDataPayload(){
@@ -28793,113 +29666,135 @@ function buildOrderDataPayload(){
   const shippingCompany = document.getElementById('custShippingCompany').value;
   const payment = document.getElementById('custPayment').value;
   if(!name || !phone || !address){
-    alert('من فضلك اكتب الاسم ورقم الهاتف والعنوان قبل إرسال الطلب.');
+    alertUX('من فضلك اكتب الاسم ورقم الهاتف والعنوان قبل إرسال الطلب.');
     return null;
   }
   if(!shipping){
-    alert('من فضلك اختار طريقة الشحن قبل إرسال الطلب.');
+    alertUX('من فضلك اختار طريقة الشحن قبل إرسال الطلب.');
     return null;
   }
   if(!payment){
-    alert('من فضلك اختار طريقة الدفع قبل إرسال الطلب.');
+    alertUX('من فضلك اختار طريقة الدفع قبل إرسال الطلب.');
     return null;
   }
   const grand = lines.reduce((a,l)=>a+l.lineTotal, 0);
   const itemsList = lines.map(l => ({name: l.it.name, qty: l.qty, unitPrice: l.it.price||0, lineTotal: l.lineTotal}));
-  return {
+  const orderReceivingFields = buildOrderReceivingFields(grand, 0);
+  return Object.assign({
     brand: BRAND.name, date: new Date().toISOString(),
     name, phone, address, shipping, shippingCompany, payment,
     items: itemsList, grandTotal: grand
-  };
+  }, orderReceivingFields);
 }
 
 // دالة مستقلة #1 — إرسال بيانات الطلب (العميل + المنتجات + السلة) فقط إلى Google Apps Script.
+// تستخدم الآن طبقة الحماية الموحّدة (runGuardedElectronicSend) لمنع التكرار والتحقق من البيانات
+// ومعالجة الأخطاء، دون تغيير الشكل الأصلي لبيانات الطلب المُرسلة.
 async function sendOrderDataElectronically(){
-  const payload = buildOrderDataPayload();
-  if(!payload) return;
   const btn = document.getElementById('sendOrderDataBtn');
-  const oldText = btn.textContent; btn.disabled = true; btn.textContent = 'جاري الإرسال...';
+  if(btn && btn.disabled) return; // منع الإرسال المكرر أثناء تنفيذ العملية
+  const oldText = btn ? btn.textContent : '';
+  if(btn){ btn.disabled = true; btn.textContent = 'جاري الإرسال...'; btn.classList.add('ux-btn-busy'); }
   showOrderSendStatus('sending', '⏳ جاري إرسال بيانات الطلب...');
   try{
-    const result = await sendOrderToGoogleSheet(Object.assign({type:'order_data'}, payload));
-    if(result.ok || result.skipped){
-      showElectronicSendSuccess();
-    } else {
-      showOrderSendStatus('error', '⚠️ حصل خطأ أثناء إرسال بيانات الطلب. حاول تاني.');
-    }
-  }catch(e){
-    showOrderSendStatus('error', '⚠️ حصل خطأ أثناء إرسال بيانات الطلب. حاول تاني.');
+    await runGuardedElectronicSend('بيانات الطلب', async (payload) => {
+      const fullPayload = Object.assign({type:'order_data'}, payload);
+      const result = await sendOrderToGoogleSheet(fullPayload);
+      // [مرحلة 2 - أوفلاين] لو الإرسال فشل فعليًا (مش skipped)، نحفظ الطلب في قائمة
+      // الانتظار المحلية لإعادة المحاولة تلقائيًا لاحقًا، ونعرض رسالة توضح ذلك للعميل.
+      if(!result || (!result.ok && !result.skipped)){
+        addOrderToPendingQueue(fullPayload, 'بيانات الطلب', false);
+        showOrderSendStatus('error', '⚠️ تعذّر إرسال بيانات الطلب الآن. تم حفظ الطلب محليًا وسيتم إرساله تلقائيًا عند توفر الإنترنت.');
+      }
+      return result;
+    });
+  } finally {
+    if(btn){ btn.disabled = false; btn.textContent = oldText; btn.classList.remove('ux-btn-busy'); }
   }
-  btn.disabled = false; btn.textContent = oldText;
 }
 
 // دالة مستقلة #2 — إرسال نسخة PDF إلكترونيًا: تُستخدم دالة إنشاء PDF الموجودة بالفعل
 // (renderOrderPagesToCanvases + jsPDF) لكن بدلاً من pdf.save(...) يتم إخراج الملف كـ Base64
 // وإرساله عبر fetch؛ لا يوجد أي تنزيل على جهاز العميل.
 async function sendOrderPdfElectronically(){
-  const payload = buildOrderDataPayload();
-  if(!payload) return;
   const btn = document.getElementById('sendOrderPdfElectronicBtn');
-  const oldText = btn.textContent; btn.disabled = true; btn.textContent = 'جاري التجهيز والإرسال...';
+  if(btn && btn.disabled) return; // منع الإرسال المكرر أثناء التجهيز
+  const oldText = btn ? btn.textContent : '';
+  if(btn){ btn.disabled = true; btn.textContent = 'جاري التجهيز والإرسال...'; btn.classList.add('ux-btn-busy'); }
   showOrderSendStatus('sending', '⏳ جاري تجهيز وإرسال ملف PDF...');
   try{
-    const canvases = await renderOrderPagesToCanvases(); // نفس دالة إنشاء PDF الموجودة بالفعل
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({orientation:'portrait', unit:'pt', format:'a4'});
-    const pageW = pdf.internal.pageSize.getWidth();
-    canvases.forEach((canvas, idx) => {
-      if(idx > 0) pdf.addPage();
-      const imgData = canvas.toDataURL('image/png');
-      const ratio = canvas.height / canvas.width;
-      const imgW = pageW - 40;
-      const imgH = imgW * ratio;
-      pdf.addImage(imgData, 'PNG', 20, 20, imgW, imgH);
+    await runGuardedElectronicSend('ملف PDF', async (payload) => {
+      const canvases = await renderOrderPagesToCanvases(); // نفس دالة إنشاء PDF الموجودة بالفعل
+      if(!Array.isArray(canvases) || canvases.length === 0){
+        throw new Error('تعذّر إنشاء صفحات الطلب لتجهيز ملف PDF.');
+      }
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({orientation:'portrait', unit:'pt', format:'a4'});
+      const pageW = pdf.internal.pageSize.getWidth();
+      canvases.forEach((canvas, idx) => {
+        if(idx > 0) pdf.addPage();
+        const imgData = canvas.toDataURL('image/png');
+        const ratio = canvas.height / canvas.width;
+        const imgW = pageW - 40;
+        const imgH = imgW * ratio;
+        pdf.addImage(imgData, 'PNG', 20, 20, imgW, imgH);
+      });
+      const pdfBase64 = pdf.output('datauristring'); // إخراج كـ Base64 بدل التنزيل (لا pdf.save هنا)
+      assertGeneratedFileIsValid(pdfBase64, 'ملف PDF'); // تأكيد أن الملف الناتج ليس فارغًا/تالفًا قبل الإرسال
+      // [Debug] طباعة حجم ملف PDF الناتج (بالميجابايت) لتشخيص أي فشل بسبب حجم البيانات
+      console.log('[GAS ORDER][PDF] حجم ملف PDF بصيغة base64 (MB):', (pdfBase64.length / 1024 / 1024).toFixed(2));
+      const custName = (document.getElementById('custName').value.trim() || 'عميل').replace(/\s+/g,'-');
+      const fullPayload = Object.assign({
+        type:'order_pdf', fileName: `الطلب-وفق-العميل-${custName}.pdf`, fileData: pdfBase64
+      }, payload);
+      const result = await sendOrderToGoogleSheet(fullPayload);
+      console.log('[GAS ORDER][PDF] نتيجة الإرسال الكاملة:', result);
+      // [مرحلة 2 - أوفلاين] عند الفشل، نحفظ بيانات الطلب الأساسية فقط (بدون ملف PDF —
+      // كما تم الاتفاق، الملفات تحتاج إعادة إرسال يدوي) في قائمة الانتظار المحلية.
+      if(!result || (!result.ok && !result.skipped)){
+        addOrderToPendingQueue(fullPayload, 'ملف PDF', true);
+        showOrderSendStatus('error', '⚠️ تعذّر إرسال ملف PDF الآن. تم حفظ بيانات الطلب محليًا (سيتم إرسالها تلقائيًا)، لكن هتحتاج تعيد إرسال ملف PDF يدويًا لما يرجع النت.');
+      }
+      return result;
     });
-    const pdfBase64 = pdf.output('datauristring'); // إخراج كـ Base64 بدل التنزيل (لا pdf.save هنا)
-    // [Debug] طباعة حجم ملف PDF الناتج (بالميجابايت) لتشخيص أي فشل بسبب حجم البيانات
-    console.log('[GAS ORDER][PDF] حجم ملف PDF بصيغة base64 (MB):', (pdfBase64.length / 1024 / 1024).toFixed(2));
-    const custName = (document.getElementById('custName').value.trim() || 'عميل').replace(/\s+/g,'-');
-    const result = await sendOrderToGoogleSheet(Object.assign({
-      type:'order_pdf', fileName: `الطلب-وفق-العميل-${custName}.pdf`, fileData: pdfBase64
-    }, payload));
-    console.log('[GAS ORDER][PDF] نتيجة الإرسال الكاملة:', result);
-    if(result.ok || result.skipped){
-      showElectronicSendSuccess();
-    } else {
-      showOrderSendStatus('error', '⚠️ حصل خطأ أثناء إرسال ملف PDF. حاول تاني.');
-    }
-  }catch(e){
-    console.error('[GAS ORDER][PDF] استثناء أثناء إنشاء أو إرسال PDF:', e);
-    showOrderSendStatus('error', '⚠️ حصل خطأ أثناء إنشاء أو إرسال ملف PDF، تأكد من الاتصال بالإنترنت وحاول تاني.');
+  } finally {
+    if(btn){ btn.disabled = false; btn.textContent = oldText; btn.classList.remove('ux-btn-busy'); }
   }
-  btn.disabled = false; btn.textContent = oldText;
 }
 
 // دالة مستقلة #3 — إرسال نسخة صورة إلكترونيًا: تُستخدم دالة إنشاء الصورة الموجودة بالفعل
 // (renderOrderPagesToCanvases + stackCanvasesToImage) لكن يتم إرسال الناتج كـ Base64 بدل التنزيل.
 async function sendOrderImageElectronically(){
-  const payload = buildOrderDataPayload();
-  if(!payload) return;
   const btn = document.getElementById('sendOrderImageElectronicBtn');
-  const oldText = btn.textContent; btn.disabled = true; btn.textContent = 'جاري التجهيز والإرسال...';
+  if(btn && btn.disabled) return; // منع الإرسال المكرر أثناء التجهيز
+  const oldText = btn ? btn.textContent : '';
+  if(btn){ btn.disabled = true; btn.textContent = 'جاري التجهيز والإرسال...'; btn.classList.add('ux-btn-busy'); }
   showOrderSendStatus('sending', '⏳ جاري تجهيز وإرسال الصورة...');
   try{
-    const canvases = await renderOrderPagesToCanvases(); // نفس دالة إنشاء الصورة الموجودة بالفعل
-    const finalCanvas = stackCanvasesToImage(canvases);
-    const imageBase64 = finalCanvas.toDataURL('image/png'); // Base64 بدل تنزيل الصورة
-    const custName = (document.getElementById('custName').value.trim() || 'عميل').replace(/\s+/g,'-');
-    const result = await sendOrderToGoogleSheet(Object.assign({
-      type:'order_image', fileName: `الطلب-وفق-العميل-${custName}.png`, fileData: imageBase64
-    }, payload));
-    if(result.ok || result.skipped){
-      showElectronicSendSuccess();
-    } else {
-      showOrderSendStatus('error', '⚠️ حصل خطأ أثناء إرسال الصورة. حاول تاني.');
-    }
-  }catch(e){
-    showOrderSendStatus('error', '⚠️ حصل خطأ أثناء إنشاء أو إرسال الصورة، تأكد من الاتصال بالإنترنت وحاول تاني.');
+    await runGuardedElectronicSend('الصورة', async (payload) => {
+      const canvases = await renderOrderPagesToCanvases(); // نفس دالة إنشاء الصورة الموجودة بالفعل
+      if(!Array.isArray(canvases) || canvases.length === 0){
+        throw new Error('تعذّر إنشاء صفحات الطلب لتجهيز الصورة.');
+      }
+      const finalCanvas = stackCanvasesToImage(canvases);
+      const imageBase64 = finalCanvas.toDataURL('image/png'); // Base64 بدل تنزيل الصورة
+      assertGeneratedFileIsValid(imageBase64, 'الصورة'); // تأكيد أن الصورة الناتجة ليست فارغة/تالفة قبل الإرسال
+      const custName = (document.getElementById('custName').value.trim() || 'عميل').replace(/\s+/g,'-');
+      const fullPayload = Object.assign({
+        type:'order_image', fileName: `الطلب-وفق-العميل-${custName}.png`, fileData: imageBase64
+      }, payload);
+      const result = await sendOrderToGoogleSheet(fullPayload);
+      // [مرحلة 2 - أوفلاين] عند الفشل، نحفظ بيانات الطلب الأساسية فقط (بدون الصورة —
+      // كما تم الاتفاق، الملفات تحتاج إعادة إرسال يدوي) في قائمة الانتظار المحلية.
+      if(!result || (!result.ok && !result.skipped)){
+        addOrderToPendingQueue(fullPayload, 'الصورة', true);
+        showOrderSendStatus('error', '⚠️ تعذّر إرسال الصورة الآن. تم حفظ بيانات الطلب محليًا (سيتم إرسالها تلقائيًا)، لكن هتحتاج تعيد إرسال الصورة يدويًا لما يرجع النت.');
+      }
+      return result;
+    });
+  } finally {
+    if(btn){ btn.disabled = false; btn.textContent = oldText; btn.classList.remove('ux-btn-busy'); }
   }
-  btn.disabled = false; btn.textContent = oldText;
 }
 
 // دالة الإلغاء — تُخفي رسالة الحالة فقط، دون التأثير على أي بيانات أو أزرار أخرى.
@@ -29078,10 +29973,10 @@ function buildCatalogPrintHTML(){
 document.getElementById('catalogPdfBtn').addEventListener('click', () => {
   if(!ownerGate('تحميل قائمة الأسعار الكاملة كملف PDF')) return;
   const sections = catalogExportableSections();
-  if(sections.length === 0){ alert('لا توجد أصناف متوفرة أو بكمية محدودة في القائمة لعمل PDF منها.'); return; }
+  if(sections.length === 0){ alertUX('لا توجد أصناف متوفرة أو بكمية محدودة في القائمة لعمل PDF منها.'); return; }
   const html = buildCatalogPrintHTML();
   const printWin = window.open('', '_blank');
-  if(!printWin){ alert('المتصفح منع فتح نافذة الطباعة. اسمح بالنوافذ المنبثقة لهذا الموقع وحاول تاني.'); return; }
+  if(!printWin){ alertUX('المتصفح منع فتح نافذة الطباعة. اسمح بالنوافذ المنبثقة لهذا الموقع وحاول تاني.'); return; }
   printWin.document.open();
   printWin.document.write(html);
   printWin.document.close();
@@ -29302,7 +30197,7 @@ function openArchivedQuoteInEditor(id){
   render();
   renderQuoteModal();
   document.getElementById('quoteModal').classList.add('show');
-  if(skipped > 0){ alert('تنبيه: ' + skipped + ' صنف من عرض السعر ده مش موجود دلوقتي في الكتالوج، فاتحذف من نسخة التعديل. المعاينة لسه بتوريه كامل زي ما اتحفظ.'); }
+  if(skipped > 0){ alertUX('تنبيه: ' + skipped + ' صنف من عرض السعر ده مش موجود دلوقتي في الكتالوج، فاتحذف من نسخة التعديل. المعاينة لسه بتوريه كامل زي ما اتحفظ.'); }
 }
 let previewedQuoteRecord = null;
 function previewArchivedQuote(id){
@@ -29644,7 +30539,7 @@ function loadExportLibs(){
 }
 /* ---- export: PNG / JPG (shared engine) ---- */
 async function saveQuoteImage(format){
-  if(quoteLineData().length === 0){ alert('اختار أصناف للعرض الأول.'); return; }
+  if(quoteLineData().length === 0){ alertUX('اختار أصناف للعرض الأول.'); return; }
   const ext = format === 'jpeg' ? 'jpg' : 'png';
   const snap = archiveCurrentQuote();
   const fileName = getQuoteFileName(ext, snap && snap.number);
@@ -29657,7 +30552,7 @@ document.getElementById('quoteJpgBtn').addEventListener('click', () => saveQuote
 
 /* ---- export: PDF (shared engine) ---- */
 document.getElementById('quotePdfBtn').addEventListener('click', async () => {
-  if(quoteLineData().length === 0){ alert('اختار أصناف للعرض الأول.'); return; }
+  if(quoteLineData().length === 0){ alertUX('اختار أصناف للعرض الأول.'); return; }
   const snap = archiveCurrentQuote();
   const fileName = getQuoteFileName('pdf', snap && snap.number);
   if(!fileName) return;
@@ -29667,7 +30562,7 @@ document.getElementById('quotePdfBtn').addEventListener('click', async () => {
 /* ---- export: Excel (.xlsx) (shared engine) ---- */
 document.getElementById('quoteExcelBtn').addEventListener('click', async () => {
   const {lines, rawSubtotal, itemDiscountTotal, globalDiscountVal, globalDiscountPctDisplay, grandTotal} = computeQuoteTotals();
-  if(lines.length === 0){ alert('اختار أصناف للعرض الأول.'); return; }
+  if(lines.length === 0){ alertUX('اختار أصناف للعرض الأول.'); return; }
   const snap = archiveCurrentQuote();
   const fileName = getQuoteFileName('xlsx', snap && snap.number);
   if(!fileName) return;
@@ -29704,7 +30599,7 @@ document.getElementById('quoteExcelBtn').addEventListener('click', async () => {
 
 /* ---- direct print (shared engine) ---- */
 document.getElementById('quotePrintBtn').addEventListener('click', () => {
-  if(quoteLineData().length === 0){ alert('اختار أصناف للعرض الأول.'); return; }
+  if(quoteLineData().length === 0){ alertUX('اختار أصناف للعرض الأول.'); return; }
   archiveCurrentQuote();
   printDocPages(buildQuoteDocPages(), 'عرض سعر');
 });
@@ -29712,7 +30607,7 @@ document.getElementById('quotePrintBtn').addEventListener('click', () => {
 /* ---- WhatsApp ---- */
 document.getElementById('quoteWaBtn').addEventListener('click', () => {
   const {lines, rawSubtotal, itemDiscountTotal, globalDiscountVal, globalDiscountPctDisplay, grandTotal} = computeQuoteTotals();
-  if(lines.length === 0){ alert('اختار أصناف للعرض الأول.'); return; }
+  if(lines.length === 0){ alertUX('اختار أصناف للعرض الأول.'); return; }
   archiveCurrentQuote();
   const custName = document.getElementById('qCustName').value.trim() || 'عميل';
   const custPhone = document.getElementById('qCustPhone').value.trim();
@@ -29832,7 +30727,7 @@ document.getElementById('excelFileInput').addEventListener('change', async (e) =
 
     const headerRowIdx = detectHeaderRow(sheet);
     const rows = XLSX.utils.sheet_to_json(sheet, {range: headerRowIdx, defval:''});
-    if(rows.length === 0){ alert('الملف فاضي أو مفيش صفوف بيانات تحت صف العناوين اللي تم اكتشافه.'); return; }
+    if(rows.length === 0){ alertUX('الملف فاضي أو مفيش صفوف بيانات تحت صف العناوين اللي تم اكتشافه.'); return; }
 
     // Flexible column matching (Arabic or English headers, tolerant of ة/ه، أ/ا، مسافات).
     // Falls back to a "contains this keyword" match when no exact alias matches any
@@ -29953,17 +30848,17 @@ document.getElementById('excelFileInput').addEventListener('change', async (e) =
     const duplicateCodeWarning = duplicateCodesInFile.length > 0
       ? `\n⛔ أكواد مكررة داخل ملف الإكسيل — تم رفض استيراد كل الصفوف اللي بتحمل الأكواد دي (${duplicateRowsSkipped} صف):\n${duplicateCodesInFile.join('، ')}\nصحّح الملف بحيث يبقى كل كود موجود مرة واحدة بس، وبعدين أعد الاستيراد.\n`
       : '';
-    alert(`تم الاستيراد ✓\nتحديث ${updated} صنف موجود (منهم ${priceChanges} تغيير سعر فعلي)\nإضافة ${added} صنف جديد\n${newSections > 0 ? 'إنشاء ' + newSections + ' قسم جديد\n' : ''}${skipped > 0 ? skipped + ' صف تم تجاهله (بلا اسم أو كود)\n' : ''}${priceWarning}${duplicateCodeWarning}\nتم اكتشاف صف العناوين تلقائيًا (صف رقم ${headerRowIdx+1} في الملف)، والملف يدعم أعمدة: رقم الصنف/الكود، اسم الصنف، سعر الجملة/السعر، والقسم لو موجود.\n${priceChanges > 0 ? 'تقدر تراجع كل تغييرات الأسعار من زرار 🔔 تحديثات الأسعار فوق.\n' : ''}\nمتنساش تحفظ نسخة العمل بعد كده عشان التعديلات تتحفظ.`);
+    alertUX(`تم الاستيراد ✓\nتحديث ${updated} صنف موجود (منهم ${priceChanges} تغيير سعر فعلي)\nإضافة ${added} صنف جديد\n${newSections > 0 ? 'إنشاء ' + newSections + ' قسم جديد\n' : ''}${skipped > 0 ? skipped + ' صف تم تجاهله (بلا اسم أو كود)\n' : ''}${priceWarning}${duplicateCodeWarning}\nتم اكتشاف صف العناوين تلقائيًا (صف رقم ${headerRowIdx+1} في الملف)، والملف يدعم أعمدة: رقم الصنف/الكود، اسم الصنف، سعر الجملة/السعر، والقسم لو موجود.\n${priceChanges > 0 ? 'تقدر تراجع كل تغييرات الأسعار من زرار 🔔 تحديثات الأسعار فوق.\n' : ''}\nمتنساش تحفظ نسخة العمل بعد كده عشان التعديلات تتحفظ.`);
     // Stage: image-system report after every import, reflecting the catalog's
     // current image state (no image folder was picked here, so orphan-image
     // count is not applicable to this step — only reported after linking).
-    alert(formatImageSystemReport(buildImageSystemReport(null)));
+    alertUX(formatImageSystemReport(buildImageSystemReport(null)));
     if(confirm('هل تريد ربط صور المنتجات تلقائيًا بالكود الآن؟\nاختر مجلد الصور وسيتم البحث عن صورة بنفس كود كل صنف (jpg / jpeg / png / webp).')){
       document.getElementById('imagesFolderInput').click();
     }
   }catch(err){
-    console.error(err);
-    alert('حصل خطأ أثناء قراءة ملف الإكسيل. تأكد إن الملف بصيغة xlsx أو xls وجرّب تاني.');
+    console.error('[IMPORT][EXCEL] فشل استيراد ملف الإكسيل:', err);
+    alertUX('⚠️ حصل خطأ أثناء قراءة ملف الإكسيل ولم يتم تغيير أي بيانات في القائمة. تأكد إن الملف بصيغة xlsx أو xls وجرّب تاني.');
   }
 });
 
@@ -30076,6 +30971,7 @@ document.getElementById('imagesFolderInput').addEventListener('change', async (e
   const files = Array.from(e.target.files || []);
   e.target.value = '';
   if(!files.length) return;
+  showLoading('جاري فحص وربط صور المنتجات...');
 
   // Index selected files by normalized (trimmed, lowercase) product code,
   // grouping every file that belongs to that code (main + numbered extras)
@@ -30172,6 +31068,7 @@ document.getElementById('imagesFolderInput').addEventListener('change', async (e
     }
   }
   await Promise.all(Array.from({length: Math.min(CONCURRENCY, workItems.length)}, worker));
+  hideLoading(true);
 
   // Orphan images: files in the selected folder whose base code doesn't
   // match ANY product code in the catalog. Reported so the person can spot
@@ -30188,10 +31085,10 @@ document.getElementById('imagesFolderInput').addEventListener('change', async (e
   const multiNote = multiLinked > 0
     ? `\nمنهم ${multiLinked} صنف اترَبط بأكتر من صورة (صورة رئيسية + صور إضافية) بنفس الكود.\n`
     : '';
-  alert(`تم فحص مجلد الصور ✓\nإجمالي الأصناف: ${totalProducts}\nتم ربط ${linked} صنف بصورة/صور تلقائيًا بالكود.\n${multiNote}${ambiguousWarning}${orphanWarning}${notFound} صنف من غير صورة مطابقة لكوده — هيظهر بصورة افتراضية بدون أي خطأ.\nمتنساش تحفظ نسخة العمل بعد كده عشان الربط يتحفظ.`);
+  alertUX(`تم فحص مجلد الصور ✓\nإجمالي الأصناف: ${totalProducts}\nتم ربط ${linked} صنف بصورة/صور تلقائيًا بالكود.\n${multiNote}${ambiguousWarning}${orphanWarning}${notFound} صنف من غير صورة مطابقة لكوده — هيظهر بصورة افتراضية بدون أي خطأ.\nمتنساش تحفظ نسخة العمل بعد كده عشان الربط يتحفظ.`);
   // Stage: shared image-system report after linking, this time with a real
   // orphan-image count since a folder was actually scanned in this flow.
-  alert(formatImageSystemReport(buildImageSystemReport(orphanCodes.length)));
+  alertUX(formatImageSystemReport(buildImageSystemReport(orphanCodes.length)));
 });
 
 /* ---- Excel EXPORT (mirror of the import format above, so a file exported here
@@ -30201,7 +31098,7 @@ document.getElementById('imagesFolderInput').addEventListener('change', async (e
 const EXPORT_AVAILABILITY_LABELS = {available:'متاح', limited:'محدود', out:'غير متاح'};
 document.getElementById('exportExcelBtn').addEventListener('click', async () => {
   if(!ownerGate('تصدير ملف إكسيل')) return;
-  if(!DATA.length){ alert('مفيش أي أصناف لتصديرها.'); return; }
+  if(!DATA.length){ alertUX('مفيش أي أصناف لتصديرها.'); return; }
   const rows = [['القسم','الكود','الاسم','السعر','الحالة']];
   DATA.forEach(sec => {
     (sec.items || []).forEach(it => {
@@ -30231,6 +31128,11 @@ function refreshLastBackupLabel(){
 refreshLastBackupLabel();
 
 document.getElementById('backupBtn').addEventListener('click', () => {
+  const btn = document.getElementById('backupBtn');
+  if(btn && btn.disabled) return; // منع الضغط المكرر أثناء إنشاء النسخة الاحتياطية
+  const oldText = btn ? btn.textContent : '';
+  if(btn){ btn.disabled = true; btn.textContent = 'جاري إنشاء النسخة الاحتياطية...'; }
+  try{
   const now = new Date();
   const pad = n => String(n).padStart(2,'0');
   // Stage 6: metadata block added to the backup file (backup type, app/DB version, company
@@ -30276,7 +31178,13 @@ document.getElementById('backupBtn').addEventListener('click', () => {
   const stamp = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
   Storage.set(LAST_BACKUP_KEY, stamp);
   refreshLastBackupLabel();
-  alert('اتحفظت نسخة احتياطية كاملة (JSON) في مجلد التنزيلات ✓\nبتشمل الأصناف والإعدادات والفواتير وعروض الأسعار والعملاء المحفوظين. ممكن تستخدمها لاحقًا لاستعادة كل البيانات، أو لنقلها لإصدار جديد من المشروع.');
+  alertUX('✅ اتحفظت نسخة احتياطية كاملة (JSON) في مجلد التنزيلات.\nبتشمل الأصناف والإعدادات والفواتير وعروض الأسعار والعملاء المحفوظين. ممكن تستخدمها لاحقًا لاستعادة كل البيانات، أو لنقلها لإصدار جديد من المشروع.');
+  }catch(e){
+    console.error('[BACKUP] فشل إنشاء النسخة الاحتياطية:', e);
+    alertUX('⚠️ حصل خطأ أثناء إنشاء النسخة الاحتياطية ولم يتم حفظ أي ملف. بياناتك الحالية لم تتأثر — حاول مرة أخرى.');
+  } finally {
+    if(btn){ btn.disabled = false; btn.textContent = oldText; }
+  }
 });
 
 /* ---- generic merge helper: combines two archive lists by a unique key, keeping
@@ -30341,9 +31249,11 @@ document.getElementById('restoreBtn').addEventListener('click', () => {
 document.getElementById('backupFileInput').addEventListener('change', async (e) => {
   const file = e.target.files[0]; e.target.value = '';
   if(!file) return;
+  showLoading('جاري قراءة ملف النسخة الاحتياطية...');
   try{
     const text = await file.text();
     let snap = JSON.parse(text);
+    hideLoading();
     // Stage 6: sanity-check the file's structure first — same "invalid backup file" check
     // as before — then, only once the file is confirmed to be a readable backup, show the
     // user what's inside it (older backup files without `backupMeta` fall back to values
@@ -30431,10 +31341,12 @@ document.getElementById('backupFileInput').addEventListener('change', async (e) 
     buildChips(); render();
     if(typeof renderInvoiceArchiveList === 'function') renderInvoiceArchiveList();
     if(typeof renderQuoteArchiveList === 'function') renderQuoteArchiveList();
-    alert('تمت الاستعادة بنجاح ✓ (شاملة الفواتير وعروض الأسعار والعملاء المحفوظين)\nمتنساش تحفظ نسخة عمل جديدة عشان التغييرات تتحفظ في الملف.');
+    alertUX('تمت الاستعادة بنجاح ✓ (شاملة الفواتير وعروض الأسعار والعملاء المحفوظين)\nمتنساش تحفظ نسخة عمل جديدة عشان التغييرات تتحفظ في الملف.');
   }catch(err){
-    console.error(err);
-    alert('ملف النسخة الاحتياطية غير صالح أو تالف.');
+    console.error('[BACKUP][RESTORE] فشل استيراد النسخة الاحتياطية:', err);
+    alertUX('⚠️ ملف النسخة الاحتياطية غير صالح أو تالف، ولم يتم تغيير أي بيانات حالية.\nتأكد إنك اخترت ملف .json تم إنشاؤه من زر "نسخة احتياطية" في هذا البرنامج، وحاول مرة أخرى.');
+  } finally {
+    hideLoading(true);
   }
 });
 
@@ -30492,7 +31404,7 @@ document.getElementById('migrateOldVersionBtn').addEventListener('click', () => 
   if(!ownerGate('ترحيل البيانات من إصدار سابق')) return;
   const legacyItems = findLegacyVersionData();
   if(legacyItems.length === 0){
-    alert('لم يتم العثور على بيانات من إصدار سابق محفوظة على هذا الجهاز.');
+    alertUX('لم يتم العثور على بيانات من إصدار سابق محفوظة على هذا الجهاز.');
     return;
   }
   const listText = legacyItems.map(item => '— ' + item.label).join('\n');
@@ -30522,7 +31434,7 @@ document.getElementById('migrateOldVersionBtn').addEventListener('click', () => 
     // left in place rather than guessed at, since this version has no known field to
     // migrate them into.
   });
-  alert('تم ترحيل ' + migratedCount + ' من عناصر البيانات من الإصدار السابق بنجاح ✓');
+  alertUX('تم ترحيل ' + migratedCount + ' من عناصر البيانات من الإصدار السابق بنجاح ✓');
 });
 
 function injectRemovedElementSafetyNet(clone){
@@ -30600,7 +31512,9 @@ function buildExportHTML(mode){
     // customer-facing offer display (offersShowcase strip, offerShowcaseModal
     // detail view, and the popup/banner/in-page notification widgets) is
     // intentionally NOT in this list — those stay in every edition.
-    'offersManageBtn','offersModal','offerFormModal','offerPreviewModal','offersArchiveModal'];
+    'offersManageBtn','offersModal','offerFormModal','offerPreviewModal','offersArchiveModal',
+    // [جديد - المرحلة 3B] مركز الطلبات: أداة شركة (Owner) فقط، تُحذف من نسخة العميل النهائية.
+    'ordersCenterBtn','ordersCenterModal'];
   // NOTE: 'catalogPickerModal' is intentionally NOT in OWNER_ONLY_IDS — it's the
   // shared "اختيار منتج من الكتالوج" picker used both by the owner (invoice/quote,
   // whose own buttons/modals ARE removed above) and by the customer's own order
@@ -30707,28 +31621,67 @@ async function saveWorkCopyInPlace(htmlString){
     await writable.close();
     return true;
   }catch(err){
+    // المستخدم لغى نافذة اختيار الملف — مش خطأ حقيقي، والزر لازم يرجع لحالته الطبيعية
+    // من غير تنزيل نسخة احتياطية بديلة أو رسالة خطأ مربكة.
+    if(err && err.name === 'AbortError') return 'cancelled';
+    console.error('[SAVE][IN-PLACE] فشل الحفظ داخل نفس الملف:', err);
     return false;
   }
 }
 document.getElementById('saveBtn').addEventListener('click', async () => {
-  const html = buildExportHTML(false);
-  const savedInPlace = await saveWorkCopyInPlace(html);
-  if(savedInPlace){
-    alert('تم الحفظ في نفس ملف العمل مباشرة ✓ (من غير ما ينزل نسخة جديدة كل مرة)');
-  } else {
-    downloadHTML(html, 'work');
-    alert('اتحفظت نسخة العمل (قابلة للتعديل) في مجلد التنزيلات ✓\nملحوظة: الحفظ التلقائي في نفس الملف متاح بس على متصفح Chrome أو Edge على الكمبيوتر.');
+  const btn = document.getElementById('saveBtn');
+  if(btn && btn.disabled) return; // منع الضغط المكرر أثناء الحفظ
+  const oldText = btn ? btn.textContent : '';
+  if(btn){ btn.disabled = true; btn.textContent = 'جاري الحفظ...'; }
+  try{
+    const html = buildExportHTML(false);
+    const savedInPlace = await saveWorkCopyInPlace(html);
+    if(savedInPlace === 'cancelled'){
+      // المستخدم لغى نافذة اختيار الملف بنفسه — لا داعي لأي رسالة أو تنزيل بديل.
+    } else if(savedInPlace){
+      alertUX('✅ تم الحفظ في نفس ملف العمل مباشرة (من غير ما ينزل نسخة جديدة كل مرة).');
+    } else {
+      downloadHTML(html, 'work');
+      alertUX('✅ اتحفظت نسخة العمل (قابلة للتعديل) في مجلد التنزيلات.\nملحوظة: الحفظ التلقائي في نفس الملف متاح بس على متصفح Chrome أو Edge على الكمبيوتر.');
+    }
+  }catch(e){
+    console.error('[SAVE] فشل حفظ نسخة العمل:', e);
+    alertUX('⚠️ حصل خطأ أثناء الحفظ ولم تُحفظ أي بيانات جديدة. بياناتك الحالية في الصفحة لم تتأثر — حاول مرة أخرى.');
+  } finally {
+    if(btn){ btn.disabled = false; btn.textContent = oldText; }
   }
 });
 document.getElementById('exportBtn').addEventListener('click', () => {
-  const html = buildExportHTML(true);
-  downloadHTML(html, 'customers');
-  alert('اتحفظت النسخة النهائية للعملاء (للقراءة فقط + إمكانية الطلب) في مجلد التنزيلات ✓');
+  const btn = document.getElementById('exportBtn');
+  if(btn && btn.disabled) return; // منع الضغط المكرر أثناء التصدير
+  const oldText = btn ? btn.textContent : '';
+  if(btn){ btn.disabled = true; btn.textContent = 'جاري التصدير...'; }
+  try{
+    const html = buildExportHTML(true);
+    downloadHTML(html, 'customers');
+    alertUX('✅ اتحفظت النسخة النهائية للعملاء (للقراءة فقط + إمكانية الطلب) في مجلد التنزيلات.');
+  }catch(e){
+    console.error('[EXPORT][CUSTOMER] فشل تصدير نسخة العملاء:', e);
+    alertUX('⚠️ حصل خطأ أثناء تصدير نسخة العملاء. حاول مرة أخرى.');
+  } finally {
+    if(btn){ btn.disabled = false; btn.textContent = oldText; }
+  }
 });
 document.getElementById('exportBusinessBtn').addEventListener('click', () => {
-  const html = buildExportHTML('business');
-  downloadHTML(html, 'business-edition');
-  alert('اتحفظت نسخة الشركة (Business Edition) في مجلد التنزيلات ✓\nنفس صلاحيات ووظائف نسخة المطور بالكامل، فيما عدا إخفاء زر ⚙ إعدادات التصميم والتواصل ونافذته فقط.');
+  const btn = document.getElementById('exportBusinessBtn');
+  if(btn && btn.disabled) return; // منع الضغط المكرر أثناء التصدير
+  const oldText = btn ? btn.textContent : '';
+  if(btn){ btn.disabled = true; btn.textContent = 'جاري التصدير...'; }
+  try{
+    const html = buildExportHTML('business');
+    downloadHTML(html, 'business-edition');
+    alertUX('✅ اتحفظت نسخة الشركة (Business Edition) في مجلد التنزيلات.\nنفس صلاحيات ووظائف نسخة المطور بالكامل، فيما عدا إخفاء زر ⚙ إعدادات التصميم والتواصل ونافذته فقط.');
+  }catch(e){
+    console.error('[EXPORT][BUSINESS] فشل تصدير نسخة الشركة:', e);
+    alertUX('⚠️ حصل خطأ أثناء تصدير نسخة الشركة. حاول مرة أخرى.');
+  } finally {
+    if(btn){ btn.disabled = false; btn.textContent = oldText; }
+  }
 });
 
 /* ================= AUTO-SAVE SESSION (draft-in-progress invoice/quote) =================
@@ -31088,7 +32041,7 @@ showCartRestorePrompt();
      No new export/build logic is introduced here. Each button below does nothing
      but forward a click to the real, pre-existing save-bar button — the exact
      same #exportBusinessBtn / #exportBtn that already call buildExportHTML() +
-     downloadHTML() and show their own confirmation alert(). Since those buttons
+     downloadHTML() and show their own confirmation alertUX(). Since those buttons
      stay present in the DOM (only visually hidden via display:none in some
      preview modes), .click() on them still runs their real handler unchanged. */
   const pwSaveCompanyBtn = document.getElementById('pwSaveCompanyBtn');
@@ -31112,5 +32065,450 @@ showCartRestorePrompt();
 })();
 </script>
 
+<!-- ================= [جديد - المرحلة 3B] ORDERS CENTER (Frontend) =================
+     يعتمد بالكامل على الـ Endpoint الجديد "action=getOrders" الذي تم إضافته في
+     المرحلة 3A داخل Apps Script V4 (نفس رابط GAS_ORDERS_WEBHOOK_URL المستخدم بالفعل
+     لإرسال الطلبات). هذا القسم للقراءة والعرض فقط (Read-Only) في هذه المرحلة.
+
+     [تجهيز لمراحل قادمة] البنية هنا مُجهّزة عمدًا بحيث تُضاف لاحقًا بسهولة:
+       - تغيير حالة الطلب (سيُستخدم ordersCenterAllOrders[i].rowIndex + endpoint POST جديد)
+       - عرض تفاصيل الطلب الكاملة (openOrderDetailsPlaceholder أدناه هي نقطة البداية)
+       - إعادة تحميل الطلب / حذفه (نفس فكرة rowIndex + endpoint جديد)
+     بدون الحاجة لإعادة كتابة أي كود من هذه المرحلة. -->
+<script>
+(function(){
+  // كل الطلبات المحمّلة من الخادم (قبل تطبيق البحث/الفلترة/الفرز الحالي)
+  let ordersCenterAllOrders = [];
+  let ordersCenterLoadedOnce = false;
+
+  function ordersCenterEndpointUrl(){
+    // نفس رابط الويب آب المستخدم بالفعل في إرسال الطلبات (لا رابط جديد ولا تعديل عليه)
+    return (typeof GAS_ORDERS_WEBHOOK_URL !== 'undefined' && GAS_ORDERS_WEBHOOK_URL) ? GAS_ORDERS_WEBHOOK_URL : '';
+  }
+
+  async function ordersCenterFetchAll(opts){
+    opts = opts || {};
+    const silent = !!opts.silent;
+    const endpoint = ordersCenterEndpointUrl();
+    if(!endpoint){
+      if(!silent) notify('لا يوجد رابط Google Apps Script مربوط، لا يمكن تحميل الطلبات.', 'warning');
+      return;
+    }
+    if(!silent) showLoading('جاري تحميل الطلبات...');
+    try{
+      const sep = endpoint.indexOf('?') === -1 ? '?' : '&';
+      const url = endpoint + sep + 'action=getOrders';
+      const res = await fetch(url, { method: 'GET' });
+      const resText = await res.text();
+      let data = null;
+      try{ data = JSON.parse(resText); }catch(parseErr){ data = null; }
+
+      if(!res.ok || !data || data.ok === false){
+        console.error('[Orders Center] فشل تحميل الطلبات:', res.status, resText);
+        if(!silent) notify('تعذّر تحميل الطلبات من الخادم.', 'error');
+        return;
+      }
+
+      const freshOrders = Array.isArray(data.orders) ? data.orders : [];
+      // [جديد - المرحلة 4] كشف الطلبات الجديدة/الملغاة/المعدّلة قبل استبدال النسخة القديمة
+      ordersCenterDetectChangesAndNotify(freshOrders);
+
+      ordersCenterAllOrders = freshOrders;
+      ordersCenterLoadedOnce = true;
+      ordersCenterPopulateStatusFilter();
+      ordersCenterApplyAndRender();
+      if(!silent) notify('تم تحميل ' + ordersCenterAllOrders.length + ' طلب بنجاح.', 'success');
+    }catch(err){
+      console.error('[Orders Center] خطأ أثناء تحميل الطلبات:', err);
+      if(!silent) notify('حصل خطأ أثناء الاتصال بالخادم لتحميل الطلبات.', 'error');
+    }finally{
+      if(!silent) hideLoading();
+    }
+  }
+
+  // يملأ قائمة فلترة الحالة ديناميكيًا من الحالات الموجودة فعليًا في الطلبات المحمّلة
+  function ordersCenterPopulateStatusFilter(){
+    const sel = document.getElementById('ordersStatusFilter');
+    if(!sel) return;
+    const currentVal = sel.value;
+    const statuses = Array.from(new Set(
+      ordersCenterAllOrders.map(o => (o.orderStatus || '').toString().trim()).filter(Boolean)
+    ));
+    let html = '<option value="">🔎 كل الحالات</option>';
+    statuses.forEach(s => {
+      html += '<option value="' + escapeHTML(s) + '">' + escapeHTML(s) + '</option>';
+    });
+    sel.innerHTML = html;
+    if(statuses.indexOf(currentVal) !== -1) sel.value = currentVal;
+  }
+
+  function ordersCenterPaymentBadgeClass(paymentStatus){
+    const s = (paymentStatus || '').toString();
+    if(s.indexOf('بالكامل') !== -1) return 'orders-status-paid';
+    if(s.indexOf('جزئ') !== -1) return 'orders-status-partial';
+    if(s.indexOf('غير مدفوع') !== -1) return 'orders-status-unpaid';
+    return '';
+  }
+
+  function ordersCenterOrderBadgeClass(orderStatus){
+    const s = (orderStatus || '').toString();
+    if(s.indexOf('جديد') !== -1) return 'orders-status-new';
+    return '';
+  }
+
+  function ordersCenterFormatMoney(val){
+    const num = Number(val) || 0;
+    return num.toLocaleString('en-US') + ' ج.م';
+  }
+
+  function ordersCenterFormatTimestamp(iso){
+    if(!iso) return '—';
+    const d = new Date(iso);
+    if(isNaN(d.getTime())) return escapeHTML(String(iso));
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const day = String(d.getDate()).padStart(2,'0');
+    const h = String(d.getHours()).padStart(2,'0');
+    const mi = String(d.getMinutes()).padStart(2,'0');
+    return `${y}-${m}-${day} ${h}:${mi}`;
+  }
+
+  // [تجهيز لمرحلة قادمة] نقطة الدخول لعرض تفاصيل طلب معيّن — سيتم استبدال محتواها
+  // بشاشة تفاصيل كاملة (الأصناف، الملفات، سجل الحالة...) في مرحلة لاحقة، دون
+  // الحاجة لتعديل أي كود آخر من هذه المرحلة (الجدول، البحث، الفرز، الفلترة).
+  window.openOrderDetailsPlaceholder = function(rowIndex){
+    const order = ordersCenterAllOrders.find(o => String(o.rowIndex) === String(rowIndex));
+    if(!order){ notify('تعذّر إيجاد بيانات هذا الطلب.', 'error'); return; }
+    notify('تفاصيل الطلب ' + (order.orderId || '—') + ' — شاشة التفاصيل الكاملة ستُفعّل في مرحلة قادمة.', 'info');
+  };
+
+  function ordersCenterRenderTable(orders){
+    const wrap = document.getElementById('ordersTableWrap');
+    if(!wrap) return;
+
+    if(!orders.length){
+      wrap.innerHTML = '<div class="cart-empty" id="ordersCenterEmptyState">' +
+        (ordersCenterLoadedOnce ? 'لا توجد طلبات مطابقة لبحثك أو الفلتر الحالي.' : 'دوس على "🔄 تحديث" عشان تجيب أحدث الطلبات من الشيت.') +
+        '</div>';
+      return;
+    }
+
+    let rowsHTML = '';
+    orders.forEach(o => {
+      const orderBadgeClass = ordersCenterOrderBadgeClass(o.orderStatus);
+      const paymentBadgeClass = ordersCenterPaymentBadgeClass(o.paymentStatus);
+      rowsHTML += '<tr>' +
+        '<td class="mono">' + escapeHTML(o.orderId || '—') + '</td>' +
+        '<td>' + ordersCenterFormatTimestamp(o.timestamp) + '</td>' +
+        '<td class="orders-td-wrap">' + escapeHTML(o.customerName || '—') + '</td>' +
+        '<td class="mono">' + escapeHTML(o.phone || '—') + '</td>' +
+        '<td class="orders-td-wrap">' + escapeHTML(o.brand || '—') + '</td>' +
+        '<td class="mono">' + ordersCenterFormatMoney(o.grandTotal) + '</td>' +
+        '<td><span class="orders-status-badge ' + paymentBadgeClass + '">' + escapeHTML(o.paymentStatus || '—') + '</span></td>' +
+        '<td><span class="orders-status-badge ' + orderBadgeClass + '">' + escapeHTML(o.orderStatus || '—') + '</span></td>' +
+        '<td><button type="button" class="orders-details-btn" onclick="openOrderDetailsPlaceholder(\'' + o.rowIndex + '\')">عرض التفاصيل</button></td>' +
+        '</tr>';
+    });
+
+    wrap.innerHTML =
+      '<table class="orders-table">' +
+        '<thead><tr>' +
+          '<th>Order ID</th><th>تاريخ الوصول</th><th>العميل</th><th>الهاتف</th><th>الشركة</th>' +
+          '<th>الإجمالي</th><th>حالة الدفع</th><th>حالة الطلب</th><th>—</th>' +
+        '</tr></thead>' +
+        '<tbody>' + rowsHTML + '</tbody>' +
+      '</table>';
+  }
+
+  // يطبّق البحث المباشر + الفلترة حسب الحالة + الفرز على النسخة المحمّلة محليًا،
+  // ثم يعيد رسم الجدول — بدون أي طلب شبكة إضافي، لاستجابة فورية أثناء الكتابة.
+  function ordersCenterApplyAndRender(){
+    const searchInput = document.getElementById('ordersSearchInput');
+    const statusSelect = document.getElementById('ordersStatusFilter');
+    const sortBySelect = document.getElementById('ordersSortBySelect');
+    const sortDirBtn = document.getElementById('ordersSortDirBtn');
+    const countEl = document.getElementById('ordersCenterResultCount');
+
+    const searchTerm = (searchInput ? searchInput.value : '').trim().toLowerCase();
+    const statusFilter = statusSelect ? statusSelect.value : '';
+    const sortBy = sortBySelect ? sortBySelect.value : 'timestamp';
+    const sortDir = sortDirBtn ? (sortDirBtn.getAttribute('data-dir') || 'desc') : 'desc';
+
+    let list = ordersCenterAllOrders.slice();
+
+    if(searchTerm){
+      list = list.filter(o => {
+        return ['customerName','phone','brand','address','itemsText','orderId','shippingCompany']
+          .some(key => String(o[key] || '').toLowerCase().indexOf(searchTerm) !== -1);
+      });
+    }
+
+    if(statusFilter){
+      list = list.filter(o => String(o.orderStatus || '') === statusFilter);
+    }
+
+    list.sort((a, b) => {
+      let av = a[sortBy], bv = b[sortBy];
+      let result;
+      if(typeof av === 'number' && typeof bv === 'number'){
+        result = av === bv ? 0 : (av < bv ? -1 : 1);
+      } else {
+        const aDate = new Date(av), bDate = new Date(bv);
+        if(!isNaN(aDate.getTime()) && !isNaN(bDate.getTime()) && av && bv){
+          result = aDate.getTime() === bDate.getTime() ? 0 : (aDate.getTime() < bDate.getTime() ? -1 : 1);
+        } else {
+          const aStr = String(av || '').toLowerCase(), bStr = String(bv || '').toLowerCase();
+          result = aStr === bStr ? 0 : (aStr < bStr ? -1 : 1);
+        }
+      }
+      return sortDir === 'asc' ? result : -result;
+    });
+
+    if(countEl){
+      countEl.textContent = list.length + ' طلب معروض من إجمالي ' + ordersCenterAllOrders.length;
+    }
+
+    ordersCenterRenderTable(list);
+  }
+
+  /* ================= [جديد - المرحلة 4] نظام الإشعارات =================
+     الهدف: عدم الحاجة لمراقبة النظام باستمرار — يعمل تلقائيًا في الخلفية
+     (طالما الصفحة مفتوحة) ويكتشف: طلب جديد / إلغاء طلب / تعديل طلب، عن طريق
+     مقارنة كل "فحص" جديد من الخادم بآخر لقطة (Snapshot) محفوظة محليًا على
+     الجهاز (localStorage)، فلا يفوّت أي تغيير طالما تم فحصه مرة واحدة على
+     الأقل. لا علاقة لهذا القسم بأي منطق من المراحل السابقة ولا يُعدّل فيه. */
+
+  const ORDERS_NOTIF_LOG_KEY = 'omega_tanta_orders_notif_log_v1';
+  const ORDERS_NOTIF_SNAPSHOT_KEY = 'omega_tanta_orders_notif_snapshot_v1';
+  const ORDERS_NOTIF_INIT_KEY = 'omega_tanta_orders_notif_initialized_v1';
+  const ORDERS_CENTER_POLL_INTERVAL_MS = 45000; // كل 45 ثانية — فحص خفيف بدون إزعاج
+
+  let ordersNotifLog = Storage.getJSON(ORDERS_NOTIF_LOG_KEY, []);
+
+  function ordersCenterSnapshotFields(o){
+    return {
+      orderStatus: o.orderStatus || '',
+      paymentStatus: o.paymentStatus || '',
+      paidAmount: Number(o.paidAmount) || 0,
+      grandTotal: Number(o.grandTotal) || 0,
+      itemsText: o.itemsText || ''
+    };
+  }
+
+  // كشف حالات "الإلغاء" اعتمادًا على نص الحالة نفسه (يدعم أي صياغة تحتوي على
+  // "ملغ" أو "الغ"، سواء كتبها الموظف يدويًا في الشيت أو جاءت من ميزة تغيير
+  // الحالة في مرحلة قادمة)، دون الحاجة لقيمة ثابتة محددة مسبقًا.
+  function ordersCenterIsCancelledStatus(status){
+    return /(ملغ|الغ)/.test(String(status || ''));
+  }
+
+  function ordersCenterSaveNotifLog(){
+    if(ordersNotifLog.length > 300) ordersNotifLog.length = 300; // منع تضخم السجل بلا حدود
+    Storage.setJSON(ORDERS_NOTIF_LOG_KEY, ordersNotifLog);
+  }
+
+  function updateOrdersCenterBadge(){
+    const badge = document.getElementById('ordersCenterBadge');
+    if(!badge) return;
+    // [عداد الطلبات الجديدة] يُحسب فقط من إشعارات النوع "new" غير المقروءة،
+    // بمعزل عن باقي أنواع الإشعارات (إلغاء/تعديل) حتى يبقى دقيقًا لغرضه.
+    const unreadNew = ordersNotifLog.filter(e => e.type === 'new' && !e.read).length;
+    if(unreadNew > 0){ badge.style.display = 'inline-flex'; badge.textContent = unreadNew; }
+    else { badge.style.display = 'none'; }
+  }
+
+  function ordersCenterFormatNotifTime(ts){
+    const d = new Date(ts);
+    const h = String(d.getHours()).padStart(2,'0');
+    const mi = String(d.getMinutes()).padStart(2,'0');
+    return h + ':' + mi;
+  }
+
+  function renderOrdersNotifLog(){
+    const listEl = document.getElementById('ordersNotifLogList');
+    if(!listEl) return;
+    if(!ordersNotifLog.length){
+      listEl.innerHTML = '<div class="cart-empty">لا توجد إشعارات بعد.</div>';
+      return;
+    }
+    let html = '';
+    ordersNotifLog.slice(0, 40).forEach(e => {
+      const icon = e.type === 'new' ? '🆕' : (e.type === 'cancelled' ? '❌' : '✏️');
+      html += '<div class="orders-notif-item' + (e.read ? '' : ' orders-notif-unread') + '">' +
+        '<span class="orders-notif-icon">' + icon + '</span>' +
+        '<span class="orders-notif-msg">' + escapeHTML(e.message) + '</span>' +
+        '<span class="orders-notif-time">' + ordersCenterFormatNotifTime(e.ts) + '</span>' +
+      '</div>';
+    });
+    listEl.innerHTML = html;
+  }
+
+  function markAllOrdersNotifRead(){
+    let changed = false;
+    ordersNotifLog.forEach(e => { if(!e.read){ e.read = true; changed = true; } });
+    if(changed){ ordersCenterSaveNotifLog(); updateOrdersCenterBadge(); renderOrdersNotifLog(); }
+  }
+
+  // [إشعار على الهاتف] عبر Notification API الخاص بالمتصفح — يعمل طالما الصفحة
+  // مفتوحة/محمّلة (حتى لو في تبويب آخر)، ويحتاج إذن صريح من المستخدم أولاً.
+  function fireBrowserNotification(title, body){
+    try{
+      if(typeof Notification === 'undefined') return;
+      if(Notification.permission !== 'granted') return;
+      new Notification(title, { body: body });
+    }catch(e){ /* أي خطأ في إشعارات المتصفح لا يوقف باقي النظام */ }
+  }
+
+  function ordersCenterUpdateNotifPermBtnLabel(){
+    const btn = document.getElementById('ordersEnableBrowserNotifBtn');
+    if(!btn) return;
+    if(typeof Notification === 'undefined'){
+      btn.textContent = '🔕 المتصفح لا يدعم الإشعارات';
+      btn.disabled = true;
+      return;
+    }
+    if(Notification.permission === 'granted'){
+      btn.textContent = '🔔 إشعارات المتصفح مُفعّلة';
+    } else if(Notification.permission === 'denied'){
+      btn.textContent = '🔕 الإشعارات مرفوضة من إعدادات المتصفح';
+    } else {
+      btn.textContent = '🔔 تفعيل إشعارات المتصفح';
+    }
+  }
+
+  // [جديد - المرحلة 4] الإشعار الموحّد: يسجّل في السجل + يحدّث الشارة + يعرض
+  // Toast داخل نسخة الشركة (notify) + يحاول إرسال إشعار متصفح/هاتف.
+  function pushOrdersNotifEvent(type, orderId, message){
+    ordersNotifLog.unshift({ type, orderId: orderId || '', message, ts: Date.now(), read: false });
+    ordersCenterSaveNotifLog();
+    updateOrdersCenterBadge();
+    renderOrdersNotifLog();
+    const toastKind = type === 'cancelled' ? 'warning' : (type === 'new' ? 'success' : 'info');
+    notify(message, toastKind);
+    fireBrowserNotification('📦 أوميجا طنطا — مركز الطلبات', message);
+  }
+
+  // [جديد - المرحلة 4] المقارنة الفعلية بين آخر لقطة محفوظة والطلبات الحالية.
+  // أول مرة تعمل فيها الصفحة على الإطلاق (لا توجد لقطة سابقة) تُسجَّل كل
+  // الطلبات الحالية بصمت (بدون إشعارات) حتى لا يُغرَق المستخدم بإشعارات عن
+  // طلبات قديمة، وابتداءً من الفحص الثاني تعمل كل الإشعارات بشكل طبيعي.
+  function ordersCenterDetectChangesAndNotify(freshOrders){
+    const oldSnapshot = Storage.getJSON(ORDERS_NOTIF_SNAPSHOT_KEY, {});
+    const initialized = Storage.get(ORDERS_NOTIF_INIT_KEY, '') === '1';
+    const newSnapshot = {};
+
+    freshOrders.forEach(o => {
+      const key = String(o.orderId || o.rowIndex);
+      const fields = ordersCenterSnapshotFields(o);
+      newSnapshot[key] = fields;
+
+      if(!initialized) return; // أول تشغيل: تسجيل صامت فقط
+
+      const old = oldSnapshot[key];
+      if(!old){
+        // طلب لم يكن موجودًا في آخر لقطة محفوظة = طلب جديد وصل
+        pushOrdersNotifEvent('new', o.orderId,
+          '🆕 طلب جديد وصل: ' + (o.orderId || '—') + ' — ' + (o.customerName || 'عميل'));
+        return;
+      }
+
+      const wasCancelled = ordersCenterIsCancelledStatus(old.orderStatus);
+      const isCancelledNow = ordersCenterIsCancelledStatus(fields.orderStatus);
+      if(!wasCancelled && isCancelledNow){
+        pushOrdersNotifEvent('cancelled', o.orderId, '❌ تم إلغاء الطلب: ' + (o.orderId || '—'));
+        return;
+      }
+
+      const changed = old.orderStatus !== fields.orderStatus ||
+        old.paymentStatus !== fields.paymentStatus ||
+        old.paidAmount !== fields.paidAmount ||
+        old.grandTotal !== fields.grandTotal ||
+        old.itemsText !== fields.itemsText;
+
+      if(changed){
+        pushOrdersNotifEvent('edited', o.orderId, '✏️ تم تعديل بيانات الطلب: ' + (o.orderId || '—'));
+      }
+    });
+
+    Storage.setJSON(ORDERS_NOTIF_SNAPSHOT_KEY, newSnapshot);
+    if(!initialized) Storage.set(ORDERS_NOTIF_INIT_KEY, '1');
+  }
+
+  // [جديد - المرحلة 4] فحص دوري في الخلفية — يعمل تلقائيًا من فتح الصفحة، بدون
+  // الحاجة لفتح مركز الطلبات يدويًا (يحقق هدف "عدم الحاجة لمراقبة النظام
+  // باستمرار"). فحص أول بعد ثوانٍ قليلة من التحميل، ثم كل 45 ثانية.
+  function ordersCenterStartBackgroundPolling(){
+    if(!ordersCenterEndpointUrl()) return;
+    setTimeout(() => ordersCenterFetchAll({ silent: true }), 6000);
+    setInterval(() => ordersCenterFetchAll({ silent: true }), ORDERS_CENTER_POLL_INTERVAL_MS);
+  }
+
+  /* ---------------- Event wiring ---------------- */
+  document.getElementById('ordersCenterBtn').addEventListener('click', () => {
+    if(!ownerGate('مركز الطلبات')) return;
+    document.getElementById('ordersCenterModal').classList.add('show');
+    renderOrdersNotifLog();
+    markAllOrdersNotifRead(); // فتح المركز يعني أن المستخدم شاف آخر المستجدات
+    if(!ordersCenterLoadedOnce){
+      ordersCenterFetchAll();
+    }
+  });
+
+  document.getElementById('ordersCenterModalClose').addEventListener('click', () => {
+    document.getElementById('ordersCenterModal').classList.remove('show');
+  });
+
+  document.getElementById('ordersRefreshBtn').addEventListener('click', function(){
+    guardClick(this, () => ordersCenterFetchAll());
+  });
+
+  document.getElementById('ordersNotifMarkReadBtn').addEventListener('click', () => {
+    markAllOrdersNotifRead();
+  });
+
+  document.getElementById('ordersEnableBrowserNotifBtn').addEventListener('click', () => {
+    if(typeof Notification === 'undefined'){
+      notify('المتصفح الحالي لا يدعم إشعارات سطح المكتب/الهاتف.', 'warning');
+      return;
+    }
+    if(Notification.permission === 'granted'){
+      notify('إشعارات المتصفح مُفعّلة بالفعل.', 'info');
+      return;
+    }
+    Notification.requestPermission().then(perm => {
+      ordersCenterUpdateNotifPermBtnLabel();
+      if(perm === 'granted') notify('تم تفعيل إشعارات المتصفح بنجاح.', 'success');
+      else notify('لم يتم منح إذن الإشعارات.', 'warning');
+    });
+  });
+
+  document.getElementById('ordersSearchInput').addEventListener('input', () => {
+    ordersCenterApplyAndRender();
+  });
+
+  document.getElementById('ordersStatusFilter').addEventListener('change', () => {
+    ordersCenterApplyAndRender();
+  });
+
+  document.getElementById('ordersSortBySelect').addEventListener('change', () => {
+    ordersCenterApplyAndRender();
+  });
+
+  document.getElementById('ordersSortDirBtn').addEventListener('click', function(){
+    const isDesc = (this.getAttribute('data-dir') || 'desc') === 'desc';
+    const newDir = isDesc ? 'asc' : 'desc';
+    this.setAttribute('data-dir', newDir);
+    this.innerHTML = newDir === 'desc' ? '⬇ الأحدث أولًا' : '⬆ الأقدم أولًا';
+    ordersCenterApplyAndRender();
+  });
+
+  // [جديد - المرحلة 4] تهيئة أولية عند تحميل الصفحة: تحديث الشارة + زر
+  // الإذن + بدء الفحص التلقائي في الخلفية، كل ده بدون أي تدخل من المستخدم.
+  updateOrdersCenterBadge();
+  renderOrdersNotifLog();
+  ordersCenterUpdateNotifPermBtnLabel();
+  ordersCenterStartBackgroundPolling();
+})();
+</script>
 
 </body></html>

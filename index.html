@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" data-file-mode="customer" style="--bg: #f7f7fb; --bg-2: #eef0fb; --surface: #ffffff; --surface-2: #f3f4fb; --green-brand: #4f46e5; --green-phos: #4f46e5; --green-phos-dim: rgba(79,70,229,0.1); --green-deep: #3730a3; --text: #0f1222; --text-dim: rgba(15,18,34,0.64); --text-faint: rgba(15,18,34,0.40); --hair: rgba(15,18,34,0.10); --red-rec: #e11d48; --on-green: #ffffff; --radius: 20px; --chip-radius: 10px; --card-shadow: 0 1px 2px rgba(15,18,34,0.04); --card-shadow-hover: 0 20px 40px rgba(79,70,229,0.14), 0 2px 8px rgba(15,18,34,0.06); --glass-blur: none; --bg-pattern: radial-gradient(720px 480px at 100% 0%, rgba(79,70,229,0.10), transparent 60%), radial-gradient(620px 420px at 0% 100%, rgba(16,185,129,0.10), transparent 60%); --scanline-opacity: 0; --font-heading: 'Almarai',sans-serif; --font-body: 'Tajawal',sans-serif; --controls-bg: rgba(247,247,251,0.85); --controls-backdrop: blur(10px);" data-theme="global"><head><script>(function(){
+<html lang="ar" dir="rtl" data-file-mode="business" style="--bg: #f5f9f6; --bg-2: #eff5f0; --surface: #ffffff; --surface-2: #f7f7f7; --green-brand: #176a3c; --green-phos: #176a3c; --green-phos-dim: rgba(23,106,60,0.1); --green-deep: #0e4024; --text: #12241b; --text-dim: rgba(18,36,27,0.6); --text-faint: rgba(18,36,27,0.4); --hair: rgba(23,106,60,0.18); --red-rec: #e0393e; --on-green: #ffffff; --radius: 4px; --chip-radius: 20px; --card-shadow: none; --card-shadow-hover: 0 6px 18px rgba(23,106,60,0.08); --glass-blur: none; --bg-pattern: none; --scanline-opacity: 0.015; --font-heading: 'Almarai',sans-serif; --font-body: 'Tajawal',sans-serif; --controls-bg: var(--bg); --controls-backdrop: none;" data-theme="light"><head><script>(function(){
   var stub = new Proxy(function(){}, {
     get: function(target, prop){ return (prop in target) ? target[prop] : stub; },
     set: function(){ return true; },
@@ -13,7 +13,7 @@
 })();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>أوميجا طنطا | قائمة أسعار الجملة</title>
+<title>أوميجا طنطا | قائمة أسعار الجملة (نسخة الشركة)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&amp;family=Tajawal:wght@400;500;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Cairo:wght@400;700;800&amp;family=Amiri:wght@400;700&amp;family=Changa:wght@400;700&amp;family=El+Messiri:wght@400;700&amp;family=Reem+Kufi:wght@400;700&amp;family=Lalezar&amp;family=Markazi+Text:wght@400;700&amp;display=swap" rel="stylesheet">
 <style>
@@ -1278,6 +1278,48 @@ table.orders-table td.orders-td-wrap{ white-space:normal; max-width:220px; }
 .orders-details-btn:hover{ background:var(--green-phos-dim); }
 #ordersCenterResultCount{ font-size:12.5px; color:var(--text-dim); font-weight:700; }
 
+/* ================= [جديد - المرحلة 8] لوحة التحكم (Dashboard) =================
+   إضافة عرض فقط: تعتمد بالكامل على البيانات المحسوبة من نفس مصادر النظام
+   الحالية (مركز الطلبات، أرشيف الفواتير، قاعدة بيانات العملاء) دون أي تخزين
+   جديد أو تعديل على المنطق القائم. مُجهّزة لإضافة بطاقات مؤشرات جديدة مستقبلًا
+   بمجرد إضافة عنصر HTML آخر بنفس كلاس dash-kpi-card داخل dash-kpi-grid. */
+.dash-kpi-grid{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:10px; margin:10px 0 14px;
+}
+.dash-kpi-card{
+  background:var(--surface-2,#f7f7f7); border:1px solid var(--hair); border-radius:var(--radius,4px);
+  padding:12px 10px; text-align:center;
+}
+.dash-kpi-value{ font-size:22px; font-weight:800; color:var(--green-deep); line-height:1.2; }
+.dash-kpi-label{ font-size:12px; color:var(--text-dim); font-weight:700; margin-top:4px; }
+.dash-section-title{ font-size:14px; font-weight:800; margin:14px 0 6px; }
+.dash-list{ border:1px solid var(--hair); border-radius:var(--radius,4px); overflow:hidden; }
+.dash-list-item{
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+  padding:8px 10px; font-size:13px; border-bottom:1px solid var(--hair);
+}
+.dash-list-item:last-child{ border-bottom:none; }
+.dash-list-item:nth-child(odd){ background:var(--surface-2,#f7f7f7); }
+.dash-list-rank{ font-weight:800; color:var(--green-deep); min-width:20px; }
+.dash-list-name{ flex:1; text-align:right; padding:0 8px; }
+.dash-list-val{ font-weight:700; white-space:nowrap; }
+
+/* ================= [جديد - المرحلة 9] مركز التقارير ================= */
+.reports-tabs{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:6px; }
+.reports-tab-btn{
+  border:1px solid var(--hair); background:var(--surface-2,#f7f7f7); color:var(--text);
+  border-radius:20px; padding:6px 14px; font-size:12.5px; font-weight:700; cursor:pointer;
+}
+.reports-tab-btn.active{ background:var(--green-deep); color:#fff; border-color:var(--green-deep); }
+.reports-filter-bar{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:4px; }
+.reports-filter-bar input[type="date"], .reports-filter-bar select{
+  padding:7px 10px; border:1px solid var(--hair); border-radius:var(--radius,4px);
+  background:var(--surface-2,#f7f7f7); color:var(--text); font-family:var(--font-body); font-size:13px;
+}
+.reports-panel{ display:none; }
+.reports-panel.active{ display:block; }
+#reportsPrintArea{ background:#fff; }
+
 /* ================= [جديد - المرحلة 4] سجل إشعارات الطلبات ================= */
 .orders-notif-toolbar{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:space-between; margin-bottom:6px; }
 .orders-notif-log{ max-height:180px; overflow-y:auto; border:1px solid var(--hair); border-radius:var(--radius,4px); }
@@ -1302,7 +1344,7 @@ table.orders-table td.orders-td-wrap{ white-space:normal; max-width:220px; }
 
 <div class="scanbar">
   <span class="rec"><span class="rec-dot"></span> LIVE PRICE LIST</span>
-  <span id="clock" class="mono">2026-07-16 21:37:27</span>
+  <span id="clock" class="mono">2026-07-17 04:45:55</span>
 </div>
 
 <header>
@@ -1352,15 +1394,25 @@ table.orders-table td.orders-td-wrap{ white-space:normal; max-width:220px; }
       <button class="edit-toggle gear-btn" id="aboutBtn" type="button" title="من نحن">ℹ <span>من نحن</span></button>
       <button class="edit-toggle gear-btn" id="aboutSystemBtn" type="button" title="حول النظام">🖥 <span>حول النظام</span></button>
       
-      
-      
-      
-      
-      
-      
+      <button class="edit-toggle gear-btn" id="quoteToggle" type="button">🧾 <span class="lbl-full">عرض سعر لعميل</span><span class="lbl-short">عرض سعر</span></button>
+      <button class="edit-toggle gear-btn" id="quoteArchiveToggle" type="button">🗂️ <span class="lbl-full">عروض الأسعار السابقة</span><span class="lbl-short">أرشيف العروض</span></button>
+      <button class="edit-toggle gear-btn" id="invoiceToggle" type="button">🧾 <span class="lbl-full">إنشاء فاتورة</span><span class="lbl-short">فاتورة</span></button>
+      <button class="edit-toggle gear-btn" id="invoiceArchiveToggle" type="button">🗂️ <span class="lbl-full">الفواتير السابقة</span><span class="lbl-short">أرشيف الفواتير</span></button>
+      <button class="edit-toggle gear-btn" id="catalogPdfBtn" type="button" title="تحميل قائمة الأسعار كاملة PDF">📄 <span class="lbl-full">تحميل القائمة PDF</span><span class="lbl-short">PDF</span></button>
+      <button class="edit-toggle gear-btn" id="offersManageBtn" type="button" title="إدارة العروض والخصومات">🏷️ <span class="lbl-full">إدارة العروض</span><span class="lbl-short">العروض</span></button>
       <!-- [جديد - المرحلة 3B] زر فتح مركز الطلبات الواردة (أداة شركة) -->
-      
-      
+      <button class="edit-toggle gear-btn" id="ordersCenterBtn" type="button" title="متابعة الطلبات الواردة من العملاء">📦 <span class="lbl-full">مركز الطلبات</span><span class="lbl-short">الطلبات</span><span id="ordersCenterBadge" class="cart-badge" style="display:none;position:static;margin-inline-start:6px;">0</span></button>
+      <!-- ================= [جديد - المرحلة 6.3] زر مركز الإشعارات (نسخة الشركة) ================= -->
+      <button class="edit-toggle gear-btn" id="notifCenterBtn" type="button" title="مركز الإشعارات: طلبات جديدة، تغييرات حالة، رسائل عملاء">🔔 <span class="lbl-full">الإشعارات</span><span class="lbl-short">إشعارات</span><span id="notifCenterBadge" class="cart-badge" style="display:none;position:static;margin-inline-start:6px;">0</span></button>
+      <!-- ================= [جديد - المرحلة 7] زر لوحة إدارة رسائل الدعم الفني (نسخة الشركة) ================= -->
+      <button class="edit-toggle gear-btn" id="supportCenterBtn" type="button" title="لوحة إدارة رسائل الدعم الفني الواردة من العملاء">🛟 <span class="lbl-full">الدعم الفني</span><span class="lbl-short">الدعم</span><span id="supportCenterBadge" class="cart-badge" style="display:none;position:static;margin-inline-start:6px;">0</span></button>
+      <!-- ================= [جديد - المرحلة 6] زر إدارة العملاء (CRM) - أداة شركة ================= -->
+      <button class="edit-toggle gear-btn" id="crmToggle" type="button" title="ملف خاص بكل عميل: بياناته، طلباته، إجمالي مشترياته، وملاحظاتك عليه">👥 <span class="lbl-full">إدارة العملاء</span><span class="lbl-short">العملاء</span></button>
+      <!-- ================= [جديد - المرحلة 8] زر لوحة التحكم (Dashboard) - أداة شركة ================= -->
+      <button class="edit-toggle gear-btn" id="dashboardBtn" type="button" title="لوحة تحكم بمؤشرات الأداء الرئيسية للنظام">📊 <span class="lbl-full">لوحة التحكم</span><span class="lbl-short">لوحة التحكم</span></button>
+      <!-- ================= [جديد - المرحلة 9] زر مركز التقارير - أداة شركة ================= -->
+      <button class="edit-toggle gear-btn" id="reportsBtn" type="button" title="مركز التقارير: مبيعات، عملاء، منتجات، أرباح، شحن، موظفين">📑 <span class="lbl-full">التقارير</span><span class="lbl-short">التقارير</span></button>
+      <button class="edit-toggle" id="editToggle" type="button">✎ <span class="lbl-full">تعديل الأسعار</span><span class="lbl-short">تعديل</span></button>
     </div>
     <div class="chips" id="chips"><div class="chip active" data-name="الكل">الكل<span class="n">1104</span></div><div class="chip " data-name="أنظمة المراقبة والكاميرات">أنظمة المراقبة والكاميرات<span class="n">83</span></div><div class="chip " data-name="الشبكات وملحقاتها">الشبكات وملحقاتها<span class="n">34</span></div><div class="chip " data-name="السماعات (اسبيكر)">السماعات (اسبيكر)<span class="n">33</span></div><div class="chip " data-name="سماعات السوبر ووفر">سماعات السوبر ووفر<span class="n">42</span></div><div class="chip " data-name="إكسسوارات اللاب توب">إكسسوارات اللاب توب<span class="n">17</span></div><div class="chip " data-name="كيبورد وماوس">كيبورد وماوس<span class="n">65</span></div><div class="chip " data-name="هيدفون">هيدفون<span class="n">10</span></div><div class="chip " data-name="اكسسوار كمبيوتر">اكسسوار كمبيوتر<span class="n">393</span></div><div class="chip " data-name="شبكات">شبكات<span class="n">111</span></div><div class="chip " data-name="كاميرات">كاميرات<span class="n">137</span></div><div class="chip " data-name="موبايل">موبايل<span class="n">16</span></div><div class="chip " data-name="ريسيفر">ريسيفر<span class="n">15</span></div><div class="chip " data-name="أصناف مستوردة">أصناف مستوردة<span class="n">148</span></div></div>
   </div>
@@ -22620,10 +22672,25 @@ table.orders-table td.orders-td-wrap{ white-space:normal; max-width:220px; }
   </div>
 </footer>
 
-
-
-
-
+<div class="save-bar" id="saveBar">
+  <div style="display:flex; flex-direction:column; gap:4px;">
+    <span class="info">وضع التعديل شغّال — غيّر الأسعار، أضف/احذف أصناف وأقسام وصور، ثم احفظ نسخة</span>
+    <span class="info" id="lastBackupLabel" style="font-size:10.5px; opacity:0.85;">آخر نسخة احتياطية: لم يتم إجراء نسخ احتياطي بعد</span>
+  </div>
+  <button class="btn-cancel" id="importExcelBtn" type="button">📥 استيراد/تحديث من إكسيل</button>
+  <button class="btn-cancel" id="linkImagesByCodeBtn" type="button">🖼️ ربط الصور تلقائيًا بالكود</button>
+  <button class="btn-cancel" id="exportExcelBtn" type="button">📊 تصدير ملف إكسيل</button>
+  <button class="btn-cancel" id="backupBtn" type="button">🗄 نسخة احتياطية (JSON)</button>
+  <button class="btn-cancel" id="restoreBtn" type="button">♻ استعادة من نسخة احتياطية</button>
+  <button class="btn-cancel" id="migrateOldVersionBtn" type="button">🔄 ترحيل البيانات من إصدار سابق</button>
+  
+  <button class="btn-save" id="exportBtn" type="button" style="background:var(--green-deep);color:#fff;">📤 نسخة نهائية للعملاء (قراءة فقط)</button>
+  
+  <button class="btn-cancel" id="cancelBtn" type="button">إلغاء</button>
+</div>
+<input type="file" id="excelFileInput" accept=".xlsx,.xls,.csv" style="">
+<input type="file" id="imagesFolderInput" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" multiple="" webkitdirectory="" style="">
+<input type="file" id="backupFileInput" accept=".json" style="">
 
 <a class="float-wa js-wa-primary" href="https://wa.me/201025459277" target="_blank" rel="noopener" aria-label="واتساب">
   <svg width="27" height="27" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.29-1.39a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.83 14.19c-.24.68-1.4 1.31-1.93 1.35-.5.05-1.02.24-3.42-.71-2.9-1.15-4.76-4.1-4.9-4.29-.14-.19-1.17-1.56-1.17-2.98 0-1.42.75-2.11 1.02-2.4.27-.29.58-.36.78-.36.19 0 .39 0 .56.01.18.01.42-.07.66.5.24.58.82 2 .89 2.15.07.14.12.31.02.5-.1.19-.15.31-.3.48-.14.17-.3.37-.43.5-.14.14-.29.29-.12.58.17.29.75 1.23 1.61 1.99 1.11.98 2.04 1.29 2.33 1.43.29.14.46.12.63-.07.17-.19.72-.84.92-1.13.19-.29.38-.24.63-.14.26.1 1.64.77 1.92.91.29.14.48.21.55.33.07.12.07.68-.17 1.36z"></path></svg>
@@ -22632,6 +22699,20 @@ table.orders-table td.orders-td-wrap{ white-space:normal; max-width:220px; }
 <button class="float-cart" id="cartFloatBtn" type="button" aria-label="سلة الطلبات">
   🧾 <span class="cart-label">سلة الطلبات</span>
   <span class="cart-badge" id="cartBadge" style="display: flex;">10</span>
+</button>
+
+<!-- ================= [جديد - المرحلة 6.2] زر إشعارات العميل ================= -->
+<button class="float-cart" id="custNotifFloatBtn" type="button" aria-label="الإشعارات" style="left:22px; right:auto; bottom:90px;">
+  🔔 <span class="cart-label">الإشعارات</span>
+  <span class="cart-badge" id="custNotifBadge" style="display:none;">0</span>
+</button>
+
+<!-- ================= [جديد - المرحلة 7] زر تواصل معنا (الدعم الفني) - نسخة العميل =================
+     إضافة مستقلة بالكامل: لا تعدّل أي وظيفة أو Endpoint موجود. تفتح نافذة الدعم
+     الفني الخاصة بالعميل (supportModal) بنفس أسلوب زر إشعارات العميل أعلاه. -->
+<button class="float-cart" id="supportFloatBtn" type="button" aria-label="تواصل معنا" style="left:22px; right:auto; bottom:158px;">
+  💬 <span class="cart-label">تواصل معنا</span>
+  <span class="cart-badge" id="supportBadge" style="display:none;">0</span>
 </button>
 
 <!-- ================= DATA SCRIPTS ================= -->
@@ -22662,8 +22743,8 @@ table.orders-table td.orders-td-wrap{ white-space:normal; max-width:220px; }
 <script id="promo-data" type="application/json">{"enabled":false,"text":"🎉 عروض وخصومات خاصة على أنظمة المراقبة — تواصل معنا الآن!"}</script>
 
 <!-- ================= EDIT-ONLY UI ================= -->
-
-
+<input type="file" id="imgFileInput" accept="image/*" style="">
+<input type="file" id="logoFileInput" accept="image/*" style="">
 
 <!-- ================= PRODUCT IMAGE GALLERY MODAL (Stage 6) =================
      Opened by clicking the "+N صور / عرض جميع الصور" badge under a product's
@@ -22856,6 +22937,66 @@ table.orders-table td.orders-td-wrap{ white-space:normal; max-width:220px; }
   </div>
 </div>
 
+<!-- ================= [جديد - المرحلة 6.2] نافذة إشعارات العميل =================
+     إضافة مستقلة بالكامل: لا تعدّل أي وظيفة أو Endpoint موجود. تجيب إشعارات
+     العميل فقط من الـ API (action=getCustomerNotifications)، وتسمح بتعليم
+     إشعار واحد كمقروء (action=markNotificationRead) مع تحديث العداد فورًا. -->
+<div class="modal-overlay" id="custNotifModal">
+  <div class="modal-box">
+    <h3>🔔 الإشعارات</h3>
+    <div style="font-size:12px;color:var(--text-dim);margin-bottom:14px;line-height:1.7;">
+      إشعاراتك الخاصة المرتبطة برقم هاتفك المسجل.
+    </div>
+    <label>رقم الهاتف المسجل</label>
+    <input id="custNotifPhone" type="text" placeholder="01xxxxxxxxx">
+    <div class="cart-actions" style="margin-top:10px;">
+      <button id="custNotifRefreshBtn" class="btn-save cart-action-btn" type="button" style="background:var(--green-phos);">🔄 تحديث</button>
+      <button id="custNotifClose" class="btn-cancel cart-action-btn" type="button">إغلاق</button>
+    </div>
+    <div class="section-divider"></div>
+    <div id="custNotifList"><div class="cart-empty">اكتب رقم هاتفك واضغط "تحديث" عشان تشوف إشعاراتك.</div></div>
+  </div>
+</div>
+
+<!-- ================= [جديد - المرحلة 7] نافذة الدعم الفني - نسخة العميل =================
+     إضافة مستقلة بالكامل بنفس أسلوب وتصميم نافذة إشعارات العميل (custNotifModal)
+     أعلاه: نفس الـ Modal classes، ونفس منطق ربط رقم الهاتف. تتيح للعميل إرسال
+     استفسار/ملاحظة جديدة (مع إمكانية ربطها برقم طلب عند الحاجة)، وعرض المحادثة
+     (رسائل العميل وردود الشركة) لنفس رقم الهاتف. تعتمد على Endpoints جديدة
+     بنفس أسلوب الـ Actions الحالية (action=sendSupportMessage /
+     action=getSupportMessages) — أضِف التفاصيل المطلوبة في Code.gs لاحقًا. -->
+<div class="modal-overlay" id="supportModal">
+  <div class="modal-box">
+    <h3>💬 تواصل معنا (الدعم الفني)</h3>
+    <div style="font-size:12px;color:var(--text-dim);margin-bottom:14px;line-height:1.7;">
+      ابعتلنا استفسارك أو ملاحظتك وهيتم الرد عليك هنا في نفس النافذة.
+    </div>
+    <label>رقم الهاتف المسجل</label>
+    <input id="supportPhone" type="text" placeholder="01xxxxxxxxx">
+
+    <div class="section-divider"></div>
+
+    <h3 style="font-size:14px; margin:0 0 8px;">✉️ إرسال رسالة جديدة</h3>
+    <label>ربط الرسالة برقم طلب (اختياري)</label>
+    <input id="supportOrderRef" type="text" placeholder="مثال: رقم الطلب أو اتركه فارغًا">
+    <label>نص الاستفسار أو الملاحظة</label>
+    <textarea id="supportMsgText" rows="3" placeholder="اكتب استفسارك أو ملاحظتك هنا..."></textarea>
+    <div class="cart-actions" style="margin-top:10px;">
+      <button id="supportSendBtn" class="btn-save cart-action-btn" type="button" style="background:var(--green-phos);">📨 إرسال</button>
+      <button id="supportRefreshBtn" class="btn-cancel cart-action-btn" type="button">🔄 تحديث المحادثة</button>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <h3 style="font-size:14px; margin:0 0 8px;">🗨️ محادثتك مع الدعم الفني</h3>
+    <div id="supportThreadList"><div class="cart-empty">اكتب رقم هاتفك واضغط "تحديث المحادثة" عشان تشوف رسائلك وردود الشركة.</div></div>
+
+    <div class="modal-actions" style="flex-wrap:wrap; margin-top:14px;">
+      <button id="supportModalClose" class="btn-cancel" type="button" style="flex:1 1 100%;">إغلاق</button>
+    </div>
+  </div>
+</div>
+
 <!-- ================= CUSTOM "NOT IN CATALOG" ITEM REQUEST MODAL ================= -->
 <div class="modal-overlay" id="customItemModal">
   <div class="modal-box">
@@ -22879,25 +23020,858 @@ table.orders-table td.orders-td-wrap{ white-space:normal; max-width:220px; }
 </div>
 
 <!-- ================= OWNER QUOTE BUILDER MODAL ================= -->
+<div class="modal-overlay" id="quoteModal">
+  <div class="modal-box" style="max-width:460px;">
+    <h3>📋 عرض سعر لعميل</h3>
+    <label>اسم العميل</label>
+    <div style="position:relative;">
+      <input id="qCustName" type="text" placeholder="اسم العميل / المحل" autocomplete="off">
+      <div id="qCustSuggest" class="cust-suggest-box"></div>
+    </div>
+    <label>رقم الهاتف / واتساب العميل (اختياري)</label>
+    <input id="qCustPhone" type="text" placeholder="01xxxxxxxxx">
 
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <div style="flex:1 1 45%;">
+        <label>المحافظة</label>
+        <input id="qGovernorate" type="text" placeholder="مثال: الغربية">
+      </div>
+      <div style="flex:1 1 45%;">
+        <label>مكان الشحن</label>
+        <select id="qShippingPlace">
+          <option value="">اختر مكان الشحن</option>
+          <option value="داخل طنطا">داخل طنطا</option>
+          <option value="باقي محافظات مصر">باقي محافظات مصر</option>
+          <option value="استلام من المحل">استلام من المحل</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+      <div style="flex:1 1 45%;">
+        <label>شركة الشحن</label>
+        <select id="qShippingCompany">
+          <option value="">اختر شركة الشحن</option>
+          <option value="البراق">البراق</option>
+          <option value="ميراج">ميراج</option>
+          <option value="موقف سيارات">موقف سيارات</option>
+          <option value="أخرى">أخرى</option>
+        </select>
+      </div>
+      <div style="flex:1 1 45%;">
+        <label>وسيلة الدفع</label>
+        <select id="qPaymentMethod">
+          <option value="">اختر وسيلة الدفع</option>
+          <option value="الدفع عن طريق البريد">الدفع عن طريق البريد</option>
+          <option value="الدفع عند الاستلام بمقابل">الدفع عند الاستلام بمقابل</option>
+          <option value="الدفع عن طريق فودافون كاش">الدفع عن طريق فودافون كاش</option>
+          <option value="الدفع عن طريق الحساب البنكي">الدفع عن طريق الحساب البنكي</option>
+          <option value="الدفع عن طريق انستاباي">الدفع عن طريق انستاباي</option>
+        </select>
+      </div>
+    </div>
+
+    <label>الخصم العام على عرض السعر (تظهر في العرض فقط، مش في القائمة العادية) — اكتب نسبة أو مبلغ وهيتحول تلقائي للتاني</label>
+    <div style="display:flex; gap:8px;">
+      <input id="qDiscount" type="number" min="0" max="100" step="1" value="0" placeholder="نسبة %" style="flex:1;">
+      <input id="qDiscountAmount" type="number" min="0" step="0.01" value="0" placeholder="مبلغ ج.م" style="flex:1;">
+    </div>
+
+    <div class="section-divider"></div>
+    <label>ابحث عن منتج من الكتالوج لإضافته للعرض</label>
+    <input id="qProductSearch" type="text" placeholder="اكتب اسم المنتج...">
+    <div id="qSearchResults" style="max-height:220px; overflow-y:auto; border:1px solid var(--hair); border-radius:8px; margin-top:6px; display:none;"></div>
+    <button id="qOpenCatalogPickerBtn" type="button" class="btn-cancel" style="width:100%; margin-top:8px;"><svg class="btn-ic" viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5 9 5 9-5z"></path><path d="M3 8v8l9 5 9-5V8"></path><path d="M12 13v8"></path></svg> اختيار منتج من الكتالوج</button>
+
+    <div class="section-divider"></div>
+    <button id="qClearAllBtn" type="button" class="btn-cancel" style="width:100%; color:var(--red-rec); border-color:var(--red-rec);"><svg class="btn-ic" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg> حذف كل المنتجات من العرض</button>
+    <div id="quoteLines">
+      <div class="order-line">
+        <div class="row1"><span class="oname">كاميرا يس اوريجنال IPC-OR-D225</span><button class="orm" data-key="0-1" type="button">✕</button></div>
+        <div class="row2">
+          <span class="ounit">سعر الوحدة: 775 ج.م</span>
+          <span class="oqty">الكمية × 2</span>
+          <span class="ototal">1,550 ج.م</span>
+        </div>
+      </div>
+    
+      <div class="order-line">
+        <div class="row1"><span class="oname">باور صبلاى 30امبير</span><button class="orm" data-key="0-2" type="button">✕</button></div>
+        <div class="row2">
+          <span class="ounit">سعر الوحدة: 325 ج.م</span>
+          <span class="oqty">الكمية × 1</span>
+          <span class="ototal">325 ج.م</span>
+        </div>
+      </div>
+    
+      <div class="order-line">
+        <div class="row1"><span class="oname">مشترك كهرباء كراش 3م M100</span><button class="orm" data-key="0-3" type="button">✕</button></div>
+        <div class="row2">
+          <span class="ounit">سعر الوحدة: 160 ج.م</span>
+          <span class="oqty">الكمية × 1</span>
+          <span class="ototal">160 ج.م</span>
+        </div>
+      </div>
+    
+      <div class="order-line">
+        <div class="row1"><span class="oname">ان فى ار يس اوريجنال 4بورت NVR 5004P</span><button class="orm" data-key="0-0" type="button">✕</button></div>
+        <div class="row2">
+          <span class="ounit">سعر الوحدة: 1,275 ج.م</span>
+          <span class="oqty">الكمية × 3</span>
+          <span class="ototal">3,825 ج.م</span>
+        </div>
+      </div>
+    
+      <div class="order-line">
+        <div class="row1"><span class="oname">اكس فى ار 16 بورت 2ميجا يونى ارش XVR-116F</span><button class="orm" data-key="0-5" type="button">✕</button></div>
+        <div class="row2">
+          <span class="ounit">سعر الوحدة: 2,700 ج.م</span>
+          <span class="oqty">الكمية × 1</span>
+          <span class="ototal">2,700 ج.م</span>
+        </div>
+      </div>
+    
+      <div class="order-line">
+        <div class="row1"><span class="oname">سلك كاميرات زد فيجن 200م RG174 Z VISION</span><button class="orm" data-key="0-7" type="button">✕</button></div>
+        <div class="row2">
+          <span class="ounit">سعر الوحدة: 1,050 ج.م</span>
+          <span class="oqty">الكمية × 1</span>
+          <span class="ototal">1,050 ج.م</span>
+        </div>
+      </div>
+    
+      <div class="order-line">
+        <div class="row1"><span class="oname">كيت K4W-3TC</span><button class="orm" data-key="0-8" type="button">✕</button></div>
+        <div class="row2">
+          <span class="ounit">سعر الوحدة: 7,000 ج.م</span>
+          <span class="oqty">الكمية × 1</span>
+          <span class="ototal">7,000 ج.م</span>
+        </div>
+      </div>
+    
+      <div class="order-line">
+        <div class="row1"><span class="oname">ديفي ار يس اورجينال4بورت 5ميجا DVR 5CH MN</span><button class="orm" data-key="0-10" type="button">✕</button></div>
+        <div class="row2">
+          <span class="ounit">سعر الوحدة: 1,150 ج.م</span>
+          <span class="oqty">الكمية × 1</span>
+          <span class="ototal">1,150 ج.م</span>
+        </div>
+      </div>
+    
+      <div class="order-line">
+        <div class="row1"><span class="oname">باور صبلاى 10امبير</span><button class="orm" data-key="0-11" type="button">✕</button></div>
+        <div class="row2">
+          <span class="ounit">سعر الوحدة: 185 ج.م</span>
+          <span class="oqty">الكمية × 1</span>
+          <span class="ototal">185 ج.م</span>
+        </div>
+      </div>
+    
+      <div class="order-line">
+        <div class="row1"><span class="oname">كاميرا يس اوريجنال IPC-OR-D60</span><button class="orm" data-key="0-12" type="button">✕</button></div>
+        <div class="row2">
+          <span class="ounit">سعر الوحدة: 575 ج.م</span>
+          <span class="oqty">الكمية × 1</span>
+          <span class="ototal">575 ج.م</span>
+        </div>
+      </div>
+    
+      <div class="order-line">
+        <div class="row1"><span class="oname">كاميرا هيك فيجن 2ميجا خارجى  16DOT EXIPF</span><button class="orm" data-key="0-14" type="button">✕</button></div>
+        <div class="row2">
+          <span class="ounit">سعر الوحدة: 470 ج.م</span>
+          <span class="oqty">الكمية × 1</span>
+          <span class="ototal">470 ج.م</span>
+        </div>
+      </div>
+    
+      <div class="order-line">
+        <div class="row1"><span class="oname">كاميرا يس اوريجنال خارجى 5 ميجا OR-B263 HD</span><button class="orm" data-key="0-15" type="button">✕</button></div>
+        <div class="row2">
+          <span class="ounit">سعر الوحدة: 850 ج.م</span>
+          <span class="oqty">الكمية × 1</span>
+          <span class="ototal">850 ج.م</span>
+        </div>
+      </div>
+    
+      <div class="order-line">
+        <div class="row1"><span class="oname">كاميرا خارجى يس اورجينال B910</span><button class="orm" data-key="0-16" type="button">✕</button></div>
+        <div class="row2">
+          <span class="ounit">سعر الوحدة: 320 ج.م</span>
+          <span class="oqty">الكمية × 1</span>
+          <span class="ototal">320 ج.م</span>
+        </div>
+      </div>
+    
+      <div class="order-line">
+        <div class="row1"><span class="oname">ديفى ار يس اورجينال 4بورت 2 ميجا DVR 4 CH -1080 YES</span><button class="orm" data-key="0-17" type="button">✕</button></div>
+        <div class="row2">
+          <span class="ounit">سعر الوحدة: 1,050 ج.م</span>
+          <span class="oqty">الكمية × 1</span>
+          <span class="ototal">1,050 ج.م</span>
+        </div>
+      </div>
+    </div>
+    <div class="order-total-row" style="border-top:1px dashed var(--hair); font-weight:400; font-size:13px; padding-top:8px;">
+      <span>الإجمالي قبل الخصم</span><span class="mono" id="quoteSubtotal">21,210 ج.م</span>
+    </div>
+    <div class="order-total-row" style="border-top:none; font-weight:400; font-size:13px; color:var(--red-rec);">
+      <span>خصم الأصناف</span><span class="mono" id="quoteItemDiscountVal">- 0 ج.م</span>
+    </div>
+    <div class="order-total-row" style="border-top:none; font-weight:400; font-size:13px; color:var(--red-rec);">
+      <span id="quoteDiscountLabel">الخصم العام (0%)</span><span class="mono" id="quoteDiscountVal">- 0 ج.م</span>
+    </div>
+    <div class="order-total-row">
+      <span>الإجمالي بعد الخصم</span><span class="val" id="quoteGrandTotal">21,210 ج.م</span>
+    </div>
+
+    <div id="quoteExportPreview" style="position: fixed; left: -9999px; top: 0px; display: none;"></div>
+
+    <div class="modal-actions" style="flex-wrap:wrap;">
+      <button id="quotePngBtn" class="btn-save" type="button" style="background:var(--green-phos); flex:1 1 100%;"><svg class="btn-ic" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path></svg> حفظ صورة PNG</button>
+      <button id="quoteJpgBtn" class="btn-save" type="button" style="background:var(--green-phos); flex:1 1 100%;"><svg class="btn-ic" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path></svg> حفظ صورة JPG</button>
+      <button id="quotePdfBtn" class="btn-save" type="button" style="background:var(--green-deep); color:#fff; flex:1 1 100%;"><svg class="btn-ic" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg> حفظ PDF</button>
+      <button id="quoteExcelBtn" class="btn-save" type="button" style="background:#1c7c54; color:#fff; flex:1 1 100%;"><svg class="btn-ic" viewBox="0 0 24 24"><path d="M3 3v18h18"></path><rect x="7" y="12" width="3" height="6"></rect><rect x="12" y="8" width="3" height="10"></rect><rect x="17" y="5" width="3" height="13"></rect></svg> حفظ Excel</button>
+      <button id="quotePrintBtn" class="btn-save" type="button" style="background:#3a5a9c; color:#fff; flex:1 1 100%;"><svg class="btn-ic" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg> طباعة مباشرة</button>
+      <button id="quoteWaBtn" class="btn-save" type="button" style="background:#1ebd5c; color:#fff; flex:1 1 100%;"><svg class="btn-ic" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg> إرسال ملخص للعميل على واتساب</button>
+      <button id="quoteContactSwitchBtn" class="btn-cancel" type="button" style="flex:1 1 100%;"><svg class="btn-ic" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"></rect><circle cx="8" cy="11" r="2"></circle><path d="M5 17c0-1.7 1.5-3 3-3s3 1.3 3 3"></path><line x1="14" y1="9" x2="19" y2="9"></line><line x1="14" y1="13" x2="19" y2="13"></line></svg> تغيير بيانات التواصل الظاهرة بالعرض</button>
+      <button id="quoteClose" class="btn-cancel" type="button" style="flex:1 1 100%;">إغلاق</button>
+    </div>
+    <div style="font-size:11px;color:var(--text-faint);margin-top:10px;line-height:1.7;">
+      ملحوظة: واتساب مش بيسمح بإرفاق ملفات تلقائيًا من رابط، فلازم تحمّل الصورة أو الـPDF الأول (بالزرار اللي فوق) وبعدين ترفقها يدويًا في محادثة واتساب. زرار "إرسال ملخص" هيفتحلك المحادثة بنص العرض جاهز.
+    </div>
+  </div>
+</div>
 
 <!-- ================= QUOTE ARCHIVE (عروض الأسعار السابقة) ================= -->
-
+<div class="modal-overlay" id="quoteArchiveModal">
+  <div class="modal-box" style="max-width:640px;">
+    <h3>🗂️ عروض الأسعار السابقة</h3>
+    <button id="qArchDeleteAllBtn" type="button" class="btn-cancel" style="width:100%; color:var(--red-rec); border-color:var(--red-rec);">🗑 حذف الجميع</button>
+    <div class="section-divider"></div>
+    <div id="quoteArchiveList"><div class="cart-empty">لسه مفيش عروض أسعار محفوظة. لما تعمل عرض سعر وتصدّره أو تطبعه هيتحفظ هنا تلقائيًا.</div></div>
+    <div class="modal-actions" style="flex-wrap:wrap;">
+      <button id="quoteArchiveClose" class="btn-cancel" type="button" style="flex:1 1 100%;">إغلاق</button>
+    </div>
+  </div>
+</div>
 
 <!-- ================= QUOTE PREVIEW (معاينة عرض سعر من الأرشيف) ================= -->
-
+<div class="modal-overlay" id="quotePreviewModal">
+  <div class="modal-box" style="max-width:640px;">
+    <h3>👁 معاينة عرض السعر</h3>
+    <div style="border:1px solid var(--hair); border-radius:10px; padding:14px; background:#fff; overflow:auto;">
+      <div id="quotePreviewBody"></div>
+    </div>
+    <div class="modal-actions" style="flex-wrap:wrap;">
+      <button id="quotePreviewPrintBtn" class="btn-save" type="button" style="background:#3a5a9c; color:#fff; flex:1 1 100%;">🖨 طباعة</button>
+      <button id="quotePreviewClose" class="btn-cancel" type="button" style="flex:1 1 100%;">إغلاق</button>
+    </div>
+  </div>
+</div>
 
 <!-- ================= OFFERS MANAGEMENT MODAL (Stage 2 — structure only; CRUD wiring comes in a later stage) ================= -->
-
+<div class="modal-overlay" id="offersModal">
+  <div class="modal-box">
+    <h3>🏷️ إدارة العروض والخصومات</h3>
+    <div class="offer-form-hint">
+      من هنا تقدر تضيف وتعدّل وتحذف عروض وخصومات خاصة، وتتحكم في تفعيلها وتواريخها. كل البيانات بتتخزن على الجهاز ده بس، ومفيش أي اتصال بالإنترنت مطلوب.
+    </div>
+    <div class="section-divider"></div>
+    <div class="offer-toolbar">
+      <button id="offerAddNewBtn" type="button" class="btn-save">+ إضافة عرض جديد</button>
+    </div>
+    <div class="section-divider"></div>
+    <div id="offersList">
+      <div class="cart-empty">لسه مفيش عروض مضافة. دوس على "+ إضافة عرض جديد" عشان تبدأ.</div>
+    </div>
+    <div class="modal-actions" style="flex-wrap:wrap;">
+      <button id="offersModalClose" class="btn-cancel" type="button" style="flex:1 1 100%;">إغلاق</button>
+    </div>
+  </div>
+</div>
 
 <!-- ================= [جديد - المرحلة 3B] ORDERS CENTER MODAL ================= -->
+<div class="modal-overlay" id="ordersCenterModal">
+  <div class="modal-box" style="max-width:1080px;">
+    <h3>📦 مركز الطلبات الواردة</h3>
+    <div class="offer-form-hint">
+      من هنا تقدر تتابع كل الطلبات اللي وصلت من العملاء، تبحث فيها فورًا، تفلترها حسب الحالة، وترتّبها زي ما يناسبك.
+    </div>
+    <div class="section-divider"></div>
 
+    <div class="orders-toolbar">
+      <div class="orders-search-box">
+        <input id="ordersSearchInput" type="text" placeholder="ابحث بالاسم، الهاتف، رقم الطلب، الشركة...">
+        <span class="icon">⌕</span>
+      </div>
+      <select id="ordersStatusFilter" class="edit-toggle gear-btn" title="فلترة حسب حالة الطلب">
+        <option value="">🔎 كل الحالات</option>
+      </select>
+      <select id="ordersSortBySelect" class="edit-toggle gear-btn" title="الفرز حسب">
+        <option value="timestamp">فرز: تاريخ الوصول</option>
+        <option value="orderDate">فرز: تاريخ الطلب</option>
+        <option value="grandTotal">فرز: الإجمالي</option>
+        <option value="customerName">فرز: اسم العميل</option>
+        <option value="orderStatus">فرز: حالة الطلب</option>
+        <option value="paymentStatus">فرز: حالة الدفع</option>
+      </select>
+      <button id="ordersSortDirBtn" type="button" class="edit-toggle gear-btn" data-dir="desc" title="اتجاه الفرز">⬇ الأحدث أولًا</button>
+      <button id="ordersRefreshBtn" type="button" class="edit-toggle gear-btn" title="تحديث الطلبات من الخادم">🔄 تحديث</button>
+      <button id="ordersEnableBrowserNotifBtn" type="button" class="edit-toggle gear-btn" title="تفعيل إشعارات المتصفح/الهاتف">🔔 تفعيل إشعارات المتصفح</button>
+    </div>
 
-<!-- ================= OFFER ADD / EDIT FORM MODAL ================= -->
+    <div class="section-divider"></div>
 
+    <!-- [جديد - المرحلة 4] سجل الإشعارات: طلب جديد / إلغاء / تعديل -->
+    <div class="orders-notif-toolbar">
+      <h3 style="margin:0; font-size:14px;">🔔 آخر الإشعارات</h3>
+      <button id="ordersNotifMarkReadBtn" type="button" class="btn-cancel" style="padding:4px 10px; font-size:12px;">تعليم الكل كمقروء</button>
+    </div>
+    <div id="ordersNotifLogList" class="orders-notif-log"><div class="cart-empty">لا توجد إشعارات بعد.</div></div>
+
+    <div class="section-divider"></div>
+
+    <div id="ordersCenterResultCount"></div>
+    <div id="ordersTableWrap" class="orders-table-wrap" style="margin-top:8px;">
+      <div class="cart-empty" id="ordersCenterEmptyState">دوس على "🔄 تحديث" عشان تجيب أحدث الطلبات من الشيت.</div>
+    </div>
+
+    <div class="modal-actions" style="flex-wrap:wrap;">
+      <button id="ordersCenterModalClose" class="btn-cancel" type="button" style="flex:1 1 100%;">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= [جديد - المرحلة 6] إدارة العملاء (CRM) =================
+     إضافة مستقلة بالكامل: تبني على قاعدة بيانات العملاء الموجودة بالفعل
+     (SAVED_CUSTOMERS / CUSTOMERS_KEY / upsertSavedCustomer) دون أي تعديل على
+     منطقها الحالي، وتضيف فقط حقل ملاحظات اختياري لكل عميل + واجهة عرض/بحث
+     تجمع بيانات كل عميل مع طلباته وفواتيره الموجودة بالفعل في النظام
+     (loadInvoiceArchive + مركز الطلبات عبر window.getOrdersCenterAllOrders). -->
+<div class="modal-overlay" id="crmModal">
+  <div class="modal-box" style="max-width:1080px;">
+    <h3>👥 إدارة العملاء</h3>
+    <div class="offer-form-hint">
+      ملف خاص بكل عميل: بياناته، كل طلباته وفواتيره المسجّلة في النظام، إجمالي مشترياته، وملاحظاتك الخاصة عليه.
+    </div>
+    <div class="section-divider"></div>
+
+    <div class="orders-toolbar">
+      <div class="orders-search-box">
+        <input id="crmSearchInput" type="text" placeholder="ابحث بالاسم أو الهاتف أو العنوان...">
+        <span class="icon">⌕</span>
+      </div>
+      <select id="crmSortBySelect" class="edit-toggle gear-btn" title="الفرز حسب">
+        <option value="lastOrder">فرز: آخر طلب</option>
+        <option value="totalPurchases">فرز: إجمالي المشتريات</option>
+        <option value="ordersCount">فرز: عدد الطلبات</option>
+        <option value="name">فرز: اسم العميل</option>
+      </select>
+      <button id="crmRefreshBtn" type="button" class="edit-toggle gear-btn" title="إعادة حساب بيانات العملاء من الفواتير والطلبات الحالية">🔄 تحديث البيانات</button>
+    </div>
+
+    <div class="section-divider"></div>
+    <div id="crmResultCount"></div>
+    <div id="crmTableWrap" class="orders-table-wrap" style="margin-top:8px;">
+      <div class="cart-empty" id="crmEmptyState">لا يوجد عملاء محفوظين بعد. العملاء يُضافون هنا تلقائيًا من كل فاتورة أو عرض سعر أو طلب يتم حفظه.</div>
+    </div>
+
+    <div class="modal-actions" style="flex-wrap:wrap;">
+      <button id="crmModalClose" class="btn-cancel" type="button" style="flex:1 1 100%;">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= [جديد - المرحلة 8] لوحة التحكم (Dashboard) =================
+     إضافة عرض فقط بالكامل: تحسب كل المؤشرات مباشرة من نفس مصادر البيانات
+     الموجودة فعليًا (window.getOrdersCenterAllOrders، loadInvoiceArchive،
+     SAVED_CUSTOMERS عبر crmGetAllCustomerSummaries) دون أي تخزين جديد أو
+     تعديل على منطق أي منها. الشبكة مُجهّزة لإضافة بطاقات/إحصائيات مستقبلية
+     بسهولة (انظر renderDashboard في قسم الجافاسكريبت). -->
+<div class="modal-overlay" id="dashboardModal">
+  <div class="modal-box" style="max-width:1080px;">
+    <h3>📊 لوحة التحكم</h3>
+    <div class="offer-form-hint">
+      نظرة سريعة على أداء النظام: الطلبات، العملاء، أفضل المنتجات، وإجمالي الإيرادات — تتحدث تلقائيًا كل ما تتغيّر بيانات الطلبات أو العملاء أو الفواتير.
+    </div>
+    <div class="section-divider"></div>
+
+    <div class="orders-toolbar">
+      <button id="dashboardRefreshBtn" type="button" class="edit-toggle gear-btn" title="إعادة حساب كل المؤشرات من البيانات الحالية">🔄 تحديث المؤشرات</button>
+    </div>
+    <div class="section-divider"></div>
+
+    <div id="dashKpiGrid" class="dash-kpi-grid"></div>
+
+    <div class="dash-section-title">🏆 أفضل العملاء</div>
+    <div id="dashTopCustomers" class="dash-list"></div>
+
+    <div class="dash-section-title">📦 أفضل المنتجات</div>
+    <div id="dashTopProducts" class="dash-list"></div>
+
+    <div class="modal-actions" style="flex-wrap:wrap;">
+      <button id="dashboardModalClose" class="btn-cancel" type="button" style="flex:1 1 100%;">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= [جديد - المرحلة 9] مركز التقارير =================
+     إضافة عرض فقط بالكامل: كل تقرير يحسب بياناته مباشرة من نفس مصادر النظام
+     الموجودة فعليًا (window.getOrdersCenterAllOrders، loadInvoiceArchive،
+     crmGetAllCustomerSummaries، SAVED_CUSTOMERS) دون أي تخزين جديد أو تعديل
+     على منطق أي منها. الشبكة (reportsTabs/reportsPanel) مُجهّزة لإضافة تقارير
+     جديدة مستقبلًا بسهولة (انظر قسم الجافاسكريبت - مركز التقارير). -->
+<div class="modal-overlay" id="reportsModal">
+  <div class="modal-box" style="max-width:1080px;">
+    <h3>📑 مركز التقارير</h3>
+    <div class="offer-form-hint">
+      تقارير احترافية جاهزة للطباعة أو تصدير Excel، مبنية على بيانات النظام الحالية، مع إمكانية التصفية حسب الفترة الزمنية.
+    </div>
+    <div class="section-divider"></div>
+
+    <div class="reports-tabs" id="reportsTabs">
+      <button type="button" class="reports-tab-btn active" data-report="sales">💰 المبيعات</button>
+      <button type="button" class="reports-tab-btn" data-report="customers">👥 العملاء</button>
+      <button type="button" class="reports-tab-btn" data-report="products">📦 المنتجات</button>
+      <button type="button" class="reports-tab-btn" data-report="employees">🧑‍💼 الموظفين</button>
+      <button type="button" class="reports-tab-btn" data-report="profit">📈 الأرباح</button>
+      <button type="button" class="reports-tab-btn" data-report="shipping">🚚 الشحن</button>
+    </div>
+
+    <div class="reports-filter-bar">
+      <label style="font-size:12.5px; font-weight:700;">من</label>
+      <input type="date" id="reportsFromDate">
+      <label style="font-size:12.5px; font-weight:700;">إلى</label>
+      <input type="date" id="reportsToDate">
+      <select id="reportsQuickRange" class="edit-toggle gear-btn">
+        <option value="">فترة مخصصة</option>
+        <option value="today">اليوم</option>
+        <option value="week">آخر 7 أيام</option>
+        <option value="month">آخر 30 يوم</option>
+        <option value="all">كل الفترات</option>
+      </select>
+      <button id="reportsApplyBtn" type="button" class="edit-toggle gear-btn">🔎 تطبيق الفلتر</button>
+      <button id="reportsPrintBtn" type="button" class="edit-toggle gear-btn">🖨 طباعة التقرير</button>
+      <button id="reportsExcelBtn" type="button" class="edit-toggle gear-btn">📗 تصدير Excel</button>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div id="reportsPrintArea">
+      <div id="reportsPanel-sales" class="reports-panel active">
+        <div id="reportSalesKpis" class="dash-kpi-grid"></div>
+        <div id="reportSalesTableWrap" class="orders-table-wrap"></div>
+      </div>
+      <div id="reportsPanel-customers" class="reports-panel">
+        <div id="reportCustomersKpis" class="dash-kpi-grid"></div>
+        <div id="reportCustomersTableWrap" class="orders-table-wrap"></div>
+      </div>
+      <div id="reportsPanel-products" class="reports-panel">
+        <div id="reportProductsKpis" class="dash-kpi-grid"></div>
+        <div id="reportProductsTableWrap" class="orders-table-wrap"></div>
+      </div>
+      <div id="reportsPanel-employees" class="reports-panel">
+        <div id="reportEmployeesTableWrap" class="orders-table-wrap"></div>
+      </div>
+      <div id="reportsPanel-profit" class="reports-panel">
+        <div id="reportProfitKpis" class="dash-kpi-grid"></div>
+        <div id="reportProfitTableWrap" class="orders-table-wrap"></div>
+      </div>
+      <div id="reportsPanel-shipping" class="reports-panel">
+        <div id="reportShippingKpis" class="dash-kpi-grid"></div>
+        <div id="reportShippingTableWrap" class="orders-table-wrap"></div>
+      </div>
+    </div>
+
+    <div class="modal-actions" style="flex-wrap:wrap;">
+      <button id="reportsModalClose" class="btn-cancel" type="button" style="flex:1 1 100%;">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= [جديد - المرحلة 6] ملف العميل التفصيلي =================
+     نافذة منفصلة تفتح عند الضغط على "عرض الملف" لعميل معيّن من جدول إدارة
+     العملاء أعلاه — تعرض كل الحقول المطلوبة (الاسم، الهاتف، العنوان، الطلبات،
+     عدد الطلبات، إجمالي المشتريات، آخر طلب، الملاحظات) وتسمح بتعديل الملاحظات
+     فقط (باقي البيانات محسوبة تلقائيًا من الفواتير/الطلبات ولا تُعدّل يدويًا هنا). -->
+<div class="modal-overlay" id="crmCustomerFileModal">
+  <div class="modal-box" style="max-width:640px;">
+    <h3>🗂️ ملف العميل</h3>
+    <div id="crmCustomerInfoBox" style="font-size:12.5px; line-height:1.9; background:rgba(255,255,255,0.03); border:1px solid var(--border-col); border-radius:8px; padding:10px 12px; margin-bottom:12px;"></div>
+
+    <div class="section-divider"></div>
+    <h3 style="font-size:14px; margin:0 0 8px;">📦 طلبات وفواتير هذا العميل</h3>
+    <div id="crmCustomerOrdersList" style="max-height:260px; overflow:auto; display:flex; flex-direction:column; gap:8px;"></div>
+
+    <div class="section-divider"></div>
+    <h3 style="font-size:14px; margin:0 0 8px;">📝 ملاحظات</h3>
+    <textarea id="crmCustomerNotes" rows="4" placeholder="أي ملاحظات خاصة بهذا العميل (تفضيلاته، اتفاقات خاصة، تنبيهات...)"></textarea>
+    <div class="cart-actions" style="margin-top:10px;">
+      <button id="crmSaveNotesBtn" type="button" class="btn-save cart-action-btn" style="background:var(--green-phos); flex:1 1 100%;">✔ حفظ الملاحظات</button>
+    </div>
+
+    <div class="modal-actions" style="flex-wrap:wrap; margin-top:14px;">
+      <button id="crmCustomerFileModalClose" class="btn-cancel" type="button" style="flex:1 1 100%;">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= [جديد - المرحلة 6.3] مركز الإشعارات (نسخة الشركة) =================
+     إضافة مستقلة بالكامل: لا تعدّل ولا تعيد تنفيذ أي جزء من نظام إشعارات "مركز
+     الطلبات" الموجود بالفعل (ordersNotifLog / pushOrdersNotifEvent / ordersCenterDetectChangesAndNotify).
+     هذه فقط واجهة عرض إضافية تقرأ من نفس السجل الموجود بالفعل وتصنّفه:
+       - طلبات جديدة (type: 'new')
+       - تغييرات حالة/بيانات الطلبات (type: 'edited' أو 'cancelled')
+       - رسائل العملاء: قسم جديد، يعتمد على Endpoint جديد بنفس أسلوب باقي
+         الـ Actions الحالية (action=getCompanyMessages)، ولا يغيّر أي Endpoint قائم.
+     لا تغيير حالة الطلب ولا إرسال رسائل من هنا — عرض فقط (سيُنفَّذ في المرحلة التالية). -->
+<div class="modal-overlay" id="notifCenterModal">
+  <div class="modal-box" style="max-width:640px;">
+    <h3>🔔 مركز الإشعارات</h3>
+    <div class="offer-form-hint">
+      كل التنبيهات المهمة في مكان واحد: الطلبات الجديدة، تغييرات حالة الطلبات، ورسائل العملاء.
+    </div>
+    <div class="section-divider"></div>
+
+    <div class="orders-notif-toolbar">
+      <h3 style="margin:0; font-size:14px;">🆕 طلبات جديدة</h3>
+    </div>
+    <div id="notifNewOrdersList" class="orders-notif-log">
+      <div class="cart-empty">لا توجد إشعارات طلبات جديدة بعد.</div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="orders-notif-toolbar">
+      <h3 style="margin:0; font-size:14px;">🔄 تغييرات حالة الطلبات</h3>
+    </div>
+    <div id="notifOrderChangesList" class="orders-notif-log">
+      <div class="cart-empty">لا توجد إشعارات تغيير حالة بعد.</div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="orders-notif-toolbar">
+      <h3 style="margin:0; font-size:14px;">💬 رسائل العملاء</h3>
+      <button id="notifMessagesRefreshBtn" type="button" class="btn-cancel" style="padding:4px 10px; font-size:12px;">🔄 تحديث</button>
+    </div>
+    <div id="notifMessagesList" class="orders-notif-log">
+      <div class="cart-empty">دوس "تحديث" عشان تجيب آخر رسائل العملاء.</div>
+    </div>
+
+    <div class="modal-actions" style="flex-wrap:wrap;">
+      <button id="notifCenterMarkReadBtn" type="button" class="btn-cancel" style="flex:1 1 100%;">تعليم الكل كمقروء</button>
+      <button id="notifCenterModalClose" class="btn-cancel" type="button" style="flex:1 1 100%;">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= [جديد - المرحلة 6.4] تفاصيل الطلب: تغيير الحالة + رسالة/ملاحظة للعميل =================
+     إضافة مستقلة: تملأ نقطة الدخول الموجودة بالفعل (openOrderDetailsPlaceholder)
+     التي كانت جاهزة لهذه المرحلة، ولا تعدّل أي جزء من جدول/بحث/فلترة/فرز مركز
+     الطلبات. تغيير الحالة وإرسال الملاحظة كلاهما يعتمد على Endpoints جديدة بنفس
+     أسلوب الـ Actions الحالية (action=updateOrderStatus / action=sendCompanyNote)،
+     وكلاهما يُنشئ إشعارًا للعميل عبر Endpoint إنشاء الإشعارات (action=createCustomerNotification)
+     المستخدم في نفس النظام الذي تقرأ منه نافذة "🔔 الإشعارات" الخاصة بالعميل
+     (action=getCustomerNotifications) الموجودة بالفعل — بدون أي تعديل عليها. -->
+<div class="modal-overlay" id="orderDetailsModal">
+  <div class="modal-box" style="max-width:640px;">
+    <h3>📄 تفاصيل الطلب</h3>
+    <div id="odInfoBox" style="font-size:12.5px; line-height:1.9; background:rgba(255,255,255,0.03); border:1px solid var(--border-col); border-radius:8px; padding:10px 12px; margin-bottom:12px;"></div>
+
+    <div class="section-divider"></div>
+
+    <h3 style="font-size:14px; margin:0 0 8px;">🔄 تغيير حالة الطلب</h3>
+    <label>الحالة الجديدة</label>
+    <select id="odStatusSelect">
+      <option value="جديد">جديد</option>
+      <option value="قيد المراجعة">قيد المراجعة</option>
+      <option value="قيد التجهيز">قيد التجهيز</option>
+      <option value="تم الشحن">تم الشحن</option>
+      <option value="تم التسليم">تم التسليم</option>
+      <option value="ملغي">ملغي</option>
+    </select>
+    <div class="cart-actions" style="margin-top:10px;">
+      <button id="odSaveStatusBtn" type="button" class="btn-save cart-action-btn" style="background:var(--green-phos); flex:1 1 100%;">✔ حفظ الحالة وإشعار العميل</button>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <h3 style="font-size:14px; margin:0 0 8px;">💬 إرسال رسالة / ملاحظة للعميل</h3>
+    <label>نص الرسالة أو الملاحظة</label>
+    <textarea id="odNoteText" rows="3" placeholder="مثال: طلبك جاهز وهيتم الشحن غدًا إن شاء الله."></textarea>
+    <div class="cart-actions" style="margin-top:10px;">
+      <button id="odSendNoteBtn" type="button" class="btn-save cart-action-btn" style="background:var(--green-phos); flex:1 1 100%;">📨 إرسال وإشعار العميل</button>
+    </div>
+
+    <div class="modal-actions" style="flex-wrap:wrap; margin-top:14px;">
+      <button id="orderDetailsModalClose" class="btn-cancel" type="button" style="flex:1 1 100%;">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= [جديد - المرحلة 5] نافذة اختيار طلب وارد لتحويله لفاتورة =================
+     إضافة مستقلة بالكامل: تعرض نفس الطلبات المحمّلة فعليًا في "مركز الطلبات"
+     (ordersCenterAllOrders عبر window.getOrdersCenterAllOrders) بدون أي طلب شبكة
+     جديد أو تعديل على منطق التحميل/الفلترة الحالي. اختيار طلب من هنا يملأ شاشة
+     الفاتورة تلقائيًا (invImportOrderIntoInvoiceFromCenter) وتظل كل الحقول قابلة
+     للتعديل بعد ذلك زي الفاتورة اليدوية تمامًا. -->
+<div class="modal-overlay" id="invImportOrdersPickerModal">
+  <div class="modal-box" style="max-width:640px;">
+    <h3>📥 اختيار طلب وارد لتحويله لفاتورة</h3>
+    <input id="invImportOrdersPickerSearch" type="text" placeholder="🔎 بحث بالاسم أو الهاتف أو رقم الطلب" autocomplete="off" style="margin-bottom:8px;">
+    <div id="invImportOrdersPickerHint" style="font-size:11.5px; color:var(--text-dim); margin-bottom:8px; line-height:1.6;"></div>
+    <div id="invImportOrdersPickerList" style="max-height:50vh; overflow:auto; display:flex; flex-direction:column; gap:8px;"></div>
+    <div class="modal-actions" style="flex-wrap:wrap; margin-top:14px;">
+      <button id="invImportOrdersPickerRefreshBtn" type="button" class="btn-cancel" style="flex:1 1 45%;">🔄 تحديث القائمة</button>
+      <button id="invImportOrdersPickerCloseBtn" class="btn-cancel" type="button" style="flex:1 1 45%;">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= [جديد - المرحلة 7] لوحة إدارة رسائل الدعم الفني - نسخة الشركة =================
+     إضافة مستقلة بالكامل: لا تعدّل أي وظيفة أو Endpoint موجود. تعرض كل رسائل
+     العملاء (action=getSupportMessages بدون phone تُرجع الكل لنسخة الشركة)،
+     وتسمح بالرد على كل رسالة (action=sendSupportReply) ومتابعة/تغيير حالة كل
+     رسالة (action=updateSupportMessageStatus) بنفس أسلوب Actions الحالية. -->
+<div class="modal-overlay" id="supportCenterModal">
+  <div class="modal-box" style="max-width:900px;">
+    <h3>🛟 لوحة إدارة رسائل الدعم الفني</h3>
+    <div class="offer-form-hint">
+      كل رسائل واستفسارات العملاء في مكان واحد، مع إمكانية الرد ومتابعة حالة كل رسالة.
+    </div>
+    <div class="section-divider"></div>
+
+    <div class="orders-notif-toolbar">
+      <h3 style="margin:0; font-size:14px;">📋 كل الرسائل</h3>
+      <button id="supportCenterRefreshBtn" type="button" class="btn-cancel" style="padding:4px 10px; font-size:12px;">🔄 تحديث</button>
+    </div>
+    <div id="supportCenterList" class="orders-notif-log" style="max-height:420px;">
+      <div class="cart-empty">دوس "تحديث" عشان تجيب آخر رسائل العملاء.</div>
+    </div>
+
+    <div class="modal-actions" style="flex-wrap:wrap;">
+      <button id="supportCenterModalClose" class="btn-cancel" type="button" style="flex:1 1 100%;">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= [جديد - المرحلة 7] تفاصيل/رد على رسالة دعم فني واحدة - نسخة الشركة ================= -->
+<div class="modal-overlay" id="supportReplyModal">
+  <div class="modal-box" style="max-width:560px;">
+    <h3>💬 تفاصيل الرسالة والرد</h3>
+    <div id="srInfoBox" style="font-size:12.5px; line-height:1.9; background:rgba(255,255,255,0.03); border:1px solid var(--border-col); border-radius:8px; padding:10px 12px; margin-bottom:12px;"></div>
+
+    <div class="section-divider"></div>
+
+    <h3 style="font-size:14px; margin:0 0 8px;">🔄 حالة الرسالة</h3>
+    <label>الحالة</label>
+    <select id="srStatusSelect">
+      <option value="جديدة">جديدة</option>
+      <option value="قيد المتابعة">قيد المتابعة</option>
+      <option value="تم الرد">تم الرد</option>
+      <option value="مغلقة">مغلقة</option>
+    </select>
+    <div class="cart-actions" style="margin-top:10px;">
+      <button id="srSaveStatusBtn" type="button" class="btn-save cart-action-btn" style="background:var(--green-phos); flex:1 1 100%;">✔ حفظ الحالة</button>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <h3 style="font-size:14px; margin:0 0 8px;">📨 الرد على العميل</h3>
+    <label>نص الرد</label>
+    <textarea id="srReplyText" rows="3" placeholder="اكتب ردك على استفسار/ملاحظة العميل هنا..."></textarea>
+    <div class="cart-actions" style="margin-top:10px;">
+      <button id="srSendReplyBtn" type="button" class="btn-save cart-action-btn" style="background:var(--green-phos); flex:1 1 100%;">📨 إرسال الرد</button>
+    </div>
+
+    <div class="modal-actions" style="flex-wrap:wrap; margin-top:14px;">
+      <button id="supportReplyModalClose" class="btn-cancel" type="button" style="flex:1 1 100%;">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="offerFormModal">
+  <div class="modal-box">
+    <h3 id="offerFormTitle">➕ إضافة عرض جديد</h3>
+    <input type="hidden" id="offerFormId" value="">
+
+    <label>عنوان العرض</label>
+    <input id="offerTitleInput" type="text" placeholder="مثال: خصم بداية الصيف">
+    <label>وصف العرض (اختياري)</label>
+    <textarea id="offerDescInput" rows="3" placeholder="تفاصيل إضافية عن العرض، هتظهر للعميل"></textarea>
+
+    <div class="section-divider"></div>
+    <h3 style="font-size:14.5px;">نوع العرض</h3>
+    <label>شكل عرض المحتوى</label>
+    <select id="offerKindInput">
+      <option value="auto_banner">🖼 بانر تلقائي (محرك التصميم الداخلي)</option>
+      <option value="image">📷 صورة جاهزة (رفع صورة)</option>
+      <option value="video">🎬 فيديو (رفع فيديو)</option>
+      <option value="products">🛒 عرض منتجات</option>
+      <option value="invoice_style">🧾 عرض على هيئة فاتورة</option>
+      <option value="free_post">📝 منشور حر</option>
+    </select>
+
+    <!-- ---- kind: auto_banner ---- -->
+    <div id="offerKindPanel_auto_banner" class="offer-kind-panel">
+      <div class="offer-form-hint">
+        محرك تصميم داخلي بالكامل — بدون إنترنت وبدون ذكاء اصطناعي. كل ضغطة على "توليد تصميم جديد" بتطلع شكل مختلف من آلاف الاحتمالات، وبيانات شركتك بتتحط تلقائيًا.
+      </div>
+      <div id="offerBannerPreview" class="offer-banner-preview"></div>
+      <div class="offer-toolbar">
+        <button id="offerBannerShuffleBtn" type="button" class="btn-cancel">🎲 توليد تصميم جديد</button>
+        <button id="offerBannerLockBtn" type="button" class="btn-save">🔒 تثبيت التصميم</button>
+      </div>
+      <div id="offerBannerLockStatus" class="offer-form-hint"></div>
+    </div>
+
+    <!-- ---- kind: image ---- -->
+    <div id="offerKindPanel_image" class="offer-kind-panel">
+      <label>رفع صورة العرض</label>
+      <div class="file-field">
+        <div class="file-field-title">📷 صورة العرض</div>
+        <div class="file-field-desc">اختر صورة جاهزة من جهازك لتظهر كعرض ترويجي (JPG, PNG, أو أي صيغة صور مدعومة).</div>
+        <div class="file-field-row">
+          <label class="file-field-btn" for="offerImageFileInput">📁 اختيار صورة</label>
+          <span class="file-field-name is-empty" id="offerImageFileName">لم يتم اختيار أي صورة بعد</span>
+          <input id="offerImageFileInput" type="file" accept="image/*">
+        </div>
+      </div>
+      <div id="offerImagePreviewHolder" style="margin-top:8px;"></div>
+    </div>
+
+    <!-- ---- kind: video ---- -->
+    <div id="offerKindPanel_video" class="offer-kind-panel">
+      <label>رفع فيديو العرض</label>
+      <div class="file-field">
+        <div class="file-field-title">🎬 فيديو العرض</div>
+        <div class="file-field-desc">اختر فيديو من جهازك لعرضه كإعلان ترويجي. يُفضّل فيديو قصير وخفيف الحجم.</div>
+        <div class="file-field-row">
+          <label class="file-field-btn" for="offerVideoFileInput">📁 اختيار فيديو</label>
+          <span class="file-field-name is-empty" id="offerVideoFileName">لم يتم اختيار أي فيديو بعد</span>
+          <input id="offerVideoFileInput" type="file" accept="video/*">
+        </div>
+        <div class="offer-form-hint">الفيديوهات الكبيرة بتاخد مساحة تخزين على الجهاز — يُفضّل فيديو قصير وخفيف الحجم.</div>
+      </div>
+      <div id="offerVideoPreviewHolder" style="margin-top:8px;"></div>
+    </div>
+
+    <!-- ---- kind: products ---- -->
+    <div id="offerKindPanel_products" class="offer-kind-panel">
+      <label>أصناف العرض</label>
+      <div id="offerProductsRows"></div>
+      <button id="offerAddProductRowBtn" type="button" class="add-section-btn">+ إضافة صنف</button>
+    </div>
+
+    <!-- ---- kind: invoice_style ---- -->
+    <div id="offerKindPanel_invoice_style" class="offer-kind-panel">
+      <label>عنوان الفاتورة التوضيحية (مثال: عرض خاص)</label>
+      <input id="offerInvoiceNoteInput" type="text" placeholder="مثال: عرض العيد — أسعار خاصة">
+      <label>أصناف العرض</label>
+      <div id="offerInvoiceRows"></div>
+      <button id="offerAddInvoiceRowBtn" type="button" class="add-section-btn">+ إضافة صنف</button>
+    </div>
+
+    <!-- ---- kind: free_post ---- -->
+    <div id="offerKindPanel_free_post" class="offer-kind-panel">
+      <div class="offer-form-hint">المنشور الحر بيستخدم العنوان والوصف بس اللي مكتوبين فوق، من غير عناصر إضافية.</div>
+    </div>
+
+    <div class="section-divider"></div>
+    <h3 style="font-size:14.5px;">قيمة الخصم</h3>
+    <label>نوع الخصم</label>
+    <select id="offerTypeInput">
+      <option value="percentage">نسبة مئوية %</option>
+      <option value="fixed">مبلغ ثابت (ج.م)</option>
+      <option value="custom">مخصص</option>
+    </select>
+    <label>قيمة الخصم</label>
+    <input id="offerValueInput" type="number" min="0" step="0.01" placeholder="مثال: 10">
+
+    <div class="section-divider"></div>
+    <h3 style="font-size:14.5px;">نطاق تطبيق العرض</h3>
+    <label>ينطبق على</label>
+    <select id="offerAppliesToInput">
+      <option value="all">كل الأصناف</option>
+      <option value="section">قسم معيّن</option>
+      <option value="item">صنف معيّن</option>
+      <option value="custom">مخصص</option>
+    </select>
+    <div id="offerTargetPickerHolder" class="offer-form-hint">
+      اختيار الأقسام/الأصناف المستهدفة هيتفعّل في مرحلة لاحقة.
+    </div>
+
+    <div class="section-divider"></div>
+    <h3 style="font-size:14.5px;">مدة العرض</h3>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <div style="flex:1 1 45%;">
+        <label>تاريخ البداية (اختياري)</label>
+        <input id="offerStartDateInput" type="date">
+      </div>
+      <div style="flex:1 1 45%;">
+        <label>تاريخ النهاية (اختياري)</label>
+        <input id="offerEndDateInput" type="date">
+      </div>
+    </div>
+    <label style="display:flex; align-items:center; gap:8px; margin-top:14px;">
+      <input id="offerActiveInput" type="checkbox" style="width:auto;" checked="">
+      تفعيل العرض (نشر)
+    </label>
+
+    <div class="section-divider"></div>
+    <h3 style="font-size:14.5px;">طريقة ظهور العرض للعميل</h3>
+    <div class="offer-form-hint">اختر طريقة واحدة أو أكثر لإظهار هذا العرض عند نشره.</div>
+    <label style="display:flex; align-items:center; gap:8px; margin-top:10px;">
+      <input id="offerNotifyPageInput" type="checkbox" style="width:auto;" checked="">
+      داخل صفحة العروض
+    </label>
+    <label style="display:flex; align-items:center; gap:8px; margin-top:8px;">
+      <input id="offerNotifyPopupInput" type="checkbox" style="width:auto;">
+      نافذة منبثقة (Popup)
+    </label>
+    <label style="display:flex; align-items:center; gap:8px; margin-top:8px;">
+      <input id="offerNotifyBannerInput" type="checkbox" style="width:auto;">
+      شريط أعلى الصفحة
+    </label>
+    <label style="display:flex; align-items:center; gap:8px; margin-top:8px;">
+      <input id="offerNotifyInpageInput" type="checkbox" style="width:auto;">
+      إشعار داخل الصفحة
+    </label>
+
+    <div class="section-divider"></div>
+    <h3 style="font-size:14.5px;">🤖 مساعد الذكاء الاصطناعي (اختياري)</h3>
+    <div class="offer-form-hint">
+      ميزة اختيارية بتحتاج اتصال بالإنترنت، والنظام مش معتمد عليها خالص. لو اتفعّلت لاحقًا بربطها بأي مزود ذكاء اصطناعي (زي ChatGPT أو Claude أو Gemini أو غيرهم)، هتقدر تستخدمها لاقتراح عنوان، وصف تسويقي، عبارات دعائية، ألوان، شكل البانر، ترتيب العناصر، أو حتى توليد صورة لو اترّبطت بخدمة صور.
+    </div>
+    <div id="offerAIAssistantBox" class="offer-ai-box">
+      <div id="offerAIStatusLine" class="offer-ai-status">⚪ غير متاح حاليًا (محتاج اتصال إنترنت ومزود ذكاء اصطناعي مُفعّل)</div>
+      <div class="offer-toolbar" style="margin-top:8px;">
+        <button id="offerAISuggestTitleBtn" type="button" class="btn-cancel" disabled="">✨ اقتراح عنوان</button>
+        <button id="offerAISuggestDescBtn" type="button" class="btn-cancel" disabled="">📝 اقتراح وصف تسويقي</button>
+        <button id="offerAISuggestColorsBtn" type="button" class="btn-cancel" disabled="">🎨 اقتراح ألوان</button>
+        <button id="offerAISuggestLayoutBtn" type="button" class="btn-cancel" disabled="">🧩 اقتراح شكل/ترتيب</button>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button id="offerFormSave" class="btn-save" type="button">💾 حفظ العرض</button>
+      <button id="offerFormCancel" class="btn-cancel" type="button">إلغاء</button>
+    </div>
+  </div>
+</div>
 
 <!-- ================= OFFER PREVIEW MODAL ================= -->
-
+<div class="modal-overlay" id="offerPreviewModal">
+  <div class="modal-box" style="max-width:560px;">
+    <h3>👁 معاينة العرض</h3>
+    <div id="offerPreviewBody" style="border:1px solid var(--hair); border-radius:10px; padding:14px; background:var(--surface); overflow:auto;"></div>
+    <div class="modal-actions" style="flex-wrap:wrap;">
+      <button id="offerPreviewClose" class="btn-cancel" type="button" style="flex:1 1 100%;">إغلاق</button>
+    </div>
+  </div>
+</div>
 
 <!-- ================= BROWSE OFFERS MODAL (Stage 4B — "تصفح عروضنا" full listing page, customer-facing) =================
      Responsive grid: 3 columns on desktop, 2 on tablets, 1 on mobile (handled in CSS).
@@ -23068,7 +24042,257 @@ table.orders-table td.orders-td-wrap{ white-space:normal; max-width:220px; }
 </div>
 
 <!-- ================= OWNER INVOICE BUILDER MODAL ================= -->
+<div class="modal-overlay" id="invoiceModal">
+  <div class="modal-box" style="max-width:600px;">
+    <h3>🧾 إنشاء فاتورة</h3>
 
+    <button id="invImportOrderBtn" type="button" class="btn-cancel" style="width:100%; border-color:var(--green-phos); color:var(--green-phos);"><svg class="btn-ic" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> استيراد طلب عميل (ملف إكسيل من سلة الطلبات)</button>
+    <input id="invImportOrderInput" type="file" accept=".xlsx,.xls" style="display:none;">
+    <div style="font-size:11px; color:var(--text-dim); margin:6px 0 0; line-height:1.6;">
+      لما العميل يبعتلك ملف الطلب (إكسيل) اللي طلع من سلة الطلبات بتاعته، ارفعه هنا وهيتحول تلقائيًا لفاتورة كاملة (بيانات العميل + الشحن + الدفع + الأصناف) تقدر تعدّل فيها زي أي فاتورة عادية.
+    </div>
+
+    <!-- ================= [جديد - المرحلة 5] إنشاء فاتورة من طلب وارد =================
+         إضافة مستقلة بالكامل: لا تعدّل زر/مسار الاستيراد من ملف إكسيل أعلاه، وإنما
+         تضيف طريقة ثانية لملء نفس شاشة الفاتورة (بيانات العميل + الشحن + الدفع + الأصناف)
+         مباشرة من الطلبات المحمّلة فعليًا في مركز الطلبات (Orders Center)، دون الحاجة
+         لملف إكسيل من العميل. بعد النقل تظل كل الحقول قابلة للتعديل زي الفاتورة اليدوية. -->
+    <button id="invImportFromOrdersCenterBtn" type="button" class="btn-cancel" style="width:100%; border-color:var(--green-phos); color:var(--green-phos); margin-top:8px;"><svg class="btn-ic" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> إنشاء فاتورة من طلب وارد</button>
+    <div style="font-size:11px; color:var(--text-dim); margin:6px 0 0; line-height:1.6;">
+      اختار طلب من الطلبات الواردة فعليًا (من نفس قائمة "الطلبات") وهيتم نقل بيانات العميل والشحن والدفع والأصناف تلقائيًا هنا، وتقدر تعدّل أي حاجة قبل الحفظ زي أي فاتورة عادية.
+    </div>
+    <div class="section-divider"></div>
+
+    <label>اسم العميل</label>
+    <div style="position:relative;">
+      <input id="invCustName" type="text" placeholder="اسم العميل" autocomplete="off">
+      <div id="invCustSuggest" class="cust-suggest-box"></div>
+    </div>
+    <label>رقم الهاتف</label>
+    <input id="invCustPhone" type="text" placeholder="01xxxxxxxxx">
+    <label>العنوان</label>
+    <input id="invCustAddress" type="text" placeholder="عنوان العميل">
+    <label>اسم الشركة (اختياري)</label>
+    <input id="invCustCompany" type="text" placeholder="اسم شركة العميل (لو موجود)">
+<div style="display:flex; gap:10px; flex-wrap:wrap;">
+
+  <div style="flex:1 1 45%;">
+    <label>المحافظة</label>
+    <input id="invGovernorate" type="text" placeholder="مثال: الغربية">
+  </div>
+
+  <div style="flex:1 1 45%;">
+    <label>مكان الشحن</label>
+    <select id="invShippingPlace">
+      <option value="">اختر مكان الشحن</option>
+      <option value="داخل طنطا">داخل طنطا</option>
+      <option value="باقي محافظات مصر">باقي محافظات مصر</option>
+      <option value="استلام من المحل">استلام من المحل</option>
+    </select>
+  </div>
+</div>
+
+<div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+
+  <div style="flex:1 1 45%;">
+    <label>شركة الشحن</label>
+    <select id="invShippingCompany">
+      <option value="">اختر شركة الشحن</option>
+      <option value="البراق">البراق</option>
+      <option value="ميراج">ميراج</option>
+      <option value="موقف سيارات">موقف سيارات</option>
+      <option value="أخرى">أخرى</option>
+    </select>
+  </div>
+
+  <div style="flex:1 1 45%;">
+    <label>وسيلة الدفع</label>
+    <select id="invPaymentMethod"><option value="">اختر وسيلة الدفع</option><option value="نقدًا">نقدًا</option><option value="الدفع عن طريق فودافون كاش">الدفع عن طريق فودافون كاش</option><option value="الدفع عن طريق البريد">الدفع عن طريق البريد</option><option value="الدفع عند الاستلام بمقابل">الدفع عند الاستلام بمقابل</option><option value="الدفع عن طريق الحساب البنكي">الدفع عن طريق الحساب البنكي</option><option value="الدفع عن طريق انستاباي">الدفع عن طريق انستاباي</option></select>
+  </div>
+
+</div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <div style="flex:1 1 45%;">
+        <label>رقم الفاتورة</label>
+        <input id="invNumber" type="text" placeholder="رقم الفاتورة">
+      </div>
+      <div style="flex:1 1 45%;">
+        <label>تاريخ الفاتورة</label>
+        <input id="invDate" type="date">
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+    <div style="display:flex; align-items:center; gap:6px; margin-bottom:6px;">
+      <span style="font-size:15px;">💰</span>
+      <strong style="font-size:13px;">بيانات الدفع</strong>
+    </div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <div style="flex:1 1 45%;">
+        <label>المبلغ المدفوع من العميل</label>
+        <input id="invPaidAmount" type="number" min="0" step="0.01" placeholder="0">
+      </div>
+      <div style="flex:1 1 45%;">
+        <label>تاريخ الدفع</label>
+        <input id="invPaymentDate" type="date">
+      </div>
+    </div>
+    <div class="order-total-row" style="border-top:none; font-weight:700; font-size:13px;">
+      <span>✅ المدفوع</span><span class="mono" id="invPaidDisplay">0 ج.م</span>
+    </div>
+    <div class="order-total-row" style="border-top:none; font-weight:700; font-size:13px;" id="invRemainingRow">
+      <span id="invRemainingLabel">⏳ المتبقي</span><span class="mono" id="invRemainingDisplay">0 ج.م</span>
+    </div>
+    <div id="invRemainingMethodWrap" style="display:none; margin-top:8px;">
+      <label>وسيلة سداد المبلغ المتبقي</label>
+      <select id="invRemainingMethod"><option value="">اختر وسيلة السداد</option><option value="نقدًا">نقدًا</option><option value="عند الاستلام">عند الاستلام</option><option value="فودافون كاش">فودافون كاش</option><option value="Instapay">Instapay</option><option value="تحويل بنكي">تحويل بنكي</option><option value="البريد المصري">البريد المصري</option><option value="بطاقة بنكية">بطاقة بنكية</option><option value="شيك">شيك</option><option value="أخرى">أخرى</option></select>
+    </div>
+
+    <div class="section-divider"></div>
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; margin-bottom:8px;">
+      <div style="display:flex; align-items:center; gap:6px;">
+        <span style="font-size:15px;">📒</span>
+        <strong style="font-size:13px;">سجل المدفوعات</strong>
+      </div>
+      <button id="invAddPaymentBtn" type="button" class="add-section-btn" style="margin:0;">+ إضافة دفعة</button>
+    </div>
+    <div id="invPaymentsTableWrap" class="payments-table-wrap">
+      <table class="payments-table" id="invPaymentsTable">
+        <thead>
+          <tr>
+            <th>التاريخ</th>
+            <th>المبلغ</th>
+            <th>وسيلة الدفع</th>
+            <th>إلى</th>
+            <th>رقم العملية</th>
+            <th>ملاحظات</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="invPaymentsTableBody">
+          <!-- صفوف الدفعات هتتضاف هنا -->
+        </tbody>
+      </table>
+    </div>
+    <div id="invPaymentsEmpty" class="cart-empty">لسه مفيش دفعات مسجلة على الفاتورة دي. دوس "إضافة دفعة" عشان تبدأ.</div>
+    <div class="order-total-row" style="border-top:none; font-weight:700; font-size:13px;">
+      <span>💵 إجمالي الدفعات المسجلة</span><span class="mono" id="invPaymentsTotal">0 ج.م</span>
+    </div>
+
+    <div class="section-divider"></div>
+    <label>ابحث عن منتج من الكتالوج لإضافته للفاتورة</label>
+    <input id="invProductSearch" type="text" placeholder="اكتب اسم المنتج...">
+    <div id="invSearchResults" style="max-height:220px; overflow-y:auto; border:1px solid var(--hair); border-radius:8px; margin-top:6px; display:none;"></div>
+    <button id="invOpenCatalogPickerBtn" type="button" class="btn-cancel" style="width:100%; margin-top:8px;"><svg class="btn-ic" viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5 9 5 9-5z"></path><path d="M3 8v8l9 5 9-5V8"></path><path d="M12 13v8"></path></svg> اختيار منتج من الكتالوج</button>
+    <button id="invAddCustomProductToggleBtn" type="button" class="btn-cancel" style="width:100%; margin-top:8px; border-color:var(--gold,#a9822f); color:var(--gold,#a9822f);">➕ إضافة منتج غير موجود بالكتالوج</button>
+    <div id="invCustomProductBox" style="display:none; border:1px dashed var(--hair); border-radius:8px; padding:10px; margin-top:8px;">
+      <label>اسم المنتج</label>
+      <input id="invCustomName" type="text" placeholder="اسم المنتج غير الموجود بالكتالوج">
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <div style="flex:1 1 30%;">
+          <label>الكمية</label>
+          <input id="invCustomQty" type="number" min="1" step="1" value="1">
+        </div>
+        <div style="flex:1 1 30%;">
+          <label>سعر الوحدة</label>
+          <input id="invCustomPrice" type="number" min="0" step="0.01" value="0">
+        </div>
+        <div style="flex:1 1 30%;">
+          <label>نسبة الخصم %</label>
+          <input id="invCustomDiscount" type="number" min="0" max="100" step="1" value="0">
+        </div>
+      </div>
+      <button id="invCustomProductAddBtn" type="button" class="btn-save" style="width:100%; background:var(--green-phos); margin-top:6px;">إضافة للفاتورة</button>
+    </div>
+
+    <div class="section-divider"></div>
+    <button id="invClearAllBtn" type="button" class="btn-cancel" style="width:100%; color:var(--red-rec); border-color:var(--red-rec);"><svg class="btn-ic" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg> حذف كل المنتجات من الفاتورة</button>
+    <div id="invLines"><div class="cart-empty">لسه مفيش منتجات مضافة للفاتورة. استخدم مربع البحث فوق.</div></div>
+
+    <div class="section-divider"></div>
+    <div style="display:flex; align-items:center; gap:6px; margin-bottom:6px;">
+      <span style="font-size:15px;">↩️</span>
+      <strong style="font-size:13px;">المرتجعات (تُخصم من إجمالي الفاتورة)</strong>
+    </div>
+    <div style="border:1px dashed var(--hair); border-radius:8px; padding:10px;">
+      <label>ابحث عن الصنف المرتجع من الكتالوج</label>
+      <input id="invReturnProductSearch" type="text" placeholder="اكتب اسم المنتج...">
+      <div id="invReturnSearchResults" style="max-height:220px; overflow-y:auto; border:1px solid var(--hair); border-radius:8px; margin-top:6px; display:none;"></div>
+      <button id="invReturnOpenCatalogPickerBtn" type="button" class="btn-cancel" style="width:100%; margin-top:8px;"><svg class="btn-ic" viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5 9 5 9-5z"></path><path d="M3 8v8l9 5 9-5V8"></path><path d="M12 13v8"></path></svg> اختيار منتج من الكتالوج</button>
+
+      <div class="section-divider" style="margin:10px 0;"></div>
+
+      <label>اسم الصنف المرتجع (أو اكتبه يدويًا)</label>
+      <input id="invReturnName" type="text" placeholder="اسم الصنف اللي رجع من العميل">
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <div style="flex:1 1 22%;">
+          <label>الكمية</label>
+          <input id="invReturnQty" type="number" min="1" step="1" value="1">
+        </div>
+        <div style="flex:1 1 22%;">
+          <label>سعر الوحدة</label>
+          <input id="invReturnPrice" type="number" min="0" step="0.01" placeholder="0">
+        </div>
+        <div style="flex:1 1 22%;">
+          <label>تاريخ المرتجع</label>
+          <input id="invReturnDate" type="date">
+        </div>
+        <div style="flex:1 1 22%;">
+          <label>تاريخ الفاتورة الأصلية</label>
+          <input id="invReturnOrigInvDate" type="date">
+        </div>
+      </div>
+      <button id="invReturnAddBtn" type="button" class="btn-save" style="width:100%; background:var(--red-rec); margin-top:6px;">➕ إضافة مرتجع</button>
+    </div>
+    <div id="invReturnsLines" style="margin-top:8px;"></div>
+    <div class="order-total-row" id="invReturnsTotalRow" style="border-top:none; font-weight:700; font-size:13px; color:var(--red-rec); display:none;">
+      <span>↩️ إجمالي المرتجعات (يُخصم من الفاتورة)</span><span class="mono" id="invReturnsTotal">- 0 ج.م</span>
+    </div>
+
+    <div class="order-total-row" style="border-top:1px dashed var(--hair); font-weight:400; font-size:13px; padding-top:8px;">
+      <span>إجمالي المنتجات (بعد خصم كل منتج)</span><span class="mono" id="invSubtotal">0 ج.م</span>
+    </div>
+    <label>خصم إجمالي الفاتورة %</label>
+    <input id="invGlobalDiscount" type="number" min="0" max="100" step="1" value="0">
+    <div class="order-total-row" style="border-top:none; font-weight:400; font-size:13px; color:var(--red-rec);">
+      <span id="invDiscountLabel">خصم الفاتورة (0%)</span><span class="mono" id="invDiscountVal">- 0 ج.م</span>
+    </div>
+    <div class="order-total-row">
+      <span>الإجمالي النهائي (قبل المرتجعات)</span><span class="val" id="invGrandTotal">0 ج.م</span>
+    </div>
+    <div class="order-total-row" id="invReturnsDeductRow" style="border-top:none; font-weight:400; font-size:13px; color:var(--red-rec); display:none;">
+      <span>خصم المرتجعات</span><span class="mono" id="invReturnsDeductVal">- 0 ج.م</span>
+    </div>
+    <div class="order-total-row" id="invNetTotalRow" style="display:none;">
+      <span>الصافي المستحق بعد المرتجعات</span><span class="val" id="invNetTotal">0 ج.م</span>
+    </div>
+
+    <div class="section-divider"></div>
+    <label>ملاحظات / شروط خاصة</label>
+    <textarea id="invNotes" rows="3" placeholder="أي ملاحظات أو شروط خاصة بالفاتورة..."></textarea>
+
+    <div class="section-divider"></div>
+    <div style="border:1px solid var(--hair); border-radius:10px; padding:14px; background:#fff; overflow:auto;">
+      <div id="invoicePreview"></div>
+    </div>
+    <div id="invoiceExportPreview" style="position: fixed; left: -9999px; top: 0px; display: none;"></div>
+
+    <div class="modal-actions" style="flex-wrap:wrap;">
+      <button id="invoicePngBtn" class="btn-save" type="button" style="background:var(--green-phos); flex:1 1 100%;"><svg class="btn-ic" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path></svg> حفظ صورة PNG</button>
+      <button id="invoiceJpgBtn" class="btn-save" type="button" style="background:var(--green-phos); flex:1 1 100%;"><svg class="btn-ic" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path></svg> حفظ صورة JPG</button>
+      <button id="invoicePdfBtn" class="btn-save" type="button" style="background:var(--green-deep); color:#fff; flex:1 1 100%;"><svg class="btn-ic" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg> حفظ PDF</button>
+      <button id="invoiceExcelBtn" class="btn-save" type="button" style="background:#1c7c54; color:#fff; flex:1 1 100%;"><svg class="btn-ic" viewBox="0 0 24 24"><path d="M3 3v18h18"></path><rect x="7" y="12" width="3" height="6"></rect><rect x="12" y="8" width="3" height="10"></rect><rect x="17" y="5" width="3" height="13"></rect></svg> حفظ Excel</button>
+      <button id="invoicePrintBtn" class="btn-save" type="button" style="background:#3a5a9c; color:#fff; flex:1 1 100%;"><svg class="btn-ic" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg> طباعة مباشرة</button>
+      <button id="invoiceWaBtn" class="btn-save" type="button" style="background:#1ebd5c; color:#fff; flex:1 1 100%;"><svg class="btn-ic" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg> إرسال عبر واتساب</button>
+      <button id="invoiceContactSwitchBtn" class="btn-cancel" type="button" style="flex:1 1 100%;"><svg class="btn-ic" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"></rect><circle cx="8" cy="11" r="2"></circle><path d="M5 17c0-1.7 1.5-3 3-3s3 1.3 3 3"></path><line x1="14" y1="9" x2="19" y2="9"></line><line x1="14" y1="13" x2="19" y2="13"></line></svg> تغيير بيانات التواصل الظاهرة بالفاتورة</button>
+      <button id="invoiceClose" class="btn-cancel" type="button" style="flex:1 1 100%;">إغلاق</button>
+    </div>
+    <div style="font-size:11px;color:var(--text-faint);margin-top:10px;line-height:1.7;">
+      ملحوظة: واتساب مش بيسمح بإرفاق ملفات تلقائيًا من رابط، فلازم تحمّل الصورة أو الـPDF الأول وبعدين ترفقها يدويًا في محادثة واتساب. زرار "إرسال عبر واتساب" هيفتحلك المحادثة بنص الفاتورة جاهز.
+    </div>
+  </div>
+</div>
 
 <!-- ================= ADD / EDIT PAYMENT (إضافة / تعديل دفعة) ================= -->
 <div class="modal-overlay" id="paymentEntryModal">
@@ -23103,15 +24327,70 @@ table.orders-table td.orders-td-wrap{ white-space:normal; max-width:220px; }
 </div>
 
 <!-- ================= INVOICE ARCHIVE (الفواتير السابقة) ================= -->
-
+<div class="modal-overlay" id="invoiceArchiveModal">
+  <div class="modal-box" style="max-width:640px;">
+    <h3>🗂️ الفواتير السابقة</h3>
+    <button id="invArchDeleteAllBtn" type="button" class="btn-cancel" style="width:100%; color:var(--red-rec); border-color:var(--red-rec);">🗑 حذف جميع الفواتير</button>
+    <div class="section-divider"></div>
+    <div id="invoiceArchiveList"><div class="cart-empty">لسه مفيش فواتير محفوظة. لما تعمل فاتورة وتصدّرها أو تطبعها هتتحفظ هنا تلقائيًا.</div></div>
+    <div class="modal-actions" style="flex-wrap:wrap;">
+      <button id="invoiceArchiveClose" class="btn-cancel" type="button" style="flex:1 1 100%;">إغلاق</button>
+    </div>
+  </div>
+</div>
 
 <!-- ================= INVOICE PREVIEW (معاينة فاتورة من الأرشيف) ================= -->
-
+<div class="modal-overlay" id="invoicePreviewModal">
+  <div class="modal-box" style="max-width:640px;">
+    <h3>👁 معاينة الفاتورة</h3>
+    <div style="border:1px solid var(--hair); border-radius:10px; padding:14px; background:#fff; overflow:auto;">
+      <div id="invoicePreviewBody"></div>
+    </div>
+    <div class="modal-actions" style="flex-wrap:wrap;">
+      <button id="invoicePreviewPrintBtn" class="btn-save" type="button" style="background:#3a5a9c; color:#fff; flex:1 1 100%;">🖨 طباعة</button>
+      <button id="invoicePreviewClose" class="btn-cancel" type="button" style="flex:1 1 100%;">إغلاق</button>
+    </div>
+  </div>
+</div>
 
 <!-- ================= CONTACT PROFILE PICKER (SHARED: INVOICE + QUOTE) ================= -->
+<div class="modal-overlay" id="contactProfileModal">
+  <div class="modal-box" style="max-width:420px;">
+    <h3>اختر بيانات التواصل التي ستظهر داخل المستند</h3>
+    <div style="display:flex; flex-direction:column; gap:10px; margin-top:6px;">
+      <button type="button" class="btn-save contact-profile-option" data-profile="mohamed" style="background:var(--green-phos); text-align:right; padding:14px; border-radius:10px; cursor:pointer; display:block; width:100%; border:none;">
+        <div style="font-weight:800; font-size:14px;">ملف م/ محمد سعد</div>
+        <div style="font-size:11.5px; font-weight:400; margin-top:4px;">OMEGA TANTA — م/ محمد سعد دويدار (أخصائي التسويق والمبيعات) — 📱 01025459277</div>
+      </button>
+      <button type="button" class="btn-save contact-profile-option" data-profile="company" style="background:var(--green-deep); color:#fff; text-align:right; padding:14px; border-radius:10px; cursor:pointer; display:block; width:100%; border:none;">
+        <div style="font-weight:800; font-size:14px;">ملف الشركة</div>
+        <div style="font-size:11.5px; font-weight:400; margin-top:4px;">OMEGA TANTA — كل بيانات فريق المبيعات بالإضافة إلى الخط الأرضي</div>
+      </button>
+    </div>
+    <div class="modal-actions" style="flex-wrap:wrap; margin-top:16px;">
+      <button id="contactProfileCancel" class="btn-cancel" type="button" style="flex:1 1 100%;">إلغاء</button>
+    </div>
+  </div>
+</div>
 
-
-
+<div class="modal-overlay" id="cartLinkModal">
+  <div class="modal-box" style="max-width:420px;">
+    <h3 id="cartLinkTitle">سلة الطلبات فيها أصناف — هل تحب تستخدمها؟</h3>
+    <div style="display:flex; flex-direction:column; gap:10px; margin-top:6px;">
+      <button type="button" id="cartLinkUseCartBtn" class="btn-save" style="background:var(--green-phos); text-align:right; padding:14px; border-radius:10px; cursor:pointer; display:block; width:100%; border:none;">
+        <div style="font-weight:800; font-size:14px;">✅ استخدام منتجات السلة</div>
+        <div style="font-size:11.5px; font-weight:400; margin-top:4px;">هيتم نقل كل الأصناف والكميات والأسعار من سلة الطلبات تلقائيًا.</div>
+      </button>
+      <button type="button" id="cartLinkNewBtn" class="btn-save" style="background:var(--green-deep); color:#fff; text-align:right; padding:14px; border-radius:10px; cursor:pointer; display:block; width:100%; border:none;">
+        <div style="font-weight:800; font-size:14px;">➕ إنشاء مستند جديد</div>
+        <div style="font-size:11.5px; font-weight:400; margin-top:4px;">هيفتح نموذج فارغ من غير أي أصناف من السلة.</div>
+      </button>
+    </div>
+    <div class="modal-actions" style="flex-wrap:wrap; margin-top:16px;">
+      <button id="cartLinkCancel" class="btn-cancel" type="button" style="flex:1 1 100%;">إلغاء</button>
+    </div>
+  </div>
+</div>
 
 <!-- ================= SHARED CATALOG PRODUCT PICKER (INVOICE + QUOTE) ================= -->
 <div class="modal-overlay" id="catalogPickerModal">
@@ -23294,7 +24573,7 @@ const PROMO = JSON.parse(document.getElementById('promo-data').textContent);
    README-GOOGLE-SHEETS-ORDERS.md for full setup steps). Leaving it empty simply skips the
    Sheets save and the WhatsApp button keeps working exactly as before — nothing breaks. */
 // [ربط جديد - المرحلة الأولى] متغير رابط Google Apps Script Web App
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzpCwiYl20QFnc6x-zH48okk9qkkGqsnbpQ1yVVUe_Qv2AH0D-N0_oyma1PICcd1o1oSw/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxtKQMh-m0MUTLasregsZu4YqUpz8BHY5vuEUu5murRHdY2c-0Ik6g22F9i1mCbrxw8xA/exec";
 const GAS_ORDERS_WEBHOOK_URL = WEB_APP_URL; // <-- تم الربط: يشير الآن لنفس رابط WEB_APP_URL أعلاه
 
 /* ================= [مرحلة: نظام استقبال الطلبات] دوال مساعدة موحّدة =================
@@ -25267,6 +26546,8 @@ const CUSTOMERS_KEY = 'omega_saved_customers_v1';
 let SAVED_CUSTOMERS = Storage.getJSON(CUSTOMERS_KEY, []) || [];
 function saveCustomersToStorage(){
   Storage.setJSON(CUSTOMERS_KEY, SAVED_CUSTOMERS);
+  // [جديد - المرحلة 8] تحديث لوحة التحكم تلقائيًا لو مفتوحة عند تغيّر بيانات العملاء
+  if(typeof dashboardMaybeRefresh === 'function') dashboardMaybeRefresh();
 }
 function upsertSavedCustomer(rec){
   const norm = s => (s || '').toString().trim();
@@ -25282,8 +26563,9 @@ function upsertSavedCustomer(rec){
     // (which has no address/company) never wipes details saved from an invoice
     Object.keys(clean).forEach(k => { if(clean[k]) existing[k] = clean[k]; });
     existing.updatedAt = Date.now();
+    if(existing.notes === undefined) existing.notes = ''; // [جديد - المرحلة 6] عميل قديم من قبل ميزة الملاحظات
   } else {
-    SAVED_CUSTOMERS.push(Object.assign({id: 'cust_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7)}, clean, {updatedAt: Date.now()}));
+    SAVED_CUSTOMERS.push(Object.assign({id: 'cust_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7)}, clean, {updatedAt: Date.now(), notes: ''})); // notes: [جديد - المرحلة 6]
   }
   saveCustomersToStorage();
 }
@@ -25340,6 +26622,646 @@ function wireCustomerAutocomplete(inputId, boxId, prefix){
 }
 wireCustomerAutocomplete('invCustName', 'invCustSuggest', 'inv');
 wireCustomerAutocomplete('qCustName', 'qCustSuggest', 'q');
+
+/* ================= [جديد - المرحلة 6] إدارة العملاء (CRM) =================
+   إضافة مستقلة بالكامل تُبنى فوق قاعدة بيانات العملاء الموجودة بالفعل
+   (SAVED_CUSTOMERS) دون أي تعديل على منطقها أو تخزينها الحالي. تجمع لكل عميل:
+   - بياناته الأساسية (من SAVED_CUSTOMERS نفسه)
+   - كل الفواتير المطابقة له من أرشيف الفواتير الموجود بالفعل (loadInvoiceArchive)
+   - كل الطلبات الواردة المطابقة له من مركز الطلبات الموجود بالفعل
+     (window.getOrdersCenterAllOrders، المُتاحة فعليًا من المرحلة 5)
+   المطابقة تتم بالهاتف أولًا (أدق معرّف)، ثم بالاسم كبديل لو الهاتف غير متاح،
+   بدون أي طلب شبكة جديد أو تكرار لمنطق موجود. */
+
+function crmNormalizePhone(p){
+  return String(p || '').replace(/\D/g, '');
+}
+
+// يبني قائمة موحّدة من "طلبات/فواتير هذا العميل" مع تاريخ كل عملية وقيمتها،
+// من مصدرين موجودين بالفعل: أرشيف الفواتير + مركز الطلبات الواردة (لو محمّل).
+function crmGetCustomerTransactions(customer){
+  const custPhone = crmNormalizePhone(customer.phone);
+  const custName = (customer.name || '').trim().toLowerCase();
+  const txns = [];
+
+  // 1) الفواتير المحفوظة فعليًا (loadInvoiceArchive الموجودة بالفعل - لا تعديل عليها)
+  const invoices = (typeof loadInvoiceArchive === 'function') ? loadInvoiceArchive() : [];
+  invoices.forEach(inv => {
+    const invPhone = crmNormalizePhone(inv.custPhone);
+    const invName = (inv.custName || '').trim().toLowerCase();
+    const matches = (custPhone && invPhone && custPhone === invPhone) || (!custPhone && custName && invName === custName);
+    if(matches){
+      txns.push({
+        kind: 'invoice', label: 'فاتورة رقم ' + (inv.number || '—'),
+        date: inv.date || (inv.savedAt ? inv.savedAt.slice(0,10) : ''),
+        amount: (inv.netTotal !== undefined && inv.netTotal !== null) ? inv.netTotal : (inv.grandTotal || 0),
+        sortTs: inv.savedAt || inv.date || ''
+      });
+    }
+  });
+
+  // 2) الطلبات الواردة (لو مركز الطلبات اتحمّل فعليًا في الجلسة الحالية - إضافة المرحلة 5)
+  const orders = (typeof window.getOrdersCenterAllOrders === 'function') ? window.getOrdersCenterAllOrders() : [];
+  orders.forEach(o => {
+    const oPhone = crmNormalizePhone(o.phone);
+    const oName = (o.customerName || '').trim().toLowerCase();
+    const matches = (custPhone && oPhone && custPhone === oPhone) || (!custPhone && custName && oName === custName);
+    if(matches){
+      txns.push({
+        kind: 'order', label: 'طلب رقم ' + (o.orderId || '—'),
+        date: o.timestamp ? ordersCenterFormatTimestampSafe(o.timestamp) : '',
+        amount: +o.grandTotal || 0,
+        sortTs: o.timestamp || ''
+      });
+    }
+  });
+
+  txns.sort((a, b) => String(b.sortTs || '').localeCompare(String(a.sortTs || '')));
+  return txns;
+}
+// [مساعدة عرض فقط] بعض المصادر ليس لها دالة تنسيق تاريخ عامة معروضة هنا، فنكتفي
+// بعرض التاريخ الخام أو تحويل بسيط، دون تكرار منطق ordersCenterFormatTimestamp
+// الداخلي (محصور داخل IIFE مركز الطلبات ولا نعدّله).
+function ordersCenterFormatTimestampSafe(iso){
+  if(!iso) return '—';
+  const d = new Date(iso);
+  if(isNaN(d.getTime())) return String(iso);
+  const y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,'0'), day = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+
+// يحسب لكل عميل: عدد الطلبات، إجمالي المشتريات، تاريخ آخر طلب — مطلوبة بالنص
+// في هذه المرحلة، ومُجهّزة أيضًا للاستخدام في مراحل قادمة (مثل قوائم أفضل
+// العملاء أو تنبيهات المتابعة).
+function crmBuildCustomerSummary(customer){
+  const txns = crmGetCustomerTransactions(customer);
+  const ordersCount = txns.length;
+  const totalPurchases = txns.reduce((a, t) => a + (Number(t.amount) || 0), 0);
+  const lastOrder = txns.length ? (txns[0].date || txns[0].sortTs || '') : '';
+  return {customer, txns, ordersCount, totalPurchases, lastOrder};
+}
+
+function crmGetAllCustomerSummaries(){
+  return SAVED_CUSTOMERS.map(c => crmBuildCustomerSummary(c));
+}
+
+function crmFormatMoney(val){
+  const num = Number(val) || 0;
+  return num.toLocaleString('en-US') + ' ج.م';
+}
+
+let crmCurrentCustomerId = null;
+
+function renderCrmTable(){
+  const wrap = document.getElementById('crmTableWrap');
+  const countEl = document.getElementById('crmResultCount');
+  if(!wrap) return;
+
+  const searchTerm = (document.getElementById('crmSearchInput').value || '').trim().toLowerCase();
+  const sortBy = document.getElementById('crmSortBySelect').value;
+
+  let summaries = crmGetAllCustomerSummaries();
+
+  if(searchTerm){
+    summaries = summaries.filter(s => ['name','phone','address'].some(k => String(s.customer[k] || '').toLowerCase().indexOf(searchTerm) !== -1));
+  }
+
+  summaries.sort((a, b) => {
+    if(sortBy === 'totalPurchases') return b.totalPurchases - a.totalPurchases;
+    if(sortBy === 'ordersCount') return b.ordersCount - a.ordersCount;
+    if(sortBy === 'name') return (a.customer.name || '').localeCompare(b.customer.name || '', 'ar');
+    return String(b.lastOrder || '').localeCompare(String(a.lastOrder || '')); // lastOrder (default)
+  });
+
+  if(countEl) countEl.textContent = summaries.length + ' عميل معروض من إجمالي ' + SAVED_CUSTOMERS.length;
+
+  if(!summaries.length){
+    wrap.innerHTML = '<div class="cart-empty" id="crmEmptyState">' +
+      (SAVED_CUSTOMERS.length ? 'لا يوجد عملاء مطابقين لبحثك.' : 'لا يوجد عملاء محفوظين بعد. العملاء يُضافون هنا تلقائيًا من كل فاتورة أو عرض سعر أو طلب يتم حفظه.') +
+      '</div>';
+    return;
+  }
+
+  let rowsHTML = '';
+  summaries.forEach(s => {
+    rowsHTML += '<tr>' +
+      '<td class="orders-td-wrap">' + escapeHTML(s.customer.name || '—') + '</td>' +
+      '<td class="mono">' + escapeHTML(s.customer.phone || '—') + '</td>' +
+      '<td class="orders-td-wrap">' + escapeHTML(s.customer.address || '—') + '</td>' +
+      '<td class="mono">' + s.ordersCount + '</td>' +
+      '<td class="mono">' + crmFormatMoney(s.totalPurchases) + '</td>' +
+      '<td class="mono">' + escapeHTML(s.lastOrder || '—') + '</td>' +
+      '<td><button type="button" class="orders-details-btn" data-crm-id="' + escapeHTML(s.customer.id) + '">عرض الملف</button></td>' +
+      '</tr>';
+  });
+
+  wrap.innerHTML =
+    '<table class="orders-table">' +
+      '<thead><tr>' +
+        '<th>الاسم</th><th>الهاتف</th><th>العنوان</th><th>عدد الطلبات</th><th>إجمالي المشتريات</th><th>آخر طلب</th><th>—</th>' +
+      '</tr></thead>' +
+      '<tbody>' + rowsHTML + '</tbody>' +
+    '</table>';
+
+  wrap.querySelectorAll('[data-crm-id]').forEach(btn => {
+    btn.addEventListener('click', () => openCrmCustomerFile(btn.getAttribute('data-crm-id')));
+  });
+}
+
+function openCrmCustomerFile(customerId){
+  const customer = SAVED_CUSTOMERS.find(c => c.id === customerId);
+  if(!customer){ notify('تعذّر إيجاد بيانات هذا العميل.', 'error'); return; }
+  crmCurrentCustomerId = customerId;
+  const summary = crmBuildCustomerSummary(customer);
+
+  const infoBox = document.getElementById('crmCustomerInfoBox');
+  if(infoBox){
+    infoBox.innerHTML =
+      '<div><b>الاسم:</b> ' + escapeHTML(customer.name || '—') + '</div>' +
+      '<div><b>الهاتف:</b> ' + escapeHTML(customer.phone || '—') + '</div>' +
+      '<div><b>العنوان:</b> ' + escapeHTML(customer.address || '—') + '</div>' +
+      '<div><b>عدد الطلبات:</b> ' + summary.ordersCount + '</div>' +
+      '<div><b>إجمالي المشتريات:</b> ' + crmFormatMoney(summary.totalPurchases) + '</div>' +
+      '<div><b>آخر طلب:</b> ' + escapeHTML(summary.lastOrder || '—') + '</div>';
+  }
+
+  const ordersListEl = document.getElementById('crmCustomerOrdersList');
+  if(ordersListEl){
+    if(!summary.txns.length){
+      ordersListEl.innerHTML = '<div class="cart-empty">لا توجد طلبات أو فواتير مسجّلة لهذا العميل بعد.</div>';
+    } else {
+      ordersListEl.innerHTML = summary.txns.map(t => {
+        const icon = t.kind === 'invoice' ? '🧾' : '📦';
+        return '<div style="border:1px solid var(--border-col); border-radius:8px; padding:8px 10px; display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap; font-size:12.5px;">' +
+          '<span>' + icon + ' ' + escapeHTML(t.label) + '</span>' +
+          '<span style="color:var(--text-dim);">' + escapeHTML(t.date || '—') + '</span>' +
+          '<span class="mono">' + crmFormatMoney(t.amount) + '</span>' +
+        '</div>';
+      }).join('');
+    }
+  }
+
+  const notesEl = document.getElementById('crmCustomerNotes');
+  if(notesEl) notesEl.value = customer.notes || '';
+
+  document.getElementById('crmCustomerFileModal').classList.add('show');
+}
+
+document.getElementById('crmToggle').addEventListener('click', () => {
+  if(!ownerGate('إدارة العملاء')) return;
+  renderCrmTable();
+  document.getElementById('crmModal').classList.add('show');
+});
+document.getElementById('crmModalClose').addEventListener('click', () => {
+  document.getElementById('crmModal').classList.remove('show');
+});
+document.getElementById('crmSearchInput').addEventListener('input', () => renderCrmTable());
+document.getElementById('crmSortBySelect').addEventListener('change', () => renderCrmTable());
+document.getElementById('crmRefreshBtn').addEventListener('click', () => renderCrmTable());
+
+document.getElementById('crmCustomerFileModalClose').addEventListener('click', () => {
+  document.getElementById('crmCustomerFileModal').classList.remove('show');
+});
+document.getElementById('crmSaveNotesBtn').addEventListener('click', () => {
+  if(!crmCurrentCustomerId) return;
+  const customer = SAVED_CUSTOMERS.find(c => c.id === crmCurrentCustomerId);
+  if(!customer) return;
+  customer.notes = document.getElementById('crmCustomerNotes').value.trim();
+  customer.updatedAt = Date.now();
+  saveCustomersToStorage();
+  notify('تم حفظ الملاحظات بنجاح.', 'success');
+  renderCrmTable(); // في حالة الفرز حسب حقل تأثّر بالتحديث
+});
+
+/* ================= [جديد - المرحلة 8] لوحة التحكم (Dashboard) =================
+   إضافة عرض فقط بالكامل: تحسب كل مؤشرات الأداء الرئيسية مباشرة من نفس مصادر
+   البيانات الموجودة فعليًا في النظام (بدون أي تخزين جديد أو تعديل على منطق
+   أي دالة قائمة):
+   - الطلبات: window.getOrdersCenterAllOrders() (مركز الطلبات - المرحلة 5)
+   - الفواتير: loadInvoiceArchive() (أرشيف الفواتير الموجود بالفعل)
+   - العملاء: SAVED_CUSTOMERS + crmGetAllCustomerSummaries() (المرحلة 6)
+   الشبكة (dashKpiGrid) مبنية لتقبل بطاقات مؤشرات إضافية مستقبلًا بمجرد إضافة
+   كائن جديد لمصفوفة dashboardBuildKpis أدناه، دون أي تعديل على باقي الدالة. */
+
+// نفس منطق كشف حالة "الإلغاء" المستخدم فعليًا داخل مركز الطلبات (IIFE منفصل
+// ولا يُصدّر للخارج)، مُكرر هنا محليًا فقط لغرض العرض دون أي تعديل على الأصل.
+function dashboardIsCancelledStatus(status){
+  return /(ملغ|الغ)/.test(String(status || ''));
+}
+function dashboardIsDeliveredStatus(status){
+  return /(تسليم|تم الشحن)/.test(String(status || ''));
+}
+
+// يحاول استخراج تاريخ إنشاء العميل من بادئة معرّفه (cust_<timestamp>_...)
+// المُولّدة فعليًا في upsertSavedCustomer، دون أي حاجة لحقل تخزين جديد.
+function dashboardCustomerCreatedTs(customer){
+  const m = String((customer && customer.id) || '').match(/^cust_(\d+)_/);
+  return m ? (+m[1] || 0) : 0;
+}
+
+function dashboardFormatMoney(val){
+  const num = Number(val) || 0;
+  return num.toLocaleString('en-US') + ' ج.م';
+}
+
+function dashboardBuildKpis(){
+  const allOrders = (typeof window.getOrdersCenterAllOrders === 'function') ? window.getOrdersCenterAllOrders() : [];
+  const now = new Date();
+  const todayStr = now.toISOString().slice(0, 10);
+  const weekAgoTs = now.getTime() - 7 * 24 * 60 * 60 * 1000;
+
+  let ordersToday = 0, ordersWeek = 0, ordersCancelled = 0, ordersDelivered = 0, revenue = 0;
+  allOrders.forEach(o => {
+    const ts = o.timestamp ? new Date(o.timestamp).getTime() : NaN;
+    if(o.timestamp && String(o.timestamp).slice(0, 10) === todayStr) ordersToday++;
+    if(!isNaN(ts) && ts >= weekAgoTs) ordersWeek++;
+    const cancelled = dashboardIsCancelledStatus(o.orderStatus);
+    if(cancelled) ordersCancelled++;
+    else{
+      revenue += (+o.grandTotal || 0);
+      if(dashboardIsDeliveredStatus(o.orderStatus)) ordersDelivered++;
+    }
+  });
+  const ordersInProgress = allOrders.length - ordersCancelled - ordersDelivered;
+
+  const newCustomers = SAVED_CUSTOMERS.filter(c => dashboardCustomerCreatedTs(c) >= weekAgoTs).length;
+
+  return [
+    {label:'إجمالي الطلبات', value: allOrders.length},
+    {label:'طلبات اليوم', value: ordersToday},
+    {label:'طلبات الأسبوع', value: ordersWeek},
+    {label:'عملاء جدد (آخر 7 أيام)', value: newCustomers},
+    {label:'الطلبات قيد التنفيذ', value: Math.max(0, ordersInProgress)},
+    {label:'إجمالي الإيرادات', value: dashboardFormatMoney(revenue)}
+  ];
+}
+
+function dashboardBuildTopCustomers(limit){
+  const summaries = (typeof crmGetAllCustomerSummaries === 'function') ? crmGetAllCustomerSummaries() : [];
+  return summaries
+    .filter(s => s.totalPurchases > 0)
+    .sort((a, b) => b.totalPurchases - a.totalPurchases)
+    .slice(0, limit || 5);
+}
+
+function dashboardBuildTopProducts(limit){
+  const allOrders = (typeof window.getOrdersCenterAllOrders === 'function') ? window.getOrdersCenterAllOrders() : [];
+  const map = {}; // name -> {qty, revenue}
+  allOrders.forEach(o => {
+    if(dashboardIsCancelledStatus(o.orderStatus)) return;
+    const items = (typeof parseOrderItemsText === 'function') ? parseOrderItemsText(o.itemsText) : [];
+    items.forEach(it => {
+      const key = it.name || 'غير معروف';
+      if(!map[key]) map[key] = {name: key, qty: 0, revenue: 0};
+      map[key].qty += (+it.qty || 0);
+      map[key].revenue += (+it.qty || 0) * (+it.unitPrice || 0);
+    });
+  });
+  return Object.values(map).sort((a, b) => b.qty - a.qty).slice(0, limit || 5);
+}
+
+function renderDashboard(){
+  const kpiGrid = document.getElementById('dashKpiGrid');
+  if(kpiGrid){
+    kpiGrid.innerHTML = dashboardBuildKpis().map(k =>
+      '<div class="dash-kpi-card"><div class="dash-kpi-value">' + escapeHTML(String(k.value)) + '</div><div class="dash-kpi-label">' + escapeHTML(k.label) + '</div></div>'
+    ).join('');
+  }
+
+  const topCustWrap = document.getElementById('dashTopCustomers');
+  if(topCustWrap){
+    const topCustomers = dashboardBuildTopCustomers(5);
+    topCustWrap.innerHTML = topCustomers.length ? topCustomers.map((s, i) =>
+      '<div class="dash-list-item"><span class="dash-list-rank">#' + (i + 1) + '</span><span class="dash-list-name">' + escapeHTML(s.customer.name || '—') + '</span><span class="dash-list-val">' + dashboardFormatMoney(s.totalPurchases) + '</span></div>'
+    ).join('') : '<div class="cart-empty">لا توجد بيانات مشتريات كافية بعد.</div>';
+  }
+
+  const topProdWrap = document.getElementById('dashTopProducts');
+  if(topProdWrap){
+    const topProducts = dashboardBuildTopProducts(5);
+    topProdWrap.innerHTML = topProducts.length ? topProducts.map((p, i) =>
+      '<div class="dash-list-item"><span class="dash-list-rank">#' + (i + 1) + '</span><span class="dash-list-name">' + escapeHTML(p.name) + '</span><span class="dash-list-val">' + p.qty + ' وحدة</span></div>'
+    ).join('') : '<div class="cart-empty">لا توجد بيانات طلبات كافية بعد.</div>';
+  }
+}
+
+// يُستدعى من نقاط تغيّر البيانات الفعلية (طلبات/عملاء/فواتير) لتحديث اللوحة
+// تلقائيًا فقط لو كانت مفتوحة حاليًا، بدون أي تكلفة إضافية وهي مغلقة.
+function dashboardMaybeRefresh(){
+  const modal = document.getElementById('dashboardModal');
+  if(modal && modal.classList.contains('show')) renderDashboard();
+}
+
+document.getElementById('dashboardBtn').addEventListener('click', () => {
+  if(!ownerGate('لوحة التحكم')) return;
+  renderDashboard();
+  document.getElementById('dashboardModal').classList.add('show');
+});
+document.getElementById('dashboardModalClose').addEventListener('click', () => {
+  document.getElementById('dashboardModal').classList.remove('show');
+});
+document.getElementById('dashboardRefreshBtn').addEventListener('click', () => renderDashboard());
+
+/* ================= [جديد - المرحلة 9] مركز التقارير =================
+   إضافة عرض فقط بالكامل: كل تقرير يُحسب مباشرة من نفس مصادر البيانات
+   الموجودة فعليًا في النظام (بدون أي تخزين جديد أو تعديل على منطق أي دالة
+   قائمة):
+   - الطلبات: window.getOrdersCenterAllOrders()
+   - الفواتير: loadInvoiceArchive()
+   - العملاء: SAVED_CUSTOMERS + crmGetAllCustomerSummaries()
+   - الأصناف: parseOrderItemsText(o.itemsText)
+   - الطباعة: printDocPages() الموجودة بالفعل (تصدير الفاتورة/عرض السعر)
+   - تصدير Excel: exportDocAsExcel() الموجودة بالفعل
+   ملحوظة تقرير الموظفين: لا يوجد داخل النظام الحالي أي مصدر بيانات لموظف/مندوب
+   مرتبط بالطلب أو الفاتورة (تم التأكد من عدم وجوده قبل التنفيذ)، فالتقرير هنا
+   جاهز شكليًا وبنفس نمط باقي التقارير، ويعرض رسالة توضيحية بدل بيانات وهمية،
+   تمهيدًا لربطه لاحقًا بمجرد توفر الحقل (مثلاً addedBy/employeeName) دون أي
+   تعديل إضافي على هذا القسم. */
+
+let reportsCurrentTab = 'sales';
+let reportsRangeFromTs = null; // null = بلا حد أدنى (كل الفترات)
+let reportsRangeToTs = null;   // null = بلا حد أقصى
+
+function reportsParseTs(val){
+  if(!val) return NaN;
+  const d = new Date(val);
+  return isNaN(d.getTime()) ? NaN : d.getTime();
+}
+
+function reportsApplyQuickRange(){
+  const sel = document.getElementById('reportsQuickRange');
+  const val = sel ? sel.value : '';
+  const fromInput = document.getElementById('reportsFromDate');
+  const toInput = document.getElementById('reportsToDate');
+  const now = new Date();
+  const todayStr = now.toISOString().slice(0, 10);
+  if(val === 'today'){
+    if(fromInput) fromInput.value = todayStr;
+    if(toInput) toInput.value = todayStr;
+  } else if(val === 'week'){
+    const from = new Date(now.getTime() - 6 * 24 * 60 * 60 * 1000);
+    if(fromInput) fromInput.value = from.toISOString().slice(0, 10);
+    if(toInput) toInput.value = todayStr;
+  } else if(val === 'month'){
+    const from = new Date(now.getTime() - 29 * 24 * 60 * 60 * 1000);
+    if(fromInput) fromInput.value = from.toISOString().slice(0, 10);
+    if(toInput) toInput.value = todayStr;
+  } else if(val === 'all'){
+    if(fromInput) fromInput.value = '';
+    if(toInput) toInput.value = '';
+  }
+}
+
+function reportsReadRange(){
+  const fromInput = document.getElementById('reportsFromDate');
+  const toInput = document.getElementById('reportsToDate');
+  const fromTs = fromInput && fromInput.value ? reportsParseTs(fromInput.value + 'T00:00:00') : NaN;
+  const toTs = toInput && toInput.value ? reportsParseTs(toInput.value + 'T23:59:59') : NaN;
+  reportsRangeFromTs = isNaN(fromTs) ? null : fromTs;
+  reportsRangeToTs = isNaN(toTs) ? null : toTs;
+}
+
+function reportsInRange(ts){
+  if(isNaN(ts)) return true; // لو مفيش تاريخ معروف للسجل، لا نستبعده من التقرير
+  if(reportsRangeFromTs !== null && ts < reportsRangeFromTs) return false;
+  if(reportsRangeToTs !== null && ts > reportsRangeToTs) return false;
+  return true;
+}
+
+function reportsFilterOrders(allOrders){
+  return allOrders.filter(o => reportsInRange(o.timestamp ? new Date(o.timestamp).getTime() : NaN));
+}
+function reportsFilterInvoices(allInvoices){
+  return allInvoices.filter(inv => reportsInRange(reportsParseTs(inv.savedAt || inv.date)));
+}
+
+function reportsKpiHTML(items){
+  return items.map(k =>
+    '<div class="dash-kpi-card"><div class="dash-kpi-value">' + escapeHTML(String(k.value)) + '</div><div class="dash-kpi-label">' + escapeHTML(k.label) + '</div></div>'
+  ).join('');
+}
+function reportsTableHTML(headers, rowsHTML, emptyMsg){
+  if(!rowsHTML.length){
+    return '<div class="cart-empty">' + escapeHTML(emptyMsg || 'لا توجد بيانات كافية ضمن الفترة المحددة.') + '</div>';
+  }
+  return '<table class="orders-table"><thead><tr>' + headers.map(h => '<th>' + escapeHTML(h) + '</th>').join('') + '</tr></thead><tbody>' + rowsHTML.join('') + '</tbody></table>';
+}
+
+/* ---- تقرير المبيعات ---- */
+function renderReportSales(){
+  const orders = reportsFilterOrders((typeof window.getOrdersCenterAllOrders === 'function') ? window.getOrdersCenterAllOrders() : []);
+  let revenue = 0, cancelled = 0;
+  orders.forEach(o => {
+    if(dashboardIsCancelledStatus(o.orderStatus)) cancelled++;
+    else revenue += (+o.grandTotal || 0);
+  });
+  const kpiEl = document.getElementById('reportSalesKpis');
+  if(kpiEl) kpiEl.innerHTML = reportsKpiHTML([
+    {label:'عدد الطلبات', value: orders.length},
+    {label:'الطلبات الملغاة', value: cancelled},
+    {label:'إجمالي المبيعات', value: dashboardFormatMoney(revenue)},
+    {label:'متوسط قيمة الطلب', value: dashboardFormatMoney(orders.length ? revenue / Math.max(1, orders.length - cancelled) : 0)}
+  ]);
+  const rows = orders.slice().sort((a, b) => String(b.timestamp || '').localeCompare(String(a.timestamp || ''))).map(o =>
+    '<tr><td>' + escapeHTML(o.orderId || '—') + '</td><td>' + escapeHTML(o.customerName || '—') + '</td><td class="mono">' + (o.timestamp ? ordersCenterFormatTimestampSafe(o.timestamp) : '—') + '</td><td><span class="orders-status-badge">' + escapeHTML(o.orderStatus || '—') + '</span></td><td class="mono">' + dashboardFormatMoney(o.grandTotal) + '</td></tr>'
+  );
+  const wrap = document.getElementById('reportSalesTableWrap');
+  if(wrap) wrap.innerHTML = reportsTableHTML(['رقم الطلب','العميل','التاريخ','الحالة','الإجمالي'], rows, 'لا توجد طلبات ضمن الفترة المحددة.');
+}
+
+/* ---- تقرير العملاء ---- */
+function renderReportCustomers(){
+  const summaries = ((typeof crmGetAllCustomerSummaries === 'function') ? crmGetAllCustomerSummaries() : [])
+    .map(s => Object.assign({}, s, {txns: s.txns.filter(t => reportsInRange(reportsParseTs(t.sortTs || t.date)))}))
+    .map(s => Object.assign({}, s, {
+      ordersCountFiltered: s.txns.length,
+      totalPurchasesFiltered: s.txns.reduce((a, t) => a + (Number(t.amount) || 0), 0)
+    }))
+    .filter(s => s.ordersCountFiltered > 0)
+    .sort((a, b) => b.totalPurchasesFiltered - a.totalPurchasesFiltered);
+
+  const totalRevenue = summaries.reduce((a, s) => a + s.totalPurchasesFiltered, 0);
+  const newCustomers = SAVED_CUSTOMERS.filter(c => reportsInRange(dashboardCustomerCreatedTs(c))).length;
+  const kpiEl = document.getElementById('reportCustomersKpis');
+  if(kpiEl) kpiEl.innerHTML = reportsKpiHTML([
+    {label:'إجمالي العملاء', value: SAVED_CUSTOMERS.length},
+    {label:'عملاء نشطون بالفترة', value: summaries.length},
+    {label:'عملاء جدد بالفترة', value: newCustomers},
+    {label:'إجمالي مشتريات الفترة', value: dashboardFormatMoney(totalRevenue)}
+  ]);
+  const rows = summaries.map(s =>
+    '<tr><td>' + escapeHTML(s.customer.name || '—') + '</td><td class="mono">' + escapeHTML(s.customer.phone || '—') + '</td><td class="mono">' + s.ordersCountFiltered + '</td><td class="mono">' + dashboardFormatMoney(s.totalPurchasesFiltered) + '</td></tr>'
+  );
+  const wrap = document.getElementById('reportCustomersTableWrap');
+  if(wrap) wrap.innerHTML = reportsTableHTML(['اسم العميل','الهاتف','عدد العمليات','إجمالي المشتريات'], rows, 'لا توجد بيانات عملاء ضمن الفترة المحددة.');
+}
+
+/* ---- تقرير المنتجات ---- */
+function renderReportProducts(){
+  const orders = reportsFilterOrders((typeof window.getOrdersCenterAllOrders === 'function') ? window.getOrdersCenterAllOrders() : []);
+  const map = {};
+  orders.forEach(o => {
+    if(dashboardIsCancelledStatus(o.orderStatus)) return;
+    const items = (typeof parseOrderItemsText === 'function') ? parseOrderItemsText(o.itemsText) : [];
+    items.forEach(it => {
+      const key = it.name || 'غير معروف';
+      if(!map[key]) map[key] = {name: key, qty: 0, revenue: 0};
+      map[key].qty += (+it.qty || 0);
+      map[key].revenue += (+it.qty || 0) * (+it.unitPrice || 0);
+    });
+  });
+  const list = Object.values(map).sort((a, b) => b.qty - a.qty);
+  const kpiEl = document.getElementById('reportProductsKpis');
+  if(kpiEl) kpiEl.innerHTML = reportsKpiHTML([
+    {label:'عدد الأصناف المباعة', value: list.length},
+    {label:'إجمالي الوحدات المباعة', value: list.reduce((a, p) => a + p.qty, 0)},
+    {label:'إجمالي قيمة المبيعات', value: dashboardFormatMoney(list.reduce((a, p) => a + p.revenue, 0))}
+  ]);
+  const rows = list.slice(0, 100).map((p, i) =>
+    '<tr><td class="mono">' + (i + 1) + '</td><td>' + escapeHTML(p.name) + '</td><td class="mono">' + p.qty + '</td><td class="mono">' + dashboardFormatMoney(p.revenue) + '</td></tr>'
+  );
+  const wrap = document.getElementById('reportProductsTableWrap');
+  if(wrap) wrap.innerHTML = reportsTableHTML(['#','الصنف','الكمية المباعة','إجمالي القيمة'], rows, 'لا توجد بيانات منتجات ضمن الفترة المحددة.');
+}
+
+/* ---- تقرير الموظفين =================
+   لا يوجد حاليًا في النظام أي حقل يربط الطلب/الفاتورة بموظف أو مندوب مبيعات،
+   فلا تتوفر بيانات حقيقية لعرضها (ولن نعرض بيانات وهمية). الجدول جاهز
+   شكليًا بنفس تصميم باقي التقارير، ومُجهّز ليعمل تلقائيًا بمجرد إضافة حقل
+   مثل rec.employeeName مستقبلًا لأي من مصادر البيانات الحالية. ---- */
+function renderReportEmployees(){
+  const wrap = document.getElementById('reportEmployeesTableWrap');
+  if(wrap){
+    wrap.innerHTML = '<div class="cart-empty">لا يوجد حاليًا داخل النظام مصدر بيانات لموظف/مندوب مرتبط بالطلبات أو الفواتير، لذلك لا يمكن عرض تقرير حقيقي عن الموظفين بعد. هذا القسم جاهز ليعمل تلقائيًا بمجرد إضافة حقل الموظف المسؤول لأي طلب أو فاتورة مستقبلًا.</div>';
+  }
+}
+
+/* ---- تقرير الأرباح (تحليل الإيرادات: مبيعات / خصومات / مرتجعات / صافي) ----
+   لا يوجد داخل النظام حاليًا أي حقل لتكلفة الشراء (سعر التوريد) لكل صنف، لذلك
+   لا يمكن حساب هامش ربح حقيقي (ربح = إيراد - تكلفة) دون بيانات وهمية. التقرير
+   هنا يعرض بدلًا من ذلك تحليل الإيرادات الفعلية المتاحة بالكامل من أرشيف
+   الفواتير الموجود بالفعل (grandTotal / returnsTotal / netTotal). */
+function renderReportProfit(){
+  const invoices = reportsFilterInvoices(loadInvoiceArchive());
+  let gross = 0, returns = 0, net = 0;
+  invoices.forEach(inv => {
+    gross += (+inv.grandTotal || 0);
+    returns += (+inv.returnsTotal || 0);
+    net += (+inv.netTotal !== undefined && inv.netTotal !== null) ? (+inv.netTotal || 0) : (+inv.grandTotal || 0);
+  });
+  const kpiEl = document.getElementById('reportProfitKpis');
+  if(kpiEl) kpiEl.innerHTML = reportsKpiHTML([
+    {label:'عدد الفواتير', value: invoices.length},
+    {label:'إجمالي المبيعات (قبل المرتجعات)', value: dashboardFormatMoney(gross)},
+    {label:'إجمالي المرتجعات', value: dashboardFormatMoney(returns)},
+    {label:'صافي الإيرادات', value: dashboardFormatMoney(net)}
+  ]);
+  const rows = invoices.slice().sort((a, b) => String(b.savedAt || b.date || '').localeCompare(String(a.savedAt || a.date || ''))).map(inv =>
+    '<tr><td>' + escapeHTML(inv.number || '—') + '</td><td>' + escapeHTML(inv.custName || '—') + '</td><td class="mono">' + (inv.date ? new Date(inv.date).toLocaleDateString('ar-EG') : '—') + '</td><td class="mono">' + dashboardFormatMoney(inv.grandTotal) + '</td><td class="mono">' + dashboardFormatMoney(inv.returnsTotal) + '</td><td class="mono">' + dashboardFormatMoney((inv.netTotal !== undefined && inv.netTotal !== null) ? inv.netTotal : inv.grandTotal) + '</td></tr>'
+  );
+  const wrap = document.getElementById('reportProfitTableWrap');
+  if(wrap) wrap.innerHTML = reportsTableHTML(['رقم الفاتورة','العميل','التاريخ','الإجمالي','المرتجعات','الصافي'], rows, 'لا توجد فواتير ضمن الفترة المحددة.');
+}
+
+/* ---- تقرير الشحن ---- */
+function renderReportShipping(){
+  const invoices = reportsFilterInvoices(loadInvoiceArchive());
+  const map = {}; // shippingCompany -> {count, revenue}
+  invoices.forEach(inv => {
+    const key = inv.shippingCompany || 'غير محدد';
+    if(!map[key]) map[key] = {name: key, count: 0, revenue: 0};
+    map[key].count++;
+    map[key].revenue += (inv.netTotal !== undefined && inv.netTotal !== null) ? (+inv.netTotal || 0) : (+inv.grandTotal || 0);
+  });
+  const list = Object.values(map).sort((a, b) => b.count - a.count);
+  const kpiEl = document.getElementById('reportShippingKpis');
+  if(kpiEl) kpiEl.innerHTML = reportsKpiHTML([
+    {label:'عدد شركات/طرق الشحن المستخدمة', value: list.length},
+    {label:'إجمالي الفواتير المشحونة', value: invoices.length}
+  ]);
+  const rows = list.map(s =>
+    '<tr><td>' + escapeHTML(s.name) + '</td><td class="mono">' + s.count + '</td><td class="mono">' + dashboardFormatMoney(s.revenue) + '</td></tr>'
+  );
+  const wrap = document.getElementById('reportShippingTableWrap');
+  if(wrap) wrap.innerHTML = reportsTableHTML(['شركة/مكان الشحن','عدد الفواتير','إجمالي القيمة'], rows, 'لا توجد بيانات شحن ضمن الفترة المحددة.');
+}
+
+const REPORTS_RENDERERS = {
+  sales: renderReportSales,
+  customers: renderReportCustomers,
+  products: renderReportProducts,
+  employees: renderReportEmployees,
+  profit: renderReportProfit,
+  shipping: renderReportShipping
+};
+// [تجهيز للمستقبل] لإضافة تقرير جديد لاحقًا: أضف مفتاح جديد هنا بدالة renderReportX
+// خاصة به + زر tab بنفس data-report + panel بنفس id، دون أي تعديل على هذه الدالة نفسها.
+const REPORTS_TITLES = {
+  sales:'تقرير المبيعات', customers:'تقرير العملاء', products:'تقرير المنتجات',
+  employees:'تقرير الموظفين', profit:'تقرير الأرباح', shipping:'تقرير الشحن'
+};
+
+function renderCurrentReport(){
+  const fn = REPORTS_RENDERERS[reportsCurrentTab];
+  if(fn) fn();
+}
+
+function reportsSwitchTab(tabKey){
+  if(!REPORTS_RENDERERS[tabKey]) return;
+  reportsCurrentTab = tabKey;
+  document.querySelectorAll('#reportsTabs .reports-tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-report') === tabKey);
+  });
+  document.querySelectorAll('.reports-panel').forEach(panel => {
+    panel.classList.toggle('active', panel.id === 'reportsPanel-' + tabKey);
+  });
+  renderCurrentReport();
+}
+
+document.querySelectorAll('#reportsTabs .reports-tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => reportsSwitchTab(btn.getAttribute('data-report')));
+});
+document.getElementById('reportsQuickRange').addEventListener('change', () => {
+  reportsApplyQuickRange();
+  reportsReadRange();
+  renderCurrentReport();
+});
+document.getElementById('reportsApplyBtn').addEventListener('click', () => {
+  reportsReadRange();
+  renderCurrentReport();
+});
+document.getElementById('reportsPrintBtn').addEventListener('click', () => {
+  const panel = document.getElementById('reportsPanel-' + reportsCurrentTab);
+  if(!panel){ return; }
+  const title = REPORTS_TITLES[reportsCurrentTab] || 'تقرير';
+  const headerHTML = '<h2 style="text-align:center; margin-bottom:4px;">' + escapeHTML(BRAND.name || '') + '</h2><h3 style="text-align:center; margin-top:0;">' + escapeHTML(title) + '</h3>';
+  printDocPages([headerHTML + panel.innerHTML], title);
+});
+document.getElementById('reportsExcelBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('reportsExcelBtn');
+  const title = REPORTS_TITLES[reportsCurrentTab] || 'تقرير';
+  const rows = [[title]];
+  const table = document.querySelector('#reportsPanel-' + reportsCurrentTab + ' table.orders-table');
+  if(table){
+    table.querySelectorAll('tr').forEach(tr => {
+      rows.push(Array.from(tr.children).map(td => td.textContent.trim()));
+    });
+  } else {
+    rows.push(['لا توجد بيانات كافية للتصدير ضمن الفترة المحددة.']);
+  }
+  const fileName = 'omega-' + reportsCurrentTab + '-report-' + new Date().toISOString().slice(0, 10) + '.xlsx';
+  await exportDocAsExcel(rows, title.slice(0, 30), fileName, btn);
+});
+
+document.getElementById('reportsBtn').addEventListener('click', () => {
+  if(!ownerGate('مركز التقارير')) return;
+  reportsReadRange();
+  renderCurrentReport();
+  document.getElementById('reportsModal').classList.add('show');
+});
+document.getElementById('reportsModalClose').addEventListener('click', () => {
+  document.getElementById('reportsModal').classList.remove('show');
+});
 
 let activeSection = 'الكل';
 let query = '';
@@ -26795,6 +28717,8 @@ function loadInvoiceArchive(){
 }
 function saveInvoiceArchiveList(list){
   Storage.setJSON(INVOICE_ARCHIVE_KEY, list);
+  // [جديد - المرحلة 8] تحديث لوحة التحكم تلقائيًا لو مفتوحة عند تغيّر بيانات الفواتير
+  if(typeof dashboardMaybeRefresh === 'function') dashboardMaybeRefresh();
 }
 function currentInvoiceSnapshot(){
   const {lines, globalDiscountPct, grandTotal, returns, returnsTotal, netTotal, payments, paidAmount, remainingAmount, paymentStatus} = computeInvoiceTotals();
@@ -26823,7 +28747,11 @@ function currentInvoiceSnapshot(){
     returnsTotal: returnsTotal,
     grandTotal: grandTotal,
     netTotal: netTotal,
-    savedAt: new Date().toISOString()
+    savedAt: new Date().toISOString(),
+    // [جديد - المرحلة 5] تجهيز ربط الفاتورة بطلب وارد داخل النظام الحالي —
+    // يبقى null لأي فاتورة أُنشئت يدويًا (الطريقة الأولى) دون أي تغيير عليها.
+    linkedOrderId: (INVOICE_LINKED_ORDER && INVOICE_LINKED_ORDER.orderId) || '',
+    linkedOrderRowIndex: (INVOICE_LINKED_ORDER && INVOICE_LINKED_ORDER.rowIndex) || ''
   };
 }
 function archiveCurrentInvoice(){
@@ -26924,6 +28852,8 @@ function openArchivedInvoiceInEditor(id){
   INVOICE_ITEMS = (rec.items || []).map(it => ({id: ++invoiceItemSeq, name: it.name, unitPrice: it.unitPrice, qty: it.qty, discountPct: it.discountPct || 0}));
   INVOICE_RETURNS = (rec.returns || []).map(r => ({id: ++invoiceReturnSeq, name: r.name, price: r.price, qty: Math.max(1, parseInt(r.qty, 10) || 1), returnDate: r.returnDate, origInvDate: r.origInvDate}));
   INVOICE_PAYMENTS = loadInvoicePaymentsFromRecord(rec);
+  // [جديد - المرحلة 5] استعادة ربط الفاتورة بالطلب الوارد (لو كانت أُنشئت هكذا) عند إعادة فتحها للتعديل
+  INVOICE_LINKED_ORDER = rec.linkedOrderId ? {orderId: rec.linkedOrderId, rowIndex: rec.linkedOrderRowIndex || ''} : null;
   renderInvoiceLines();
   renderInvoiceReturns();
   renderInvoicePayments();
@@ -27783,6 +29713,7 @@ function openInvoiceModalFresh(prefillItems){
   document.getElementById('invCustomProductBox').style.display = 'none';
   INVOICE_ITEMS = (prefillItems && prefillItems.length) ? prefillItems : [];
   INVOICE_PAYMENTS = [];
+  INVOICE_LINKED_ORDER = null; // [جديد - المرحلة 5] كل فتح جديد للفاتورة (يدوي أو استيراد) يبدأ بلا ربط، ثم يُعاد ضبطه بعدها لو جاء من طلب وارد
   renderInvoiceLines();
   renderInvoicePayments();
   renderInvoicePreview();
@@ -27939,6 +29870,153 @@ document.getElementById('invImportOrderInput').addEventListener('change', async 
   } finally {
     hideLoading();
   }
+});
+
+/* ================= [جديد - المرحلة 5] إنشاء فاتورة من طلب وارد =================
+   طريقة ثانية مستقلة تمامًا عن الاستيراد من ملف إكسيل أعلاه: تعرض الطلبات
+   المحمّلة فعليًا في مركز الطلبات (window.getOrdersCenterAllOrders، بدون أي
+   طلب شبكة جديد أو تكرار لمنطق التحميل/الفلترة الموجود هناك)، وتسمح باختيار
+   طلب واحد لنقل بياناته (العميل + الشحن + الدفع + الأصناف) مباشرة لشاشة
+   الفاتورة الحالية عبر openInvoiceModalFresh نفسها المستخدمة فعليًا في كل
+   طرق إنشاء الفاتورة الأخرى — فتبقى كل الحقول قابلة للتعديل بعدها بلا أي فرق
+   عن الفاتورة اليدوية. لا تعديل على أي دالة أو متغير موجود من قبل. */
+
+// يحفظ الطلب المرتبط بالفاتورة الحالية (لو أُنشئت من طلب وارد) عشان يُحفظ مع
+// الفاتورة عند الأرشفة، تجهيزًا لربط الفاتورة بالطلب داخل الباك-إند مستقبلاً.
+let INVOICE_LINKED_ORDER = null; // {orderId, rowIndex} أو null لو الفاتورة يدوية بالكامل
+
+// يحوّل سطر نصي واحد من itemsText (الشكل: "1) اسم الصنف × 2 = 500 ج.م") إلى
+// {name, qty, unitPrice} — نفس تنسيق itemsText المُولَّد فعليًا في أكثر من
+// مكان بالمشروع (customerOrderLineData وغيرها)، فلا حاجة لأي تنسيق جديد.
+function parseOrderItemsTextLine(line){
+  const m = String(line || '').match(/^\s*\d+\)\s*(.+?)\s*×\s*(\d+)\s*=\s*([\d,\.]+)\s*ج\.م/);
+  if(!m) return null;
+  const name = m[1].trim();
+  const qty = Math.max(1, parseInt(m[2], 10) || 1);
+  const lineTotal = +String(m[3]).replace(/,/g, '') || 0;
+  const unitPrice = qty > 0 ? Math.round((lineTotal / qty) * 100) / 100 : lineTotal;
+  return {name, qty, unitPrice};
+}
+function parseOrderItemsText(itemsText){
+  const lines = String(itemsText || '').split(/\n/).map(s => s.trim()).filter(Boolean);
+  const items = [];
+  lines.forEach(line => {
+    const parsed = parseOrderItemsTextLine(line);
+    if(parsed) items.push({id: ++invoiceItemSeq, name: parsed.name, unitPrice: parsed.unitPrice, qty: parsed.qty, discountPct: 0});
+  });
+  return items;
+}
+
+function invOrdersPickerFormatMoney(val){
+  const num = Number(val) || 0;
+  return num.toLocaleString('en-US') + ' ج.م';
+}
+
+function renderInvImportOrdersPickerList(searchTerm){
+  const listEl = document.getElementById('invImportOrdersPickerList');
+  const hintEl = document.getElementById('invImportOrdersPickerHint');
+  if(!listEl) return;
+  const allOrders = (typeof window.getOrdersCenterAllOrders === 'function') ? window.getOrdersCenterAllOrders() : [];
+  const term = (searchTerm || '').trim().toLowerCase();
+  let orders = allOrders.slice();
+  if(term){
+    orders = orders.filter(o => ['customerName','phone','orderId','address'].some(k => String(o[k] || '').toLowerCase().indexOf(term) !== -1));
+  }
+  orders.sort((a,b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+
+  if(!allOrders.length){
+    hintEl.textContent = 'لسه مفيش طلبات محمّلة من "الطلبات" في الجلسة دي. افتح شاشة "الطلبات" ودوس تحديث، بعدين ارجع هنا واضغط "🔄 تحديث القائمة".';
+  } else {
+    hintEl.textContent = 'عدد الطلبات المعروضة: ' + orders.length + ' من إجمالي ' + allOrders.length + '.';
+  }
+
+  if(!orders.length){
+    listEl.innerHTML = '<div class="cart-empty">لا توجد طلبات مطابقة.</div>';
+    return;
+  }
+
+  listEl.innerHTML = orders.map(o => {
+    const badge = /(ملغ|الغ)/.test(String(o.orderStatus || '')) ? 'orders-status-badge' : 'orders-status-badge orders-status-new';
+    return '<div class="cust-suggest-item" style="cursor:pointer; border:1px solid var(--border-col); border-radius:8px; padding:10px 12px; display:flex; flex-direction:column; gap:4px;" data-rowindex="' + escapeHTML(String(o.rowIndex)) + '">' +
+      '<div style="display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap;">' +
+        '<b>' + escapeHTML(o.customerName || 'بدون اسم') + '</b>' +
+        '<span class="mono" style="font-size:11px; color:var(--text-dim);">' + escapeHTML(o.orderId || '—') + '</span>' +
+      '</div>' +
+      '<div style="font-size:12px; color:var(--text-dim);">📞 ' + escapeHTML(o.phone || '—') + ' &nbsp;|&nbsp; 💰 ' + invOrdersPickerFormatMoney(o.grandTotal) + '</div>' +
+      '<div><span class="' + badge + '">' + escapeHTML(o.orderStatus || '—') + '</span></div>' +
+    '</div>';
+  }).join('');
+
+  listEl.querySelectorAll('[data-rowindex]').forEach(el => {
+    el.addEventListener('click', () => {
+      const rowIndex = el.getAttribute('data-rowindex');
+      const allOrders2 = (typeof window.getOrdersCenterAllOrders === 'function') ? window.getOrdersCenterAllOrders() : [];
+      const order = allOrders2.find(o => String(o.rowIndex) === String(rowIndex));
+      if(!order){ alertUX('تعذّر إيجاد بيانات هذا الطلب.'); return; }
+      importOrderIntoInvoice(order);
+      document.getElementById('invImportOrdersPickerModal').classList.remove('show');
+    });
+  });
+}
+
+// ينقل بيانات طلب وارد كامل إلى شاشة الفاتورة، مستخدمًا نفس آلية الفتح
+// (openInvoiceModalFresh) المستخدمة فعليًا في كل طرق إنشاء الفاتورة الأخرى،
+// فتبقى الحقول بعد النقل قابلة للتعديل بنفس الطريقة تمامًا (كميات، أسعار،
+// منتجات، خصومات، شحن، دفع، ملاحظات...).
+function importOrderIntoInvoice(order){
+  const items = parseOrderItemsText(order.itemsText);
+  openInvoiceModalFresh(items);
+
+  document.getElementById('invCustName').value = order.customerName || '';
+  document.getElementById('invCustPhone').value = order.phone || '';
+  document.getElementById('invCustAddress').value = order.address || '';
+  document.getElementById('invGovernorate').value = order.governorate || '';
+  if(order.shipping) document.getElementById('invShippingPlace').value = mapImportedShippingPlace(order.shipping) || order.shipping;
+  document.getElementById('invShippingCompany').value = order.shippingCompany || '';
+  document.getElementById('invPaymentMethod').value = order.payment || '';
+
+  const paidAmount = Math.max(0, +order.paidAmount || 0);
+  if(paidAmount > 0){
+    INVOICE_PAYMENTS.push({
+      id: ++invoicePaymentSeq,
+      amount: paidAmount,
+      date: todayISODate(),
+      method: order.payment || '',
+      to: '', refNo: '', note: 'تم استيرادها تلقائيًا من الطلب الوارد رقم ' + (order.orderId || '—'),
+      attachments: []
+    });
+    renderInvoicePayments();
+  }
+
+  // تجهيز ربط الفاتورة بهذا الطلب داخل النظام الحالي (يُحفظ مع الفاتورة عند
+  // الأرشفة عبر currentInvoiceSnapshot، دون أي إرسال فعلي للباك-إند بعد).
+  INVOICE_LINKED_ORDER = {orderId: order.orderId || '', rowIndex: order.rowIndex};
+
+  renderInvoicePreview();
+  if(!items.length){
+    alertUX('تم نقل بيانات العميل والشحن والدفع من الطلب، لكن مقدرتش أحوّل أي صنف تلقائيًا من نص الطلب. من فضلك أضف الأصناف يدويًا من البحث في المنتجات قبل الحفظ.');
+  } else {
+    alertUX('تم استيراد الطلب رقم ' + (order.orderId || '—') + ' بنجاح (' + items.length + ' صنف). راجع البيانات وعدّل اللي محتاج تعديل قبل ما تحفظ أو تبعت الفاتورة.');
+  }
+}
+
+document.getElementById('invImportFromOrdersCenterBtn').addEventListener('click', () => {
+  document.getElementById('invImportOrdersPickerSearch').value = '';
+  renderInvImportOrdersPickerList('');
+  document.getElementById('invImportOrdersPickerModal').classList.add('show');
+});
+document.getElementById('invImportOrdersPickerCloseBtn').addEventListener('click', () => {
+  document.getElementById('invImportOrdersPickerModal').classList.remove('show');
+});
+document.getElementById('invImportOrdersPickerSearch').addEventListener('input', (e) => {
+  renderInvImportOrdersPickerList(e.target.value);
+});
+document.getElementById('invImportOrdersPickerRefreshBtn').addEventListener('click', async () => {
+  if(typeof window.ordersCenterRequestRefresh === 'function'){
+    showLoading('جاري تحديث قائمة الطلبات...');
+    try{ await window.ordersCenterRequestRefresh({silent:true}); } finally { hideLoading(); }
+  }
+  renderInvImportOrdersPickerList(document.getElementById('invImportOrdersPickerSearch').value);
 });
 
 invoiceToggle.addEventListener('click', () => {
@@ -28630,7 +30708,11 @@ function updateCartBadge(){
   const count = Object.values(activeCart).reduce((a,b)=>a+b,0) + (quoteMode ? 0 : CUSTOM_ITEMS.length);
   if(count > 0){ badge.style.display='flex'; badge.textContent = count; }
   else{ badge.style.display='none'; }
-  document.querySelector('.float-cart .cart-label').textContent = quoteMode ? 'عرض السعر' : 'سلة الطلبات';
+  // [إصلاح] "عرض السعر" تسمية خاصة بنسخة الشركة فقط. نسخة العميل (سواء المعاينة
+  // الحية أو الملف النهائي) لازم تفضل شايفة "سلة الطلبات" دايمًا حتى لو quoteMode
+  // اتفعّل بالغلط من مكان تاني (تسريب بيانات قديمة، تبديل أوضاع، إلخ).
+  const isCustomerCopy = (typeof window !== 'undefined' && window.CURRENT_PW_MODE === 'customer');
+  document.querySelector('.float-cart .cart-label').textContent = (quoteMode && !isCustomerCopy) ? 'عرض السعر' : 'سلة الطلبات';
 }
 
 function renderCartModal(){
@@ -29149,6 +31231,369 @@ document.getElementById('myOrdersArchiveList').addEventListener('click', (e) => 
     document.getElementById('trackMyOrdersList').style.display = '';
     document.querySelector('#trackMyOrdersModal .cart-actions').style.display = '';
   });
+})();
+
+/* ================= [جديد - المرحلة 6.2] مركز إشعارات العميل =================
+   إضافة مستقلة بالكامل: لا تعدّل أي دالة أو Endpoint موجود، ولا تلمس أي كود خاص
+   بإشعارات العروض أو سجل إشعارات الطلبات الموجودَين بالفعل. تستهلك API جديد
+   مخصص لإشعارات العميل فقط (action=getCustomerNotifications / markNotificationRead)
+   عبر نفس WEB_APP_URL الحالي. حالة "مقروء" تُحفظ محليًا على جهاز العميل
+   (localStorage) حتى لو الـ API نفسه ما بيرجعش حقل isRead. */
+(function(){
+  const CUST_NOTIF_READ_KEY = 'custNotifReadIds';
+
+  function custNotifEndpointUrl(){
+    return (typeof GAS_ORDERS_WEBHOOK_URL !== 'undefined' && GAS_ORDERS_WEBHOOK_URL) ? GAS_ORDERS_WEBHOOK_URL : '';
+  }
+
+  function custNotifNormalizePhone(p){
+    return String(p || '').replace(/[^\d]/g, '');
+  }
+
+  function custNotifGetReadIds(){
+    try{
+      const raw = localStorage.getItem(CUST_NOTIF_READ_KEY);
+      const arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr : [];
+    }catch(e){ return []; }
+  }
+
+  function custNotifSaveReadIds(ids){
+    try{ localStorage.setItem(CUST_NOTIF_READ_KEY, JSON.stringify(ids)); }catch(e){}
+  }
+
+  function custNotifMarkReadLocally(id){
+    const ids = custNotifGetReadIds();
+    const key = String(id);
+    if(!ids.includes(key)){
+      ids.push(key);
+      custNotifSaveReadIds(ids);
+    }
+  }
+
+  function custNotifFormatTimestamp(iso){
+    if(!iso) return '—';
+    const d = new Date(iso);
+    if(isNaN(d.getTime())) return escapeHTML(String(iso));
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const day = String(d.getDate()).padStart(2,'0');
+    const h = String(d.getHours()).padStart(2,'0');
+    const mi = String(d.getMinutes()).padStart(2,'0');
+    return `${y}-${m}-${day} ${h}:${mi}`;
+  }
+
+  let custNotifData = [];
+
+  function custNotifUpdateBadge(){
+    const badge = document.getElementById('custNotifBadge');
+    if(!badge) return;
+    const readIds = custNotifGetReadIds();
+    const unreadCount = custNotifData.filter(n => !readIds.includes(String(n.id)) && !n.isRead).length;
+    if(unreadCount > 0){
+      badge.textContent = String(unreadCount);
+      badge.style.display = 'flex';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+
+  function custNotifRenderList(){
+    const listEl = document.getElementById('custNotifList');
+    if(!listEl) return;
+    if(!custNotifData.length){
+      listEl.innerHTML = '<div class="cart-empty">لا توجد إشعارات بعد.</div>';
+      return;
+    }
+    const readIds = custNotifGetReadIds();
+    const sorted = custNotifData.slice().sort((a,b) => {
+      const da = new Date(a.date || a.timestamp || 0).getTime();
+      const db = new Date(b.date || b.timestamp || 0).getTime();
+      return db - da;
+    });
+    listEl.innerHTML = sorted.map(n => {
+      const isRead = n.isRead || readIds.includes(String(n.id));
+      return '<div class="orders-notif-item' + (isRead ? '' : ' orders-notif-unread') + '" data-id="' + escapeHTML(String(n.id)) + '">' +
+        '<div class="orders-notif-icon">🔔</div>' +
+        '<div class="orders-notif-msg">' + escapeHTML(n.message || n.title || '—') + '</div>' +
+        '<div class="orders-notif-time">' + custNotifFormatTimestamp(n.date || n.timestamp) + '</div>' +
+        (isRead ? '' : '<button type="button" class="btn-cancel cust-notif-mark-read-btn" data-id="' + escapeHTML(String(n.id)) + '" style="padding:3px 8px; font-size:11px; margin-inline-start:6px;">تعليم كمقروء</button>') +
+      '</div>';
+    }).join('');
+  }
+
+  async function custNotifFetch(){
+    const endpoint = custNotifEndpointUrl();
+    const phoneInput = document.getElementById('custNotifPhone');
+    const phone = phoneInput ? phoneInput.value.trim() : '';
+
+    if(!phone){
+      alertUX('من فضلك اكتب رقم الهاتف المسجل أولاً.');
+      return;
+    }
+    if(!endpoint){
+      notify('لا يوجد رابط Google Apps Script مربوط، لا يمكن تحميل الإشعارات.', 'warning');
+      return;
+    }
+
+    showLoading('جاري تحميل إشعاراتك...');
+    try{
+      const sep = endpoint.indexOf('?') === -1 ? '?' : '&';
+      const url = endpoint + sep + 'action=getCustomerNotifications&phone=' + encodeURIComponent(phone);
+      const res = await fetch(url, { method: 'GET' });
+      const resText = await res.text();
+      let data = null;
+      try{ data = JSON.parse(resText); }catch(parseErr){ data = null; }
+
+      if(!res.ok || !data || data.ok === false){
+        console.error('[إشعارات العميل] فشل تحميل الإشعارات:', res.status, resText);
+        notify('تعذّر تحميل إشعاراتك من الخادم.', 'error');
+        return;
+      }
+
+      const wantedPhone = custNotifNormalizePhone(phone);
+      const allNotifs = Array.isArray(data.notifications) ? data.notifications : [];
+      custNotifData = allNotifs.filter(n => !n.phone || custNotifNormalizePhone(n.phone) === wantedPhone);
+
+      custNotifRenderList();
+      custNotifUpdateBadge();
+      if(!custNotifData.length){
+        notify('مفيش إشعارات مرتبطة بالرقم ده.', 'info');
+      } else {
+        notify('تم تحميل ' + custNotifData.length + ' إشعار.', 'success');
+      }
+    }catch(err){
+      console.error('[إشعارات العميل] خطأ أثناء تحميل الإشعارات:', err);
+      notify('حصل خطأ أثناء الاتصال بالخادم لتحميل إشعاراتك.', 'error');
+    }finally{
+      hideLoading();
+    }
+  }
+
+  async function custNotifMarkRead(id){
+    custNotifMarkReadLocally(id);
+    custNotifRenderList();
+    custNotifUpdateBadge();
+
+    const endpoint = custNotifEndpointUrl();
+    if(!endpoint) return;
+    try{
+      const sep = endpoint.indexOf('?') === -1 ? '?' : '&';
+      const url = endpoint + sep + 'action=markNotificationRead&id=' + encodeURIComponent(id);
+      await fetch(url, { method: 'GET' });
+    }catch(err){
+      console.error('[إشعارات العميل] تعذّر إعلام الخادم بالقراءة (تم التعليم محليًا بنجاح):', err);
+    }
+  }
+
+  document.getElementById('custNotifFloatBtn').addEventListener('click', () => {
+    const phoneInput = document.getElementById('custNotifPhone');
+    const custPhoneEl = document.getElementById('custPhone');
+    if(phoneInput && custPhoneEl && custPhoneEl.value.trim() && !phoneInput.value.trim()){
+      phoneInput.value = custPhoneEl.value.trim();
+    }
+    custNotifRenderList();
+    document.getElementById('custNotifModal').classList.add('show');
+  });
+  document.getElementById('custNotifClose').addEventListener('click', () => {
+    document.getElementById('custNotifModal').classList.remove('show');
+  });
+  document.getElementById('custNotifRefreshBtn').addEventListener('click', custNotifFetch);
+  document.getElementById('custNotifList').addEventListener('click', (e) => {
+    const btn = e.target.closest('.cust-notif-mark-read-btn');
+    if(!btn) return;
+    custNotifMarkRead(btn.dataset.id);
+  });
+
+  custNotifUpdateBadge();
+})();
+
+/* ================= [جديد - المرحلة 7] الدعم الفني - نسخة العميل =================
+   إضافة مستقلة بالكامل بنفس أسلوب مركز إشعارات العميل أعلاه (custNotif...):
+   لا تعدّل أي دالة أو Endpoint موجود. تعتمد على Endpoints جديدة بنفس أسلوب
+   getCustomerNotifications الحالي:
+     - action=getSupportMessages&phone=...   لجلب محادثة العميل (رسائله وردود الشركة)
+     - action=sendSupportMessage             لإرسال رسالة/استفسار جديد (مع ربط اختيارى برقم طلب)
+   حالة "مقروء" لردود الشركة تُحفظ محليًا على جهاز العميل بنفس أسلوب CUST_NOTIF_READ_KEY. */
+(function(){
+  const SUPPORT_READ_KEY = 'custSupportReadIds';
+
+  function supportEndpointUrl(){
+    return (typeof GAS_ORDERS_WEBHOOK_URL !== 'undefined' && GAS_ORDERS_WEBHOOK_URL) ? GAS_ORDERS_WEBHOOK_URL : '';
+  }
+
+  function supportGetReadIds(){
+    try{
+      const raw = localStorage.getItem(SUPPORT_READ_KEY);
+      const arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr : [];
+    }catch(e){ return []; }
+  }
+
+  function supportSaveReadIds(ids){
+    try{ localStorage.setItem(SUPPORT_READ_KEY, JSON.stringify(ids)); }catch(e){}
+  }
+
+  function supportMarkAllRepliesReadLocally(items){
+    const ids = supportGetReadIds();
+    items.forEach(m => {
+      if(m.reply){
+        const key = String(m.id);
+        if(!ids.includes(key)) ids.push(key);
+      }
+    });
+    supportSaveReadIds(ids);
+  }
+
+  function supportFormatTimestamp(iso){
+    if(!iso) return '—';
+    const d = new Date(iso);
+    if(isNaN(d.getTime())) return escapeHTML(String(iso));
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const day = String(d.getDate()).padStart(2,'0');
+    const h = String(d.getHours()).padStart(2,'0');
+    const mi = String(d.getMinutes()).padStart(2,'0');
+    return `${y}-${m}-${day} ${h}:${mi}`;
+  }
+
+  let supportThreadData = [];
+
+  function supportUpdateBadge(){
+    const badge = document.getElementById('supportBadge');
+    if(!badge) return;
+    const readIds = supportGetReadIds();
+    const unreadCount = supportThreadData.filter(m => m.reply && !readIds.includes(String(m.id))).length;
+    if(unreadCount > 0){
+      badge.textContent = String(unreadCount);
+      badge.style.display = 'flex';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+
+  function supportRenderThread(){
+    const listEl = document.getElementById('supportThreadList');
+    if(!listEl) return;
+    if(!supportThreadData.length){
+      listEl.innerHTML = '<div class="cart-empty">لسه مفيش رسائل. اكتب رقم هاتفك واضغط "تحديث المحادثة"، أو ابعت رسالة جديدة.</div>';
+      return;
+    }
+    let html = '';
+    supportThreadData.forEach(m => {
+      html += '<div class="cart-line" style="flex-direction:column; align-items:stretch; gap:6px;">' +
+        '<div><b>رسالتك' + (m.orderRef ? (' (مرتبطة بالطلب: ' + escapeHTML(m.orderRef) + ')') : '') + ':</b><br>' + escapeHTML(m.message || '—') + '</div>' +
+        '<div style="font-size:11px;color:var(--text-dim);">' + supportFormatTimestamp(m.ts) + ' — الحالة: ' + escapeHTML(m.status || 'جديدة') + '</div>' +
+        (m.reply ? ('<div style="margin-top:4px;padding:8px;border-radius:8px;background:rgba(45,212,191,0.08);"><b>📨 رد الشركة:</b><br>' + escapeHTML(m.reply) + '</div>') : '') +
+      '</div>';
+    });
+    listEl.innerHTML = html;
+  }
+
+  async function supportFetchThread(){
+    const endpoint = supportEndpointUrl();
+    const phone = document.getElementById('supportPhone').value.trim();
+    if(!phone){
+      notify('من فضلك اكتب رقم هاتفك المسجل أولًا.', 'warning');
+      return;
+    }
+    if(!endpoint){
+      notify('لا يوجد رابط Google Apps Script مربوط، لا يمكن تحميل المحادثة.', 'warning');
+      return;
+    }
+    showLoading('جاري تحميل محادثتك...');
+    try{
+      const sep = endpoint.indexOf('?') === -1 ? '?' : '&';
+      const url = endpoint + sep + 'action=getSupportMessages&phone=' + encodeURIComponent(phone);
+      const res = await fetch(url, { method: 'GET' });
+      const resText = await res.text();
+      let data = null;
+      try{ data = JSON.parse(resText); }catch(parseErr){ data = null; }
+      if(!res.ok || !data || data.ok === false || !Array.isArray(data.messages)){
+        // Endpoint غير مفعّل بعد على الخادم (Code.gs لم يُحدَّث بعد) — نعرض حالة فارغة واضحة بدل خطأ يعطّل الواجهة.
+        supportThreadData = [];
+        supportRenderThread();
+        return;
+      }
+      supportThreadData = data.messages;
+      supportRenderThread();
+      supportMarkAllRepliesReadLocally(supportThreadData);
+      supportUpdateBadge();
+    }catch(err){
+      console.error('[الدعم الفني] تعذّر تحميل المحادثة:', err);
+      notify('حصل خطأ أثناء الاتصال بالخادم لتحميل محادثتك.', 'error');
+    }finally{
+      hideLoading();
+    }
+  }
+
+  async function supportSendMessage(){
+    const endpoint = supportEndpointUrl();
+    const phone = document.getElementById('supportPhone').value.trim();
+    const orderRef = document.getElementById('supportOrderRef').value.trim();
+    const message = document.getElementById('supportMsgText').value.trim();
+    if(!phone){
+      notify('من فضلك اكتب رقم هاتفك المسجل.', 'warning');
+      return;
+    }
+    if(!message){
+      notify('من فضلك اكتب نص الرسالة أو الاستفسار.', 'warning');
+      return;
+    }
+    if(!endpoint){
+      notify('لا يوجد رابط Google Apps Script مربوط، لا يمكن إرسال الرسالة.', 'warning');
+      return;
+    }
+    const custNameEl = document.getElementById('custName');
+    showLoading('جاري إرسال رسالتك...');
+    try{
+      const sep = endpoint.indexOf('?') === -1 ? '?' : '&';
+      const url = endpoint + sep + 'action=sendSupportMessage' +
+        '&phone=' + encodeURIComponent(phone) +
+        '&customerName=' + encodeURIComponent(custNameEl ? custNameEl.value.trim() : '') +
+        '&message=' + encodeURIComponent(message) +
+        '&orderRef=' + encodeURIComponent(orderRef);
+      const res = await fetch(url, { method: 'GET' });
+      const resText = await res.text();
+      let data = null;
+      try{ data = JSON.parse(resText); }catch(parseErr){ data = null; }
+      if(!res.ok || !data || data.ok === false){
+        console.error('[الدعم الفني] فشل إرسال الرسالة:', res.status, resText);
+        notify('تعذّر إرسال رسالتك، حاول مرة أخرى.', 'error');
+        return;
+      }
+      notify('تم إرسال رسالتك بنجاح، هيتم الرد عليك هنا.', 'success');
+      document.getElementById('supportMsgText').value = '';
+      document.getElementById('supportOrderRef').value = '';
+      await supportFetchThread();
+    }catch(err){
+      console.error('[الدعم الفني] خطأ أثناء إرسال الرسالة:', err);
+      notify('حصل خطأ أثناء الاتصال بالخادم لإرسال رسالتك.', 'error');
+    }finally{
+      hideLoading();
+    }
+  }
+
+  document.getElementById('supportFloatBtn').addEventListener('click', () => {
+    const phoneInput = document.getElementById('supportPhone');
+    const custPhoneEl = document.getElementById('custPhone');
+    if(phoneInput && custPhoneEl && custPhoneEl.value.trim() && !phoneInput.value.trim()){
+      phoneInput.value = custPhoneEl.value.trim();
+    }
+    supportRenderThread();
+    document.getElementById('supportModal').classList.add('show');
+  });
+  document.getElementById('supportModalClose').addEventListener('click', () => {
+    document.getElementById('supportModal').classList.remove('show');
+  });
+  document.getElementById('supportRefreshBtn').addEventListener('click', function(){
+    guardClick(this, () => supportFetchThread());
+  });
+  document.getElementById('supportSendBtn').addEventListener('click', function(){
+    guardClick(this, () => supportSendMessage());
+  });
+
+  supportUpdateBadge();
 })();
 
 document.getElementById('sendOrderBtn').addEventListener('click', () => {
@@ -31505,7 +33950,7 @@ function buildExportHTML(mode){
   // view-source or dev-tools CSS manipulation. injectRemovedElementSafetyNet()
   // (above) keeps the rest of the script running safely afterwards.
   const DEV_ONLY_IDS = ['previewWorkspaceBar','pwContextBar','pwToast','saveBtn','exportBusinessBtn'];
-  const OWNER_ONLY_IDS = ['editToggle','gearBtn','quoteToggle','quoteArchiveToggle','invoiceToggle','invoiceArchiveToggle','catalogPdfBtn','saveBar','settingsModal','quoteModal','quoteArchiveModal','quotePreviewModal','invoiceModal','invoiceArchiveModal','invoicePreviewModal','contactProfileModal','cartLinkModal','imgFileInput','logoFileInput','backupFileInput','excelFileInput','imagesFolderInput','linkImagesByCodeBtn',
+  const OWNER_ONLY_IDS = ['editToggle','gearBtn','quoteToggle','quoteArchiveToggle','invoiceToggle','invoiceArchiveToggle','catalogPdfBtn','saveBar','settingsModal','quoteModal','quoteArchiveModal','quotePreviewModal','invoiceModal','invoiceArchiveModal','invoicePreviewModal','invImportOrdersPickerModal','crmToggle','crmModal','crmCustomerFileModal','contactProfileModal','cartLinkModal','imgFileInput','logoFileInput','backupFileInput','excelFileInput','imagesFolderInput','linkImagesByCodeBtn',
     // Offers admin UI: button + modals for creating/editing/deleting offers. Kept
     // owner-only so the customer copy never shows offer-editing tools — same
     // real-removal approach as every other owner-only control above. The
@@ -31514,7 +33959,17 @@ function buildExportHTML(mode){
     // intentionally NOT in this list — those stay in every edition.
     'offersManageBtn','offersModal','offerFormModal','offerPreviewModal','offersArchiveModal',
     // [جديد - المرحلة 3B] مركز الطلبات: أداة شركة (Owner) فقط، تُحذف من نسخة العميل النهائية.
-    'ordersCenterBtn','ordersCenterModal'];
+    'ordersCenterBtn','ordersCenterModal',
+    // [جديد - المرحلة 6.3] مركز الإشعارات: أداة شركة (Owner) فقط بنفس المنطق أعلاه.
+    'notifCenterBtn','notifCenterModal',
+    // [جديد - المرحلة 6.4] شاشة تفاصيل الطلب (تغيير الحالة/إرسال ملاحظة): أداة شركة فقط.
+    'orderDetailsModal',
+    // [جديد - المرحلة 7] لوحة إدارة رسائل الدعم الفني: أداة شركة (Owner) فقط، تُحذف من نسخة العميل النهائية.
+    'supportCenterBtn','supportCenterModal','supportReplyModal',
+    // [جديد - المرحلة 8] لوحة التحكم (Dashboard): أداة شركة (Owner) فقط، بنفس منطق باقي أدوات الشركة أعلاه.
+    'dashboardBtn','dashboardModal',
+    // [جديد - المرحلة 9] مركز التقارير: أداة شركة (Owner) فقط، بنفس منطق باقي أدوات الشركة أعلاه.
+    'reportsBtn','reportsModal'];
   // NOTE: 'catalogPickerModal' is intentionally NOT in OWNER_ONLY_IDS — it's the
   // shared "اختيار منتج من الكتالوج" picker used both by the owner (invoice/quote,
   // whose own buttons/modals ARE removed above) and by the customer's own order
@@ -31790,6 +34245,12 @@ window.addEventListener('beforeunload', runAutoArchive);
 document.addEventListener('visibilitychange', () => { if(document.hidden) runAutoArchive(); });
 
 function restoreInvoiceDraftSession(rec){
+  // [إصلاح] نفس منطق إصلاح مسودة عرض السعر أدناه — الفاتورة أداة خاصة بالشركة
+  // فقط، فمينفعش تتفعّل في نسخة العميل.
+  if(typeof window !== 'undefined' && window.CURRENT_PW_MODE === 'customer'){
+    clearSessionAutosave();
+    return;
+  }
   document.getElementById('invNumber').value = rec.number || nextInvoiceNumber();
   document.getElementById('invDate').value = rec.date || todayISODate();
   document.getElementById('invCustName').value = rec.custName || '';
@@ -31809,6 +34270,8 @@ function restoreInvoiceDraftSession(rec){
   INVOICE_ITEMS = (rec.items || []).map(it => ({id: ++invoiceItemSeq, name: it.name, unitPrice: it.unitPrice, qty: it.qty, discountPct: it.discountPct || 0}));
   INVOICE_RETURNS = (rec.returns || []).map(r => ({id: ++invoiceReturnSeq, name: r.name, price: r.price, qty: Math.max(1, parseInt(r.qty, 10) || 1), returnDate: r.returnDate, origInvDate: r.origInvDate}));
   INVOICE_PAYMENTS = loadInvoicePaymentsFromRecord(rec);
+  // [جديد - المرحلة 5] استعادة ربط الفاتورة بالطلب الوارد (لو كانت أُنشئت هكذا) عند استرجاع مسودة الجلسة
+  INVOICE_LINKED_ORDER = rec.linkedOrderId ? {orderId: rec.linkedOrderId, rowIndex: rec.linkedOrderRowIndex || ''} : null;
   renderInvoiceLines();
   renderInvoiceReturns();
   renderInvoicePayments();
@@ -31816,6 +34279,17 @@ function restoreInvoiceDraftSession(rec){
   document.getElementById('invoiceModal').classList.add('show');
 }
 function restoreQuoteDraftSession(rec){
+  // [إصلاح] نسخة العميل (المعاينة الحية داخل هذا الملف، أو النسخة النهائية
+  // المُصدَّرة) لا تملك أداة "عرض سعر" أصلاً. لو اتفتحت مسودة عرض سعر قديمة
+  // (متسربة من نسخة الشركة عبر نفس التخزين المحلي، أو أثناء التنقل بين أوضاع
+  // المعاينة) وإحنا فعليًا في وضع "نسخة العميل"، لازم نتجاهلها تمامًا بدل ما
+  // نفعّل quoteMode ونفتح شاشة عرض السعر — ده كان بيسبب تجمد سلة الطلبات
+  // وتحويل اسمها لـ"عرض السعر" مع عدم وجود زر لإرجاعها (لأن زر عرض السعر
+  // نفسه مخفي في نسخة العميل). السلة العادية تفضل زي ما هي بدون أي تغيير.
+  if(typeof window !== 'undefined' && window.CURRENT_PW_MODE === 'customer'){
+    clearSessionAutosave();
+    return;
+  }
   if(editingMode){ editToggle.click(); }
   QUOTE_CART = {};
   QUOTE_PRICE_OVERRIDE = {};
@@ -31895,7 +34369,7 @@ function showCartRestorePrompt(){
   };
   if(deleteBtn) deleteBtn.onclick = () => {
     modal.classList.remove('show');
-    try{ window.localStorage.removeItem(CART_STORAGE_KEY); }catch(e){}
+    Storage.remove(CART_STORAGE_KEY);
   };
 }
 showCartRestorePrompt();
@@ -31930,13 +34404,17 @@ showCartRestorePrompt();
   const PW_HIDE_IDS = {
     developer: [],
     company: [],
-    customer: ['editToggle','gearBtn','quoteToggle','quoteArchiveToggle','invoiceToggle','invoiceArchiveToggle','catalogPdfBtn','saveBar','settingsModal','quoteModal','quoteArchiveModal','quotePreviewModal','invoiceModal','invoiceArchiveModal','invoicePreviewModal','contactProfileModal','cartLinkModal','imgFileInput','logoFileInput','backupFileInput','excelFileInput','imagesFolderInput','linkImagesByCodeBtn','offersManageBtn','offersModal','offerFormModal','offerPreviewModal','offersArchiveModal']
+    customer: ['editToggle','gearBtn','quoteToggle','quoteArchiveToggle','invoiceToggle','invoiceArchiveToggle','catalogPdfBtn','saveBar','settingsModal','quoteModal','quoteArchiveModal','quotePreviewModal','invoiceModal','invoiceArchiveModal','invoicePreviewModal','crmToggle','crmModal','crmCustomerFileModal','contactProfileModal','cartLinkModal','imgFileInput','logoFileInput','backupFileInput','excelFileInput','imagesFolderInput','linkImagesByCodeBtn','offersManageBtn','offersModal','offerFormModal','offerPreviewModal','offersArchiveModal']
   };
   const PW_ALL_HIDDEN_IDS = Array.from(new Set([].concat(PW_HIDE_IDS.company, PW_HIDE_IDS.customer)));
   // Owner-only modals: force-closed (not just hidden) on entering Customer Preview,
   // so no leftover admin dialog state survives into the simulated customer session.
-  const PW_OWNER_MODAL_IDS = ['settingsModal','quoteModal','quoteArchiveModal','quotePreviewModal','invoiceModal','invoiceArchiveModal','invoicePreviewModal','contactProfileModal','cartLinkModal','offersModal','offerFormModal','offerPreviewModal'];
+  const PW_OWNER_MODAL_IDS = ['settingsModal','quoteModal','quoteArchiveModal','quotePreviewModal','invoiceModal','invoiceArchiveModal','invoicePreviewModal','invImportOrdersPickerModal','crmModal','crmCustomerFileModal','contactProfileModal','cartLinkModal','offersModal','offerFormModal','offerPreviewModal'];
   let currentPreviewMode = 'developer';
+  // [إصلاح] نعرض الوضع الحالي على window عشان الدوال المُعرَّفة قبل الـ IIFE ده
+  // (زي restoreQuoteDraftSession) تقدر تتأكد وقت التنفيذ الفعلي هل إحنا في نسخة
+  // العميل ولا لأ، حتى لو اتعرّفت هي قبل ما الوضع الحالي يتحدد.
+  window.CURRENT_PW_MODE = currentPreviewMode;
   const PW_MODE_DISPLAY_NAMES = {
     developer: 'Developer Preview',
     company: 'Company Preview',
@@ -31983,6 +34461,11 @@ showCartRestorePrompt();
       // Real customers never have edit-mode or an in-progress admin quote draft open.
       if(typeof editingMode !== 'undefined' && editingMode && typeof editToggle !== 'undefined' && editToggle){ editToggle.click(); }
       if(typeof quoteMode !== 'undefined' && quoteMode && typeof quoteToggle !== 'undefined' && quoteToggle){ quoteToggle.click(); }
+      // [إصلاح] Backstop: حتى لو click() ما اشتغلش لأي سبب، نتأكد إن quoteMode
+      // اتقفل فعليًا وإن تسمية السلة رجعت "سلة الطلبات" فور الدخول لنسخة العميل.
+      if(typeof quoteMode !== 'undefined') quoteMode = false;
+      if(typeof quoteToggle !== 'undefined' && quoteToggle) quoteToggle.classList.remove('on');
+      if(typeof updateCartBadge === 'function') updateCartBadge();
       PW_OWNER_MODAL_IDS.forEach(id => {
         const el = document.getElementById(id);
         if(el) el.classList.remove('show');
@@ -32015,6 +34498,7 @@ showCartRestorePrompt();
       if(el) el.style.setProperty('display', 'none', 'important');
     });
     currentPreviewMode = mode;
+    window.CURRENT_PW_MODE = mode;
     document.querySelectorAll('#previewWorkspaceBar .pw-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.mode === mode);
     });
@@ -32176,11 +34660,156 @@ showCartRestorePrompt();
   // [تجهيز لمرحلة قادمة] نقطة الدخول لعرض تفاصيل طلب معيّن — سيتم استبدال محتواها
   // بشاشة تفاصيل كاملة (الأصناف، الملفات، سجل الحالة...) في مرحلة لاحقة، دون
   // الحاجة لتعديل أي كود آخر من هذه المرحلة (الجدول، البحث، الفرز، الفلترة).
+  // [المرحلة 6.4] نفس نقطة الدخول المجهّزة مسبقًا — تم تنفيذ محتواها الآن بدل
+  // رسالة "ستُفعّل في مرحلة قادمة"، بدون تغيير اسم الدالة أو طريقة استدعائها
+  // من الجدول (onclick="openOrderDetailsPlaceholder(...)" يبقى كما هو).
+  // [المرحلة 5 - الفاتورة من طلب وارد] كشف قائمة الطلبات المحمّلة فعليًا لأي كود
+  // خارجي (شاشة الفاتورة) يحتاج يعرضها للمستخدم عشان يختار طلب لتحويله لفاتورة،
+  // بدون أي تعديل على منطق التحميل/الفلترة/الفرز الحالي داخل هذا الـ IIFE.
+  window.getOrdersCenterAllOrders = function(){ return ordersCenterAllOrders.slice(); };
+  window.ordersCenterRequestRefresh = function(opts){ return ordersCenterFetchAll(opts || {silent:true}); };
+
+  let odCurrentOrder = null;
   window.openOrderDetailsPlaceholder = function(rowIndex){
     const order = ordersCenterAllOrders.find(o => String(o.rowIndex) === String(rowIndex));
     if(!order){ notify('تعذّر إيجاد بيانات هذا الطلب.', 'error'); return; }
-    notify('تفاصيل الطلب ' + (order.orderId || '—') + ' — شاشة التفاصيل الكاملة ستُفعّل في مرحلة قادمة.', 'info');
+    odCurrentOrder = order;
+    const infoBox = document.getElementById('odInfoBox');
+    if(infoBox){
+      infoBox.innerHTML =
+        '<div><b>رقم الطلب:</b> ' + escapeHTML(order.orderId || '—') + '</div>' +
+        '<div><b>العميل:</b> ' + escapeHTML(order.customerName || '—') + '</div>' +
+        '<div><b>الهاتف:</b> ' + escapeHTML(order.phone || '—') + '</div>' +
+        '<div><b>الإجمالي:</b> ' + ordersCenterFormatMoney(order.grandTotal) + '</div>' +
+        '<div><b>حالة الطلب الحالية:</b> ' + escapeHTML(order.orderStatus || '—') + '</div>' +
+        '<div><b>حالة الدفع:</b> ' + escapeHTML(order.paymentStatus || '—') + '</div>';
+    }
+    const statusSel = document.getElementById('odStatusSelect');
+    if(statusSel) statusSel.value = order.orderStatus || 'جديد';
+    const noteEl = document.getElementById('odNoteText');
+    if(noteEl) noteEl.value = '';
+    document.getElementById('orderDetailsModal').classList.add('show');
   };
+
+  // POST عام يُعاد استخدامه لكل عمليات الكتابة الجديدة في هذه المرحلة (تغيير
+  // حالة/رسالة/إنشاء إشعار عميل) — بنفس أسلوب POST الحالي المستخدم فعليًا في
+  // إرسال الطلب (Content-Type: text/plain لتفادي preflight)، بدون إعادة تنفيذه.
+  async function ordersCenterPostAction(payload){
+    const endpoint = ordersCenterEndpointUrl();
+    if(!endpoint) return {ok:false, skipped:true};
+    try{
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      const resText = await res.text();
+      let data = null;
+      try{ data = JSON.parse(resText); }catch(parseErr){ data = null; }
+      if(!res.ok) return {ok:false};
+      if(data && data.ok === false) return {ok:false};
+      return {ok:true, data};
+    }catch(err){
+      console.error('[Orders Center] فشل تنفيذ العملية:', payload && payload.action, err);
+      return {ok:false};
+    }
+  }
+
+  // [المطلوب] عند تغيير حالة الطلب أو إرسال رسالة/ملاحظة من الشركة، يُنشأ إشعار
+  // للعميل فقط — عبر نفس نظام إشعارات العميل (action=createCustomerNotification)
+  // الذي تقرأ منه نافذة إشعارات العميل الموجودة بالفعل (getCustomerNotifications).
+  // لا يُستخدم هذا الاستدعاء في أي حدث آخر غير الاثنين المذكورين في هذه المرحلة.
+  async function notifyCustomerAboutOrder(order, message){
+    if(!order || !order.phone) return;
+    await ordersCenterPostAction({
+      action: 'createCustomerNotification',
+      phone: order.phone,
+      orderId: order.orderId || '',
+      message: message
+    });
+  }
+
+  document.getElementById('orderDetailsModalClose').addEventListener('click', () => {
+    document.getElementById('orderDetailsModal').classList.remove('show');
+  });
+
+  document.getElementById('odSaveStatusBtn').addEventListener('click', function(){
+    guardClick(this, async () => {
+      if(!odCurrentOrder){ notify('لا يوجد طلب محدد.', 'error'); return; }
+      const newStatus = document.getElementById('odStatusSelect').value;
+      if(!newStatus){ alertUX('من فضلك اختار الحالة الجديدة.'); return; }
+      if(newStatus === (odCurrentOrder.orderStatus || '')){
+        notify('الحالة المختارة هي نفس الحالة الحالية بالفعل.', 'info');
+        return;
+      }
+      if(!confirm('تأكيد تغيير حالة الطلب "' + (odCurrentOrder.orderId || '—') + '" إلى "' + newStatus + '"؟ هيتم إشعار العميل تلقائيًا.')) return;
+
+      showLoading('جاري تحديث حالة الطلب...');
+      const result = await ordersCenterPostAction({
+        action: 'updateOrderStatus',
+        rowIndex: odCurrentOrder.rowIndex,
+        orderId: odCurrentOrder.orderId || '',
+        newStatus: newStatus
+      });
+      hideLoading();
+
+      if(!result.ok){
+        notify('تعذّر تحديث حالة الطلب على الخادم. تأكد من اتصال الإنترنت وحاول مرة أخرى.', 'error');
+        return;
+      }
+
+      const oldStatus = odCurrentOrder.orderStatus || '';
+      odCurrentOrder.orderStatus = newStatus;
+      const infoBox = document.getElementById('odInfoBox');
+      if(infoBox){
+        const line = infoBox.querySelector('div:nth-child(5)');
+        if(line) line.innerHTML = '<b>حالة الطلب الحالية:</b> ' + escapeHTML(newStatus);
+      }
+      ordersCenterApplyAndRender();
+      notify('تم تحديث حالة الطلب إلى "' + newStatus + '" بنجاح.', 'success');
+
+      await notifyCustomerAboutOrder(odCurrentOrder,
+        'تم تحديث حالة طلبك رقم ' + (odCurrentOrder.orderId || '—') + ' من "' + (oldStatus || '—') + '" إلى "' + newStatus + '".');
+
+      // [تحديث عداد الإشعارات تلقائيًا] نفس مركز الإشعارات الموجود من المرحلة 6.3
+      if(typeof updateNotifCenterBadge === 'function') updateNotifCenterBadge();
+      if(typeof renderNotifCenter === 'function') renderNotifCenter();
+    });
+  });
+
+  document.getElementById('odSendNoteBtn').addEventListener('click', function(){
+    guardClick(this, async () => {
+      if(!odCurrentOrder){ notify('لا يوجد طلب محدد.', 'error'); return; }
+      const noteEl = document.getElementById('odNoteText');
+      const noteText = noteEl ? noteEl.value.trim() : '';
+      if(!noteText){ alertUX('من فضلك اكتب نص الرسالة أو الملاحظة أولاً.'); return; }
+
+      showLoading('جاري إرسال الرسالة...');
+      const result = await ordersCenterPostAction({
+        action: 'sendCompanyNote',
+        rowIndex: odCurrentOrder.rowIndex,
+        orderId: odCurrentOrder.orderId || '',
+        phone: odCurrentOrder.phone || '',
+        message: noteText
+      });
+      hideLoading();
+
+      if(!result.ok){
+        notify('تعذّر إرسال الرسالة على الخادم. تأكد من اتصال الإنترنت وحاول مرة أخرى.', 'error');
+        return;
+      }
+
+      notify('تم إرسال الرسالة للعميل بنجاح.', 'success');
+      if(noteEl) noteEl.value = '';
+
+      await notifyCustomerAboutOrder(odCurrentOrder,
+        'رسالة جديدة بخصوص طلبك رقم ' + (odCurrentOrder.orderId || '—') + ': ' + noteText);
+
+      // [تحديث عداد الإشعارات تلقائيًا] نفس مركز الإشعارات الموجود من المرحلة 6.3
+      if(typeof updateNotifCenterBadge === 'function') updateNotifCenterBadge();
+      if(typeof renderNotifCenter === 'function') renderNotifCenter();
+    });
+  });
 
   function ordersCenterRenderTable(orders){
     const wrap = document.getElementById('ordersTableWrap');
@@ -32269,6 +34898,8 @@ showCartRestorePrompt();
     }
 
     ordersCenterRenderTable(list);
+    // [جديد - المرحلة 8] تحديث لوحة التحكم تلقائيًا لو مفتوحة عند تغيّر/تحديث بيانات الطلبات
+    if(typeof dashboardMaybeRefresh === 'function') dashboardMaybeRefresh();
   }
 
   /* ================= [جديد - المرحلة 4] نظام الإشعارات =================
@@ -32347,6 +34978,9 @@ showCartRestorePrompt();
     let changed = false;
     ordersNotifLog.forEach(e => { if(!e.read){ e.read = true; changed = true; } });
     if(changed){ ordersCenterSaveNotifLog(); updateOrdersCenterBadge(); renderOrdersNotifLog(); }
+    // [جديد - المرحلة 6.3] إضافي فقط: مزامنة مركز الإشعارات المستقل مع نفس السجل.
+    if(typeof updateNotifCenterBadge === 'function') updateNotifCenterBadge();
+    if(typeof renderNotifCenter === 'function') renderNotifCenter();
   }
 
   // [إشعار على الهاتف] عبر Notification API الخاص بالمتصفح — يعمل طالما الصفحة
@@ -32386,6 +35020,9 @@ showCartRestorePrompt();
     const toastKind = type === 'cancelled' ? 'warning' : (type === 'new' ? 'success' : 'info');
     notify(message, toastKind);
     fireBrowserNotification('📦 أوميجا طنطا — مركز الطلبات', message);
+    // [جديد - المرحلة 6.3] إضافي فقط: تحديث مركز الإشعارات المستقل (نفس السجل).
+    if(typeof updateNotifCenterBadge === 'function') updateNotifCenterBadge();
+    if(typeof renderNotifCenter === 'function') renderNotifCenter();
   }
 
   // [جديد - المرحلة 4] المقارنة الفعلية بين آخر لقطة محفوظة والطلبات الحالية.
@@ -32502,12 +35139,358 @@ showCartRestorePrompt();
     ordersCenterApplyAndRender();
   });
 
-  // [جديد - المرحلة 4] تهيئة أولية عند تحميل الصفحة: تحديث الشارة + زر
+  // [جديد - المرحلة 6.3] تهيئة أولية عند تحميل الصفحة: تحديث الشارة + زر
   // الإذن + بدء الفحص التلقائي في الخلفية، كل ده بدون أي تدخل من المستخدم.
   updateOrdersCenterBadge();
   renderOrdersNotifLog();
   ordersCenterUpdateNotifPermBtnLabel();
   ordersCenterStartBackgroundPolling();
+
+  /* ================= [جديد - المرحلة 6.3] مركز الإشعارات (نسخة الشركة) =================
+     إضافة بحتة فوق ما هو موجود بالفعل — لا تعيد تنفيذ أي جزء من نظام إشعارات
+     "مركز الطلبات" أعلاه، وإنما تعرض نفس السجل (ordersNotifLog) مصنّفًا في واجهة
+     مستقلة (طلبات جديدة / تغييرات حالة)، وتضيف قسمًا جديدًا لرسائل العملاء
+     (يعتمد على Endpoint جديد: action=getCompanyMessages، بنفس أسلوب باقي
+     الـ Actions الحالية زي getOrders). لا تغيير حالة طلب ولا إرسال رسائل من
+     هنا — ده هيتنفذ في مرحلة تالية كما هو مطلوب. */
+
+  const NOTIF_MESSAGES_READ_KEY = 'omega_tanta_notif_messages_read_v1';
+  let companyMessagesLog = [];
+  let companyMessagesReadIds = Storage.getJSON(NOTIF_MESSAGES_READ_KEY, []);
+
+  // طلبات جديدة فقط (نفس تصنيف type:'new' الموجود بالفعل في ordersNotifLog).
+  function notifCenterNewOrdersEntries(){
+    return ordersNotifLog.filter(e => e.type === 'new');
+  }
+  // تغييرات حالة/بيانات الطلبات (نفس type:'edited' و 'cancelled' الموجودين بالفعل).
+  function notifCenterOrderChangeEntries(){
+    return ordersNotifLog.filter(e => e.type === 'edited' || e.type === 'cancelled');
+  }
+
+  function notifCenterRenderList(listEl, entries, emptyMsg){
+    if(!listEl) return;
+    if(!entries.length){
+      listEl.innerHTML = '<div class="cart-empty">' + emptyMsg + '</div>';
+      return;
+    }
+    let html = '';
+    entries.slice(0, 40).forEach(e => {
+      const icon = e.type === 'new' ? '🆕' : (e.type === 'cancelled' ? '❌' : '✏️');
+      html += '<div class="orders-notif-item' + (e.read ? '' : ' orders-notif-unread') + '">' +
+        '<span class="orders-notif-icon">' + icon + '</span>' +
+        '<span class="orders-notif-msg">' + escapeHTML(e.message) + '</span>' +
+        '<span class="orders-notif-time">' + ordersCenterFormatNotifTime(e.ts) + '</span>' +
+      '</div>';
+    });
+    listEl.innerHTML = html;
+  }
+
+  function notifCenterRenderMessagesList(){
+    const listEl = document.getElementById('notifMessagesList');
+    if(!listEl) return;
+    if(!companyMessagesLog.length){
+      listEl.innerHTML = '<div class="cart-empty">دوس "تحديث" عشان تجيب آخر رسائل العملاء.</div>';
+      return;
+    }
+    let html = '';
+    companyMessagesLog.slice(0, 40).forEach(m => {
+      const isRead = companyMessagesReadIds.indexOf(String(m.id)) !== -1;
+      html += '<div class="orders-notif-item' + (isRead ? '' : ' orders-notif-unread') + '">' +
+        '<span class="orders-notif-icon">💬</span>' +
+        '<span class="orders-notif-msg">' + escapeHTML((m.customerName || 'عميل') + ': ' + (m.message || '')) + '</span>' +
+        '<span class="orders-notif-time">' + (m.ts ? ordersCenterFormatNotifTime(m.ts) : '—') + '</span>' +
+      '</div>';
+    });
+    listEl.innerHTML = html;
+  }
+
+  function renderNotifCenter(){
+    notifCenterRenderList(document.getElementById('notifNewOrdersList'), notifCenterNewOrdersEntries(), 'لا توجد إشعارات طلبات جديدة بعد.');
+    notifCenterRenderList(document.getElementById('notifOrderChangesList'), notifCenterOrderChangeEntries(), 'لا توجد إشعارات تغيير حالة بعد.');
+    notifCenterRenderMessagesList();
+  }
+
+  function updateNotifCenterBadge(){
+    const badge = document.getElementById('notifCenterBadge');
+    if(!badge) return;
+    const unreadOrders = ordersNotifLog.filter(e => !e.read).length; // جديد + تغيير حالة/إلغاء
+    const unreadMessages = companyMessagesLog.filter(m => companyMessagesReadIds.indexOf(String(m.id)) === -1).length;
+    const total = unreadOrders + unreadMessages;
+    if(total > 0){ badge.style.display = 'inline-flex'; badge.textContent = total; }
+    else { badge.style.display = 'none'; }
+  }
+
+  function markAllNotifCenterRead(){
+    markAllOrdersNotifRead(); // يعيد استخدام دالة مركز الطلبات الموجودة بالفعل، بدون إعادة تنفيذها
+    companyMessagesReadIds = companyMessagesLog.map(m => String(m.id));
+    Storage.setJSON(NOTIF_MESSAGES_READ_KEY, companyMessagesReadIds);
+    updateNotifCenterBadge();
+    renderNotifCenter();
+  }
+
+  // [رسائل العملاء] Endpoint جديد مستقل (action=getCompanyMessages) بنفس أسلوب
+  // getOrders/getCustomerNotifications الحاليين. لو لسه مش متاح على الخادم
+  // (Code.gs لم يُحدَّث بعد)، تُعرض حالة فارغة واضحة بدل أي خطأ يعطّل الواجهة.
+  async function notifCenterFetchMessages(){
+    const endpoint = ordersCenterEndpointUrl();
+    if(!endpoint){
+      notify('لا يوجد رابط Google Apps Script مربوط، لا يمكن تحميل رسائل العملاء.', 'warning');
+      return;
+    }
+    try{
+      const sep = endpoint.indexOf('?') === -1 ? '?' : '&';
+      const url = endpoint + sep + 'action=getCompanyMessages';
+      const res = await fetch(url, { method: 'GET' });
+      const resText = await res.text();
+      let data = null;
+      try{ data = JSON.parse(resText); }catch(parseErr){ data = null; }
+      if(!res.ok || !data || data.ok === false || !Array.isArray(data.messages)){
+        // Endpoint غير مفعّل بعد على الخادم — لا نعتبره خطأ فادحًا، فقط نعرض حالة فارغة.
+        notifCenterRenderMessagesList();
+        return;
+      }
+      companyMessagesLog = data.messages;
+      notifCenterRenderMessagesList();
+      updateNotifCenterBadge();
+    }catch(err){
+      console.error('[Notif Center] تعذّر تحميل رسائل العملاء:', err);
+    }
+  }
+
+  document.getElementById('notifCenterBtn').addEventListener('click', () => {
+    if(!ownerGate('مركز الإشعارات')) return;
+    document.getElementById('notifCenterModal').classList.add('show');
+    renderNotifCenter();
+  });
+
+  document.getElementById('notifCenterModalClose').addEventListener('click', () => {
+    document.getElementById('notifCenterModal').classList.remove('show');
+  });
+
+  document.getElementById('notifCenterMarkReadBtn').addEventListener('click', () => {
+    markAllNotifCenterRead();
+  });
+
+  document.getElementById('notifMessagesRefreshBtn').addEventListener('click', function(){
+    guardClick(this, () => notifCenterFetchMessages());
+  });
+
+  // تهيئة أولية: تحديث الشارة عند تحميل الصفحة بنفس بيانات مركز الطلبات الحالية.
+  updateNotifCenterBadge();
+})();
+
+/* ================= [جديد - المرحلة 7] لوحة إدارة رسائل الدعم الفني - نسخة الشركة =================
+   إضافة مستقلة بالكامل: لا تعدّل أي دالة أو Endpoint موجود، ولا تلمس أي كود خاص
+   بمركز الإشعارات أعلاه (وإن كانت تعيد استخدام دالة escapeHTML/notify/ownerGate
+   وأسلوب fetch نفسه). تعتمد على Endpoints جديدة بنفس أسلوب باقي الـ Actions:
+     - action=getSupportMessages (بدون phone)     : تجيب كل رسائل كل العملاء لنسخة الشركة
+     - action=sendSupportReply                    : ترسل رد الشركة على رسالة عميل معينة
+     - action=updateSupportMessageStatus          : تحدّث حالة متابعة رسالة معينة
+   لو الـ Endpoints دي لسه مش متاحة على الخادم (Code.gs لم يُحدَّث بعد)، تُعرض
+   حالة فارغة واضحة بدل أي خطأ يعطّل الواجهة، بنفس أسلوب باقي أدوات المرحلة 6. */
+(function(){
+  let supportCenterData = [];
+  let supportCenterSelectedId = null;
+
+  function supportCenterEndpointUrl(){
+    return (typeof GAS_ORDERS_WEBHOOK_URL !== 'undefined' && GAS_ORDERS_WEBHOOK_URL) ? GAS_ORDERS_WEBHOOK_URL : '';
+  }
+
+  function supportCenterFormatTimestamp(iso){
+    if(!iso) return '—';
+    const d = new Date(iso);
+    if(isNaN(d.getTime())) return escapeHTML(String(iso));
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const day = String(d.getDate()).padStart(2,'0');
+    const h = String(d.getHours()).padStart(2,'0');
+    const mi = String(d.getMinutes()).padStart(2,'0');
+    return `${y}-${m}-${day} ${h}:${mi}`;
+  }
+
+  function updateSupportCenterBadge(){
+    const badge = document.getElementById('supportCenterBadge');
+    if(!badge) return;
+    const newCount = supportCenterData.filter(m => !m.reply || (m.status || 'جديدة') === 'جديدة').length;
+    if(newCount > 0){ badge.style.display = 'inline-flex'; badge.textContent = newCount; }
+    else { badge.style.display = 'none'; }
+  }
+
+  function supportCenterRenderList(){
+    const listEl = document.getElementById('supportCenterList');
+    if(!listEl) return;
+    if(!supportCenterData.length){
+      listEl.innerHTML = '<div class="cart-empty">دوس "تحديث" عشان تجيب آخر رسائل العملاء.</div>';
+      return;
+    }
+    let html = '';
+    supportCenterData.forEach((m, idx) => {
+      const isNew = !m.reply || (m.status || 'جديدة') === 'جديدة';
+      html += '<div class="orders-notif-item support-center-row' + (isNew ? ' orders-notif-unread' : '') + '" data-idx="' + idx + '" style="cursor:pointer; flex-direction:column; align-items:stretch; gap:4px;">' +
+        '<div style="display:flex; justify-content:space-between; gap:8px;">' +
+          '<span><b>' + escapeHTML(m.customerName || 'عميل') + '</b> — ' + escapeHTML(m.phone || '—') + '</span>' +
+          '<span class="orders-status-badge">' + escapeHTML(m.status || 'جديدة') + '</span>' +
+        '</div>' +
+        '<div>' + escapeHTML(m.message || '') + '</div>' +
+        (m.orderRef ? ('<div style="font-size:11px;color:var(--text-dim);">مرتبطة بالطلب: ' + escapeHTML(m.orderRef) + '</div>') : '') +
+        '<span class="orders-notif-time">' + supportCenterFormatTimestamp(m.ts) + '</span>' +
+      '</div>';
+    });
+    listEl.innerHTML = html;
+  }
+
+  async function supportCenterFetchAll(){
+    const endpoint = supportCenterEndpointUrl();
+    if(!endpoint){
+      notify('لا يوجد رابط Google Apps Script مربوط، لا يمكن تحميل رسائل الدعم الفني.', 'warning');
+      return;
+    }
+    showLoading('جاري تحميل رسائل الدعم الفني...');
+    try{
+      const sep = endpoint.indexOf('?') === -1 ? '?' : '&';
+      const url = endpoint + sep + 'action=getSupportMessages';
+      const res = await fetch(url, { method: 'GET' });
+      const resText = await res.text();
+      let data = null;
+      try{ data = JSON.parse(resText); }catch(parseErr){ data = null; }
+      if(!res.ok || !data || data.ok === false || !Array.isArray(data.messages)){
+        supportCenterData = [];
+        supportCenterRenderList();
+        updateSupportCenterBadge();
+        return;
+      }
+      supportCenterData = data.messages;
+      supportCenterRenderList();
+      updateSupportCenterBadge();
+    }catch(err){
+      console.error('[لوحة الدعم الفني] تعذّر تحميل الرسائل:', err);
+      notify('حصل خطأ أثناء الاتصال بالخادم لتحميل رسائل الدعم الفني.', 'error');
+    }finally{
+      hideLoading();
+    }
+  }
+
+  function supportReplyOpen(idx){
+    const m = supportCenterData[idx];
+    if(!m){ notify('تعذّر إيجاد بيانات هذه الرسالة.', 'error'); return; }
+    supportCenterSelectedId = m.id;
+
+    const infoBox = document.getElementById('srInfoBox');
+    if(infoBox){
+      infoBox.innerHTML =
+        '<div><b>العميل:</b> ' + escapeHTML(m.customerName || '—') + '</div>' +
+        '<div><b>الهاتف:</b> ' + escapeHTML(m.phone || '—') + '</div>' +
+        (m.orderRef ? ('<div><b>مرتبطة بالطلب:</b> ' + escapeHTML(m.orderRef) + '</div>') : '') +
+        '<div><b>التاريخ:</b> ' + supportCenterFormatTimestamp(m.ts) + '</div>' +
+        '<div style="margin-top:8px;"><b>نص الرسالة:</b><br>' + escapeHTML(m.message || '—') + '</div>' +
+        (m.reply ? ('<div style="margin-top:8px;"><b>آخر رد:</b><br>' + escapeHTML(m.reply) + '</div>') : '');
+    }
+    const statusSel = document.getElementById('srStatusSelect');
+    if(statusSel) statusSel.value = m.status || 'جديدة';
+    const replyText = document.getElementById('srReplyText');
+    if(replyText) replyText.value = '';
+
+    document.getElementById('supportReplyModal').classList.add('show');
+  }
+
+  async function supportReplySaveStatus(){
+    if(!supportCenterSelectedId){ notify('لم يتم تحديد رسالة.', 'warning'); return; }
+    const endpoint = supportCenterEndpointUrl();
+    const status = document.getElementById('srStatusSelect').value;
+    if(!endpoint){
+      notify('لا يوجد رابط Google Apps Script مربوط، لا يمكن حفظ الحالة.', 'warning');
+      return;
+    }
+    showLoading('جاري حفظ الحالة...');
+    try{
+      const sep = endpoint.indexOf('?') === -1 ? '?' : '&';
+      const url = endpoint + sep + 'action=updateSupportMessageStatus' +
+        '&id=' + encodeURIComponent(supportCenterSelectedId) +
+        '&status=' + encodeURIComponent(status);
+      const res = await fetch(url, { method: 'GET' });
+      const resText = await res.text();
+      let data = null;
+      try{ data = JSON.parse(resText); }catch(parseErr){ data = null; }
+      if(!res.ok || !data || data.ok === false){
+        console.error('[لوحة الدعم الفني] فشل حفظ الحالة:', res.status, resText);
+        notify('تعذّر حفظ حالة الرسالة.', 'error');
+        return;
+      }
+      notify('تم حفظ حالة الرسالة بنجاح.', 'success');
+      await supportCenterFetchAll();
+    }catch(err){
+      console.error('[لوحة الدعم الفني] خطأ أثناء حفظ الحالة:', err);
+      notify('حصل خطأ أثناء الاتصال بالخادم لحفظ الحالة.', 'error');
+    }finally{
+      hideLoading();
+    }
+  }
+
+  async function supportReplySend(){
+    if(!supportCenterSelectedId){ notify('لم يتم تحديد رسالة.', 'warning'); return; }
+    const endpoint = supportCenterEndpointUrl();
+    const replyText = document.getElementById('srReplyText').value.trim();
+    if(!replyText){
+      notify('من فضلك اكتب نص الرد.', 'warning');
+      return;
+    }
+    if(!endpoint){
+      notify('لا يوجد رابط Google Apps Script مربوط، لا يمكن إرسال الرد.', 'warning');
+      return;
+    }
+    showLoading('جاري إرسال الرد...');
+    try{
+      const sep = endpoint.indexOf('?') === -1 ? '?' : '&';
+      const url = endpoint + sep + 'action=sendSupportReply' +
+        '&id=' + encodeURIComponent(supportCenterSelectedId) +
+        '&reply=' + encodeURIComponent(replyText);
+      const res = await fetch(url, { method: 'GET' });
+      const resText = await res.text();
+      let data = null;
+      try{ data = JSON.parse(resText); }catch(parseErr){ data = null; }
+      if(!res.ok || !data || data.ok === false){
+        console.error('[لوحة الدعم الفني] فشل إرسال الرد:', res.status, resText);
+        notify('تعذّر إرسال الرد، حاول مرة أخرى.', 'error');
+        return;
+      }
+      notify('تم إرسال الرد للعميل بنجاح.', 'success');
+      document.getElementById('srReplyText').value = '';
+      await supportCenterFetchAll();
+    }catch(err){
+      console.error('[لوحة الدعم الفني] خطأ أثناء إرسال الرد:', err);
+      notify('حصل خطأ أثناء الاتصال بالخادم لإرسال الرد.', 'error');
+    }finally{
+      hideLoading();
+    }
+  }
+
+  document.getElementById('supportCenterBtn').addEventListener('click', () => {
+    if(!ownerGate('لوحة إدارة رسائل الدعم الفني')) return;
+    document.getElementById('supportCenterModal').classList.add('show');
+    supportCenterRenderList();
+  });
+  document.getElementById('supportCenterModalClose').addEventListener('click', () => {
+    document.getElementById('supportCenterModal').classList.remove('show');
+  });
+  document.getElementById('supportCenterRefreshBtn').addEventListener('click', function(){
+    guardClick(this, () => supportCenterFetchAll());
+  });
+  document.getElementById('supportCenterList').addEventListener('click', (e) => {
+    const row = e.target.closest('.support-center-row');
+    if(!row) return;
+    supportReplyOpen(+row.dataset.idx);
+  });
+  document.getElementById('supportReplyModalClose').addEventListener('click', () => {
+    document.getElementById('supportReplyModal').classList.remove('show');
+  });
+  document.getElementById('srSaveStatusBtn').addEventListener('click', function(){
+    guardClick(this, () => supportReplySaveStatus());
+  });
+  document.getElementById('srSendReplyBtn').addEventListener('click', function(){
+    guardClick(this, () => supportReplySend());
+  });
+
+  updateSupportCenterBadge();
 })();
 </script>
 
